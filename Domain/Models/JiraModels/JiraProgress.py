@@ -6,4 +6,5 @@
     def __init__(self, jiraProgress):
         self.progress = jiraProgress.progress
         self.total = jiraProgress.total
-        self.percent = jiraProgress.percent
+        if hasattr(jiraProgress, 'percent'):
+            self.percent = jiraProgress.percent

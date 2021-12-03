@@ -3,10 +3,13 @@
     "",
     "\\Common",
     "\\Common\\Support",
+    "\\Domain",
+    "\\Domain\\Models",
+    "\\Domain\\Models\\JiraModels",
     "\\Services",
-    "\\Services\\JiraImporter",
-    "\\__pycache__"
+    "\\Services\\JiraDataCollection",
+    "\\Services\\JiraDataCollection\\Support"
   ],
-  "SelectedNode": "\\Services\\JiraImporter\\JiraClient.py",
+  "SelectedNode": "\\Services\\JiraDataCollection\\JiraImporter.py",
   "PreviewInSolutionExplorer": false
 }

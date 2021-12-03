@@ -5,7 +5,8 @@ class JiraTeamMember:
     active = False #boolean value
 
     def __init__(self, jiraTeamMember):
-        self.key = jiraTeamMember.key
-        self.name = jiraTeamMember.name
-        self.displayName = jiraTeamMember.displayName
-        self.active = jiraTeamMember.active
+        if not(jiraTeamMember == None):
+            self.key = jiraTeamMember.key
+            self.name = jiraTeamMember.name
+            self.displayName = jiraTeamMember.displayName
+            self.active = jiraTeamMember.active

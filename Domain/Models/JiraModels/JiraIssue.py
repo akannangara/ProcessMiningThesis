@@ -56,7 +56,8 @@ class JiraIssue:
 				self.updated = jiraIssue.fields.updated
 				self.status = JiraStatus(jiraIssue.fields.status)
 				self.timeoriginalestimate = jiraIssue.fields.timeoriginalestimate
-				self.timetracking = JiraTimeTracking(jiraIssue.fields.timetracking)
+				if hasattr(jiraIssue.fields, 'timetracking'):
+						self.timetracking = JiraTimeTracking(jiraIssue.fields.timetracking)
 				self.aggregatetimeestimate = jiraIssue.fields.aggregatetimeestimate
 				self.reporter = JiraTeamMember(jiraIssue.fields.reporter)
 				self.creator = JiraTeamMember(jiraIssue.fields.creator)
@@ -64,6 +65,7 @@ class JiraIssue:
 				self.aggregateprogress = JiraProgress(jiraIssue.fields.aggregateprogress)
 				self.duedate= jiraIssue.fields.duedate
 				self.progress = JiraProgress(jiraIssue.fields.progress)
-				self.worklogs = JiraWorkLog(jiraIssue.fields.worklog)
+				if hasattr(jiraIssue.fields, 'worklog'):
+						self.worklogs = JiraWorkLog(jiraIssue.fields.worklog)
 				self.changelog = JiraChangeLog(jiraIssue.changelog
 																	 )
