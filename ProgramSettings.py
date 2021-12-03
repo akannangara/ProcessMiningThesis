@@ -18,5 +18,6 @@ ImageStorage = {
 }
 
 SqlDb = {
-    "ConnectionString": 'mssql+pyodbc://DESKTOP-3L76FTS/processMiningThesis?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server'
+    "ConnectionString": 'mssql+pyodbc://DESKTOP-3L76FTS/processMiningThesis?trusted_connection=yes&driver=ODBC+Driver+17+for+SQL+Server',
+    "ConnectionStringFile": "sqlite:///Database.db"
 }

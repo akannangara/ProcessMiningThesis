@@ -29,8 +29,8 @@ class SqlDbRepository:
         x = DbProjects.__table__
 
         newProject = DbProjects(Id=1, Key='projectKey', Name='projectName', ProjectTypeKey='project type key')
-        SqlDbRepository.__session.add(newProject)
-
-        SqlDbRepository.__session.commit()
+        session = SqlDbRepository.__sessionMaker()
+        session.add(newProject)
+        session.commit()
 
         y = 0

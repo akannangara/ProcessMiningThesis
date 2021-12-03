@@ -1,21 +1,13 @@
-2021-12-03 15:34:37,356 sqlalchemy.engine.Engine - INFO - SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
-2021-12-03 15:34:37,358 sqlalchemy.engine.Engine - INFO - [raw sql] ()
-2021-12-03 15:34:37,364 sqlalchemy.engine.Engine - INFO - SELECT schema_name()
-2021-12-03 15:34:37,365 sqlalchemy.engine.Engine - INFO - [generated in 0.00085s] ()
-2021-12-03 15:34:37,370 sqlalchemy.engine.Engine - INFO - SELECT CAST('test max support' AS NVARCHAR(max))
-2021-12-03 15:34:37,371 sqlalchemy.engine.Engine - INFO - [generated in 0.00096s] ()
-2021-12-03 15:34:37,375 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
-2021-12-03 15:34:37,389 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
-FROM [INFORMATION_SCHEMA].[TABLES] 
-WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
-2021-12-03 15:34:37,389 sqlalchemy.engine.Engine - INFO - [generated in 0.00103s] ('BASE TABLE', 'Projects', 'dbo')
-2021-12-03 15:34:37,410 sqlalchemy.engine.Engine - INFO - COMMIT
-2021-12-03 15:34:37,420 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
-2021-12-03 15:34:37,426 sqlalchemy.engine.Engine - INFO - INSERT INTO [Projects] ([Id], [Key], [Name], [ProjectTypeKey]) VALUES (?, ?, ?, ?)
-2021-12-03 15:34:37,426 sqlalchemy.engine.Engine - INFO - [generated in 0.00131s] (1, 'projectKey', 'projectName', 'project type key')
-2021-12-03 15:34:37,431 sqlalchemy.engine.Engine - INFO - COMMIT
-2021-12-03 15:34:38,792 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
-2021-12-03 15:34:38,795 sqlalchemy.engine.Engine - INFO - SELECT [Projects].[Id] AS [Projects_Id], [Projects].[Key] AS [Projects_Key], [Projects].[Name] AS [Projects_Name], [Projects].[ProjectTypeKey] AS [Projects_ProjectTypeKey] 
-FROM [Projects] 
-WHERE [Projects].[Id] = ?
-2021-12-03 15:34:38,796 sqlalchemy.engine.Engine - INFO - [generated in 0.00060s] (1,)
+2021-12-03 16:19:22,128 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-03 16:19:22,134 sqlalchemy.engine.Engine - INFO - PRAGMA main.table_info("Projects")
+2021-12-03 16:19:22,134 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-03 16:19:22,168 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-03 16:19:22,180 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-03 16:19:22,189 sqlalchemy.engine.Engine - INFO - INSERT INTO "Projects" ("Id", "Key", "Name", "ProjectTypeKey") VALUES (?, ?, ?, ?)
+2021-12-03 16:19:22,189 sqlalchemy.engine.Engine - INFO - [generated in 0.00119s] (1, 'projectKey', 'projectName', 'project type key')
+2021-12-03 16:19:22,364 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-03 16:19:22,869 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-03 16:19:22,935 sqlalchemy.engine.Engine - INFO - SELECT "Projects"."Id" AS "Projects_Id", "Projects"."Key" AS "Projects_Key", "Projects"."Name" AS "Projects_Name", "Projects"."ProjectTypeKey" AS "Projects_ProjectTypeKey" 
+FROM "Projects" 
+WHERE "Projects"."Id" = ?
+2021-12-03 16:19:22,935 sqlalchemy.engine.Engine - INFO - [generated in 0.00030s] (1,)
