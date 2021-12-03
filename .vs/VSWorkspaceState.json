@@ -1,9 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ProcessMining",
-    "\\ProcessMining\\Jira"
+    "\\Common",
+    "\\Common\\Support",
+    "\\Services",
+    "\\Services\\JiraImporter",
+    "\\__pycache__"
   ],
-  "SelectedNode": "\\ProcessMining\\Jira\\ProcessMiner.py",
+  "SelectedNode": "\\Services\\JiraImporter\\JiraClient.py",
   "PreviewInSolutionExplorer": false
 }

@@ -1,6 +1,11 @@
-﻿@auto_attr_check
-class JiraIssueType:
-    id : str
-    description : str
-    name : str
-    subtask : bool
+﻿class JiraIssueType:
+    id = "" #string value
+    description = "" #string value
+    name = "" #string value
+    subtask = False #boolean value
+
+    def __init__(self, jiraIssueType):
+        self.id = jiraIssueType.id
+        self.description = jiraIssueType.description
+        self.name = jiraIssueType.name
+        self.subtask = jiraIssueType.subtask
