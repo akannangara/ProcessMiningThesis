@@ -7,7 +7,7 @@ from Base import Base
 
 #TODO check if this works with foreign key and stuff
 class DbTimeTracking(Base):
-		__tablename__ = 'DbTimeTracking'
+		__tablename__ = 'TimeTracking'
 
 		Id = Column(Integer, primary_key=True, autoincrement=1)
 
@@ -21,5 +21,5 @@ class DbTimeTracking(Base):
 
 
 		def __repr__(self):
-				return "<DbTimeTracking(Id='%d', OriginalEstimate='%d', RemainingEstimate='%d', TimeSpent='%d', IssueId='%d'>" % (
+				return "<TimeTracking(Id='%d', OriginalEstimate='%d', RemainingEstimate='%d', TimeSpent='%d', IssueId='%d'>" % (
 								self.Id, self.OriginalEstimate, self.RemainingEstimate, self.TimeSpent, self.IssueId)

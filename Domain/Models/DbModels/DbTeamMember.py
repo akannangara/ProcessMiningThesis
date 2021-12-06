@@ -7,7 +7,7 @@ from Base import Base
 
 #TODO check if this works with foreign key and stuff
 class DbTeamMember(Base):
-		__tablename__ = 'DbTeamMember'
+		__tablename__ = 'TeamMembers'
 
 		Key = Column(String, primary_key=True)
 		Description = Column(String)
@@ -16,5 +16,5 @@ class DbTeamMember(Base):
 		Type = Column(String)
 		
 		def __repr__(self):
-				return "<DbTeamMember(Id='%d', Description='%s', Name='%s', Active='%r'>" % (
+				return "<TeamMember(Id='%d', Description='%s', Name='%s', Active='%r'>" % (
 								self.Id, self.Description, self.Name, self.Active)
