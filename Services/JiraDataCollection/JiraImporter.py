@@ -35,6 +35,17 @@ class JiraImporter:
             logging.error("Exception occurred with importing project {projectKey} issues in JiraImporter",
                           exc_info=True)
 
+    def ImportIssuesFromProjectsList(self, projectList):
+        logging.info("importing projects from projectsList {projectList}")
+        try:
+            issuesList = []
+            for x in projectList.intersect(JiraImporter.__client.GetProjects()):
+                issuesList.extend(self.ImportProjectIssues(x))
+            return issuesList
+        except Exception as e:
+            logging.error("Exception occurred when importing issues from projectsList {projectList}",
+                          exc_info=True)
+
     def ImportAllProjectIssues(self):
         logging.info("Importing all project issues using JiraImporter")
         try:

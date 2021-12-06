@@ -24,7 +24,6 @@ class SqlDbRepository:
         session.add(entity)
         session.commit()
 
-
     def GetDatabase(self):
         x = DbProjects.__table__
 
@@ -32,5 +31,3 @@ class SqlDbRepository:
         session = SqlDbRepository.__sessionMaker()
         session.add(newProject)
         session.commit()
-
-        y = 0
