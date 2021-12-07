@@ -21,7 +21,7 @@ class TTimeTracking(Base):
 		RemainingEstimate = Column(Integer)
 		TimeSpent = Column(Integer)
 
-		IssueId = Column(Integer, ForeignKey('Issues.Id'))
+		IssueId = Column(Integer)
 
 
 
@@ -30,7 +30,6 @@ class TTimeTracking(Base):
 								self.Id, self.OriginalEstimate, self.RemainingEstimate, self.TimeSpent, self.IssueId)
 
 		def __init__(self, jiraTimeTracking : JiraTimeTracking, issueId : int):
-				self.Id = jiraTimeTracking.id
 				self.OriginalEstimate = jiraTimeTracking.originalEstimateSeconds
 				self.RemainingEstimate = jiraTimeTracking.remainingEstimateSeconds
 				self.TimeSpent = jiraTimeTracking.timeSpentSeconds

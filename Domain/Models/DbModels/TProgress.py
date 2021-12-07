@@ -14,11 +14,13 @@ from JiraProgress import JiraProgress
 class TProgress(Base):
 		__tablename__ = 'Progress'
 
+		Id = Column(Integer, primary_key=True, autoincrement=True)
+
 		Progress = Column(Integer)
 		Total = Column(Integer)
 		Percent = Column(Integer, nullable=True)
 
-		IssueId = Column(Integer, ForeignKey('Issues.Id'), primary_key=True)
+		IssueId = Column(Integer, ForeignKey('Issues.Id'), unique=False)
 
 		def __repr__(self):
 				if self.Percent == None:
@@ -30,5 +32,5 @@ class TProgress(Base):
 		def __init__(self, jiraProgress : JiraProgress, issueId : int):
 				self.Progress = JiraProgress.progress
 				self.Total = jiraProgress.total
-				self.Percent = jiraProgress.Percent
+				self.Percent = jiraProgress.percent
 				self.IssueId = issueId

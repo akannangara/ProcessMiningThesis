@@ -1,8 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Common\\Support"
+    "\\Common",
+    "\\Domain",
+    "\\Domain\\Models",
+    "\\Domain\\Models\\DbModels",
+    "\\Domain\\Models\\JiraModels",
+    "\\Domain\\Repositories",
+    "\\Services",
+    "\\Services\\JiraDataCollection",
+    "\\Services\\JiraDataCollection\\Support"
   ],
-  "SelectedNode": "\\Domain",
+  "SelectedNode": "\\Domain\\Models\\DbModels\\TIssue.py",
   "PreviewInSolutionExplorer": false
 }

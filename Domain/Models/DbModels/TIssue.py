@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, Float
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
-import datetime
+from datetime import datetime
 
 from Base import Base
 
@@ -74,13 +74,13 @@ class TIssue(Base):
 
 		Summary = Column(String)
 
-		AggregateProgressId = Column(Integer, ForeignKey('Progress.IssueId'))
-		AggregateProgress = relationship("TProgress", foreign_keys=[AggregateProgressId])
+		AggregateProgressId = Column(Integer, ForeignKey('Progress.Id'))
+		AggregateProgress = relationship("TProgress", foreign_keys=[AggregateProgressId], uselist=False)
 
 		DueDate = Column(DateTime)
 
-		ProgressId = Column(Integer, ForeignKey('Progress.IssueId'))
-		Progress = relationship("TProgress", foreign_keys=[ProgressId])
+		ProgressId = Column(Integer, ForeignKey('Progress.Id'))
+		Progress = relationship("TProgress", foreign_keys=[ProgressId], uselist=False)
 
 
 		def __repr__(self):
@@ -97,52 +97,50 @@ class TIssue(Base):
 		def __init__(self, jiraIssue : JiraIssue):
 				self.Id = int(jiraIssue.id)
 				self.Key = jiraIssue.key
-				self.IssueType = TIssueType(jiraIssue.issuetype)
-				self.IssueTypeId = self.IssueType.Id
 				self.TimeSpent = jiraIssue.timespent
-
-				self.Project = TProject(jiraIssue.project)
-				self.ProjectId = self.Project.Id
-
 				self.AggregateTimeSpent = jiraIssue.aggregatetimespent
-
-				self.Resolution = TResolution(jiraIssue.resolution)
-				self.ResolutionId = self.Resolution.Id
-
-				self.ResolutionDate = datetime(jiraIssue.resolutiondate)
+				if jiraIssue.resolutiondate:
+						self.ResolutionDate = jiraIssue.resolutiondate[:-5]
 				self.WorkRatio = jiraIssue.workratio
-				self.Created = datetime(jiraIssue.created)
-
-				self.Priority = TPriority(jiraIssue.priority)
-				self.PriorityId = self.Priority.Id
-
+				self.Created = jiraIssue.created[:-5]
 				self.TimeEstimate = jiraIssue.timeestimate
 				self.AggregateTimeOriginalEstimate = jiraIssue.aggregatetimeoriginalestimate
-
-				sef.Assignee = TTeamMember(jiraIssue.assignee)
-				self.AssigneeId = self.Assignee.Key
-
-				self.Updated = datetime(jiraIssue.updated)
-
-				self.Status = TStatus(jiraIssue.status)
-				self.StatusId = self.Status.Id
-
+				self.Updated = jiraIssue.updated[:-5]
 				self.TimeOriginalEstimate = jiraIssue.timeoriginalestimate
-
-				self.TimeTracking = TTimeTracking(jiraIssue.timetracking, self.Id)
-				self.TimeTrackingId = self.TimeTracking.Id 
-
 				self.AggregateTimeEstimate = jiraIssue.aggregatetimeestimate
-
-				self.Reporter = TTeamMember(jiraIssue.reporter)
-				self.ReporterId = self.Reporter.Key
-				self.Creator = TTeamMember(jiraIssue.creator)
-				self.CreatorId = self.Creator.Key
-
 				self.Summary = jiraIssue.summary
+				self.DueDate = jiraIssue.duedate
+				self.DueDate = jiraIssue.duedate
 
-				self.AggregateProgress = TProgress(jiraIssue.aggregateprogress)
-				self.AggregateProgressId = self.AggregateProgress.Id
-				self.DueDate = datetime(jiraIssue.duedate)
-				self.Progress = TProgress(jiraIssue.progress)
-				self.ProgressId = self.Progress.Id
+
+				#self.Priority = TPriority(jiraIssue.priority)
+				#self.PriorityId = self.Priority.Id
+
+				#self.IssueType = TIssueType(jiraIssue.issuetype)
+				#self.IssueTypeId = self.IssueType.Id
+
+				#self.Status = TStatus(jiraIssue.status)
+				#self.StatusId = self.Status.Id
+
+				#self.Project = TProject(jiraIssue.project)
+				#self.ProjectId = self.Project.Id
+
+				#if jiraIssue.resolution.id:
+				#		self.Resolution = TResolution(jiraIssue.resolution)
+				#		self.ResolutionId = self.Resolution.Id
+
+				#self.Reporter = TTeamMember(jiraIssue.reporter)
+				#self.ReporterId = self.Reporter.Key
+				#self.Assignee = TTeamMember(jiraIssue.assignee)
+				#self.AssigneeId = self.Assignee.Key
+				#self.Creator = TTeamMember(jiraIssue.creator)
+				#self.CreatorId = self.Creator.Key
+
+				#self.TimeTracking = TTimeTracking(jiraIssue.timetracking, self.Id)
+				#self.TimeTrackingId = self.TimeTracking.Id
+
+				#self.AggregateProgress = TProgress(jiraIssue.aggregateprogress, self.Id)
+				#self.AggregateProgressId = self.AggregateProgress.Id
+
+				#self.Progress = TProgress(jiraIssue.progress, self.Id)
+				#self.ProgressId = self.Progress.Id

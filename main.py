@@ -42,7 +42,8 @@ if __name__ == "__main__":
     jiraImporter = JiraImporter(settings, dbContext)
     jiraImporter.GetProjectsList()
     issue = jiraImporter.GetIssue('CONBR-121')
-    jiraImporter.StoreIssuesToDb([issue])
-    issue = jiraImporter.GetIssue('CONBR-122')
+    x = jiraImporter.StoreIssuesToDb([issue])
+    y = dbContext.GetIssue('CONBR-121')
+    issue = jiraImporter.GetIssue('PSH-589')
     jiraImporter.StoreIssuesToDb([issue])
     z = 0

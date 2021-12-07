@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from JiraConnectionModel import JiraConnectionModel
 from JiraDataCollection.Support.JiraClient import JiraClient
 from JiraIssue import JiraIssue
+
 from TIssue import TIssue
 
 class JiraImporter(BaseModel):
@@ -75,8 +76,17 @@ class JiraImporter(BaseModel):
 
     def StoreIssuesToDb(self, issuesList: List[JiraIssue]):
         for issue in issuesList:
-            self.__StoreIssue(jiraIssue=issue)
+            JiraImporter.__dbContext.AddIssueToDb(issue)
+
+
+    #def __StoreIssueType(jiraIssueType : JiraIssueType):
+    #    if not(JiraImporter.__dbContext.EntityExists(TIssueType, issueType.id)):
+    #        entity = TIssueType(jiraIssueType)
+            
+
 
     def __StoreIssue(self, jiraIssue : JiraIssue):
-        issue = TIssue(jiraIssue)
-        JiraImporter.__dbContext.AddToDb(issue)
+        entity = TIssue(jiraIssue)
+        JiraImporter.__dbContext.AddIssueToDb(entity)
+
+        y=0

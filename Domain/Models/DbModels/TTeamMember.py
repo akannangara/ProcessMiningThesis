@@ -16,7 +16,7 @@ class TTeamMember(Base):
 		__tablename__ = 'TeamMembers'
 
 		Key = Column(String(255), primary_key=True)
-		Description = Column(String)
+		DisplayName = Column(String)
 		Name = Column(String(255))
 		Active = Column(Boolean)
 		Type = Column(String)
@@ -27,7 +27,7 @@ class TTeamMember(Base):
 
 		def __init__(self, jiraTeamMember : JiraTeamMember):
 				self.Key = jiraTeamMember.key
-				self.Description = jiraTeamMember.description
+				self.DisplayName = jiraTeamMember.displayName
 				self.Name = jiraTeamMember.name
 				self.Active = bool(jiraTeamMember.active)
 				self.Type = ""

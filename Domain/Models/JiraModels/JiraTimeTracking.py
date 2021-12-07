@@ -4,6 +4,7 @@
     timeSpentSeconds = -999 #int value
 
     def __init__(self, jiraTimeTracking):
-        self.originalEstimateSeconds = jiraTimeTracking.originalEstimateSeconds
+        if hasattr(jiraTimeTracking, 'originalEstimateSeconds'):
+            self.originalEstimateSeconds = jiraTimeTracking.originalEstimateSeconds
         self.remainingEstimateSeconds = jiraTimeTracking.remainingEstimateSeconds
         self.timeSpentSeconds = jiraTimeTracking.timeSpentSeconds
