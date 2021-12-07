@@ -1,14 +1,18 @@
 ﻿import logging
+from typing import List
+from pydantic import BaseModel
 
 from JiraConnectionModel import JiraConnectionModel
 from JiraDataCollection.Support.JiraClient import JiraClient
 from JiraIssue import JiraIssue
+from TIssue import TIssue
 
-class JiraImporter:
+class JiraImporter(BaseModel):
     __settings = None
     __client = None
+    __dbContext = None
 
-    def __init__(self, settings):
+    def __init__(self, settings, dbContext):
         JiraImporter.___settings = settings
         jiraConnectionSettings = JiraConnectionModel(settings.Jira["Servername"],
                                                  settings.Jira["Username"],
@@ -16,12 +20,22 @@ class JiraImporter:
                                                  settings.Jira["ConnectionRefreshTimer"])
 
         JiraImporter.__client = JiraClient(jiraConnectionSettings)
+        if not(dbContext==None):
+            JiraImporter.__dbContext = dbContext
 
-    def ImportIssue(self, issueId : str):
+    def GetProjectsList(self):
+        projects = JiraImporter.__client.GetProjects()
+        projectKeys = [p.key for p in projects]
+        return projects
+
+    def GetIssue(self, issueId : str):
         jiraIssue = JiraImporter.__client.GetIssue(issueId)
+        if jiraIssue == None:
+            return
         issue = JiraIssue(jiraIssue)
+        return issue
 
-    def ImportProjectIssues(self, projectKey):
+    def GetProjectIssues(self, projectKey : str):
         logging.info("Importing project issues for the project {projectKey} using JiraImporter")
         try:
             projectIssuesDictionary = {}
@@ -35,18 +49,18 @@ class JiraImporter:
             logging.error("Exception occurred with importing project {projectKey} issues in JiraImporter",
                           exc_info=True)
 
-    def ImportIssuesFromProjectsList(self, projectList):
+    def GetIssuesFromProjectsList(self, projectList : List[str]):
         logging.info("importing projects from projectsList {projectList}")
         try:
             issuesList = []
-            for x in projectList.intersect(JiraImporter.__client.GetProjects()):
+            for x in projectList.intersect(JiraImporter.GetProjectsList()):
                 issuesList.extend(self.ImportProjectIssues(x))
             return issuesList
         except Exception as e:
             logging.error("Exception occurred when importing issues from projectsList {projectList}",
                           exc_info=True)
 
-    def ImportAllProjectIssues(self):
+    def GetAllProjectIssues(self):
         logging.info("Importing all project issues using JiraImporter")
         try:
             allProjectIssuesDictionary = {}
@@ -59,3 +73,10 @@ class JiraImporter:
             logging.error("Exception occurred with imporing all project issues using JiraImporter",
                           exc_info=True)
 
+    def StoreIssuesToDb(self, issuesList: List[JiraIssue]):
+        for issue in issuesList:
+            self.__StoreIssue(jiraIssue=issue)
+
+    def __StoreIssue(self, jiraIssue : JiraIssue):
+        issue = TIssue(jiraIssue)
+        JiraImporter.__dbContext.AddToDb(issue)

@@ -28,15 +28,21 @@ import ProgramSettings as settings
 from Support.JiraConnectionModel import JiraConnectionModel
 from JiraDataCollection.JiraImporter import JiraImporter
 
-from SqlDbRepository import SqlDbRepository
+from DbContext import DbContext
 
 
 if __name__ == "__main__":
     logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
     
-    #jiraImporter = JiraImporter(settings)
-    #jiraImporter.ImportIssue('CONBR-121')
-
-    db = SqlDbRepository(settings)
-    db.GetDatabase()
+    try:
+        dbContext = DbContext(settings)
+    except Exception as e:
+        logging.error("Could not create db context")
+        exit(1)
+    jiraImporter = JiraImporter(settings, dbContext)
+    jiraImporter.GetProjectsList()
+    issue = jiraImporter.GetIssue('CONBR-121')
+    jiraImporter.StoreIssuesToDb([issue])
+    issue = jiraImporter.GetIssue('CONBR-122')
+    jiraImporter.StoreIssuesToDb([issue])
     z = 0
