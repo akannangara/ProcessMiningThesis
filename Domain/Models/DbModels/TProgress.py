@@ -20,7 +20,7 @@ class TProgress(Base):
 		Total = Column(Integer)
 		Percent = Column(Integer, nullable=True)
 
-		IssueId = Column(Integer, ForeignKey('Issues.Id'), unique=False)
+		IssueId = Column(Integer)
 
 		def __repr__(self):
 				if self.Percent == None:

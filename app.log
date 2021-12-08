@@ -1,0 +1,424 @@
+2021-12-08 11:59:36,446 root - INFO - Initializing DbContext
+2021-12-08 11:59:36,655 sqlalchemy.engine.Engine - INFO - SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
+2021-12-08 11:59:36,655 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-08 11:59:36,660 sqlalchemy.engine.Engine - INFO - SELECT schema_name()
+2021-12-08 11:59:36,661 sqlalchemy.engine.Engine - INFO - [generated in 0.00077s] ()
+2021-12-08 11:59:36,665 sqlalchemy.engine.Engine - INFO - SELECT CAST('test max support' AS NVARCHAR(max))
+2021-12-08 11:59:36,665 sqlalchemy.engine.Engine - INFO - [generated in 0.00050s] ()
+2021-12-08 11:59:36,669 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:36,683 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:36,683 sqlalchemy.engine.Engine - INFO - [generated in 0.00104s] ('BASE TABLE', 'IssueType', 'dbo')
+2021-12-08 11:59:36,986 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:36,986 sqlalchemy.engine.Engine - INFO - [cached since 0.3033s ago] ('BASE TABLE', 'Projects', 'dbo')
+2021-12-08 11:59:36,997 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:36,998 sqlalchemy.engine.Engine - INFO - [cached since 0.315s ago] ('BASE TABLE', 'Resolutions', 'dbo')
+2021-12-08 11:59:37,010 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:37,056 sqlalchemy.engine.Engine - INFO - [cached since 0.373s ago] ('BASE TABLE', 'Priorities', 'dbo')
+2021-12-08 11:59:37,067 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:37,067 sqlalchemy.engine.Engine - INFO - [cached since 0.3842s ago] ('BASE TABLE', 'TeamMembers', 'dbo')
+2021-12-08 11:59:37,070 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:37,071 sqlalchemy.engine.Engine - INFO - [cached since 0.3879s ago] ('BASE TABLE', 'Statuses', 'dbo')
+2021-12-08 11:59:37,074 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:37,075 sqlalchemy.engine.Engine - INFO - [cached since 0.3922s ago] ('BASE TABLE', 'TimeTracking', 'dbo')
+2021-12-08 11:59:37,087 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:37,088 sqlalchemy.engine.Engine - INFO - [cached since 0.405s ago] ('BASE TABLE', 'Progress', 'dbo')
+2021-12-08 11:59:37,091 sqlalchemy.engine.Engine - INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-08 11:59:37,091 sqlalchemy.engine.Engine - INFO - [cached since 0.4084s ago] ('BASE TABLE', 'Issues', 'dbo')
+2021-12-08 11:59:37,104 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [IssueType] (
+	[Id] INTEGER NOT NULL, 
+	[Description] VARCHAR(max) NULL, 
+	[Name] VARCHAR(255) NULL, 
+	[Subtask] BIT NULL, 
+	PRIMARY KEY ([Id])
+)
+
+
+2021-12-08 11:59:37,105 sqlalchemy.engine.Engine - INFO - [no key 0.00056s] ()
+2021-12-08 11:59:37,109 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [Projects] (
+	[Id] INTEGER NOT NULL IDENTITY, 
+	[Key] VARCHAR(255) NULL, 
+	[Name] VARCHAR(255) NULL, 
+	[ProjectTypeKey] VARCHAR(255) NULL, 
+	PRIMARY KEY ([Id])
+)
+
+
+2021-12-08 11:59:37,109 sqlalchemy.engine.Engine - INFO - [no key 0.00050s] ()
+2021-12-08 11:59:37,113 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [Resolutions] (
+	[Id] INTEGER NOT NULL IDENTITY, 
+	[Description] VARCHAR(max) NULL, 
+	[Name] VARCHAR(255) NULL, 
+	PRIMARY KEY ([Id])
+)
+
+
+2021-12-08 11:59:37,114 sqlalchemy.engine.Engine - INFO - [no key 0.00056s] ()
+2021-12-08 11:59:37,117 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [Priorities] (
+	[Id] INTEGER NOT NULL IDENTITY, 
+	[Name] VARCHAR(255) NULL, 
+	PRIMARY KEY ([Id])
+)
+
+
+2021-12-08 11:59:37,117 sqlalchemy.engine.Engine - INFO - [no key 0.00060s] ()
+2021-12-08 11:59:37,122 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [TeamMembers] (
+	[Key] VARCHAR(255) NOT NULL, 
+	[DisplayName] VARCHAR(max) NULL, 
+	[Name] VARCHAR(255) NULL, 
+	[Active] BIT NULL, 
+	[Type] VARCHAR(max) NULL, 
+	PRIMARY KEY ([Key])
+)
+
+
+2021-12-08 11:59:37,122 sqlalchemy.engine.Engine - INFO - [no key 0.00056s] ()
+2021-12-08 11:59:37,125 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [Statuses] (
+	[Id] INTEGER NOT NULL IDENTITY, 
+	[Description] VARCHAR(max) NULL, 
+	[Name] VARCHAR(255) NULL, 
+	PRIMARY KEY ([Id])
+)
+
+
+2021-12-08 11:59:37,126 sqlalchemy.engine.Engine - INFO - [no key 0.00056s] ()
+2021-12-08 11:59:37,130 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [TimeTracking] (
+	[Id] INTEGER NOT NULL IDENTITY, 
+	[OriginalEstimate] INTEGER NULL, 
+	[RemainingEstimate] INTEGER NULL, 
+	[TimeSpent] INTEGER NULL, 
+	[IssueId] INTEGER NULL, 
+	PRIMARY KEY ([Id])
+)
+
+
+2021-12-08 11:59:37,131 sqlalchemy.engine.Engine - INFO - [no key 0.00066s] ()
+2021-12-08 11:59:37,137 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [Progress] (
+	[Id] INTEGER NOT NULL IDENTITY, 
+	[Progress] INTEGER NULL, 
+	[Total] INTEGER NULL, 
+	[Percent] INTEGER NULL, 
+	[IssueId] INTEGER NULL, 
+	PRIMARY KEY ([Id])
+)
+
+
+2021-12-08 11:59:37,137 sqlalchemy.engine.Engine - INFO - [no key 0.00047s] ()
+2021-12-08 11:59:37,144 sqlalchemy.engine.Engine - INFO - 
+CREATE TABLE [Issues] (
+	[Id] INTEGER NOT NULL, 
+	[Key] VARCHAR(255) NULL, 
+	[IssueTypeId] INTEGER NULL, 
+	[TimeSpent] INTEGER NULL, 
+	[ProjectId] INTEGER NULL, 
+	[AggregateTimeSpent] INTEGER NULL, 
+	[ResolutionId] INTEGER NULL, 
+	[ResolutionDate] DATETIME NULL, 
+	[WorkRatio] FLOAT NULL, 
+	[Created] DATETIME NULL, 
+	[PriorityId] INTEGER NULL, 
+	[TimeEstimate] INTEGER NULL, 
+	[AggregateTimeOriginalEstimate] INTEGER NULL, 
+	[AssigneeId] VARCHAR(255) NULL, 
+	[Updated] DATETIME NULL, 
+	[StatusId] INTEGER NULL, 
+	[TimeOriginalEstimate] INTEGER NULL, 
+	[TimeTrackingId] INTEGER NULL, 
+	[AggregateTimeEstimate] INTEGER NULL, 
+	[ReporterId] VARCHAR(255) NULL, 
+	[CreatorId] VARCHAR(255) NULL, 
+	[Summary] VARCHAR(max) NULL, 
+	[AggregateProgressId] INTEGER NULL, 
+	[DueDate] DATETIME NULL, 
+	[ProgressId] INTEGER NULL, 
+	PRIMARY KEY ([Id]), 
+	FOREIGN KEY([IssueTypeId]) REFERENCES [IssueType] ([Id]), 
+	FOREIGN KEY([ProjectId]) REFERENCES [Projects] ([Id]), 
+	FOREIGN KEY([ResolutionId]) REFERENCES [Resolutions] ([Id]), 
+	FOREIGN KEY([PriorityId]) REFERENCES [Priorities] ([Id]), 
+	FOREIGN KEY([AssigneeId]) REFERENCES [TeamMembers] ([Key]), 
+	FOREIGN KEY([StatusId]) REFERENCES [Statuses] ([Id]), 
+	FOREIGN KEY([TimeTrackingId]) REFERENCES [TimeTracking] ([Id]), 
+	FOREIGN KEY([ReporterId]) REFERENCES [TeamMembers] ([Key]), 
+	FOREIGN KEY([CreatorId]) REFERENCES [TeamMembers] ([Key]), 
+	FOREIGN KEY([AggregateProgressId]) REFERENCES [Progress] ([Id]), 
+	FOREIGN KEY([ProgressId]) REFERENCES [Progress] ([Id])
+)
+
+
+2021-12-08 11:59:37,144 sqlalchemy.engine.Engine - INFO - [no key 0.00055s] ()
+2021-12-08 11:59:37,151 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:37,577 root - INFO - Importing all projects from Jira
+2021-12-08 11:59:37,721 root - INFO - Importing issue CONBR-121 from Jira
+2021-12-08 11:59:37,973 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:37,981 sqlalchemy.engine.Engine - INFO - INSERT INTO [Issues] ([Id], [Key], [IssueTypeId], [TimeSpent], [ProjectId], [AggregateTimeSpent], [ResolutionId], [ResolutionDate], [WorkRatio], [Created], [PriorityId], [TimeEstimate], [AggregateTimeOriginalEstimate], [AssigneeId], [Updated], [StatusId], [TimeOriginalEstimate], [TimeTrackingId], [AggregateTimeEstimate], [ReporterId], [CreatorId], [Summary], [AggregateProgressId], [DueDate], [ProgressId]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2021-12-08 11:59:37,982 sqlalchemy.engine.Engine - INFO - [generated in 0.00123s] (55962, 'CONBR-121', None, -999, None, 10800, None, None, 75, '2021-03-31T17:52:03.644', None, 3600, 14400, None, '2021-04-28T13:49:20.271', None, 14400, None, 3600, None, None, 'Patch and Delete calls for auth0 (user)', None, '2021-04-06', None)
+2021-12-08 11:59:37,989 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:37,993 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,002 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,002 sqlalchemy.engine.Engine - INFO - [generated in 0.00055s] (55962,)
+2021-12-08 11:59:38,014 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [IssueType].[Id] AS [IssueType_Id], [IssueType].[Description] AS [IssueType_Description], [IssueType].[Name] AS [IssueType_Name], [IssueType].[Subtask] AS [IssueType_Subtask] 
+FROM [IssueType] 
+WHERE [IssueType].[Id] = ?
+2021-12-08 11:59:38,015 sqlalchemy.engine.Engine - INFO - [generated in 0.00171s] ('10004',)
+2021-12-08 11:59:38,020 sqlalchemy.engine.Engine - INFO - INSERT INTO [IssueType] ([Id], [Description], [Name], [Subtask]) VALUES (?, ?, ?, ?)
+2021-12-08 11:59:38,021 sqlalchemy.engine.Engine - INFO - [generated in 0.00076s] (10004, '', 'Task', 1)
+2021-12-08 11:59:38,024 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,026 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,028 sqlalchemy.engine.Engine - INFO - SELECT [IssueType].[Id], [IssueType].[Description], [IssueType].[Name], [IssueType].[Subtask] 
+FROM [IssueType] 
+WHERE [IssueType].[Id] = ?
+2021-12-08 11:59:38,028 sqlalchemy.engine.Engine - INFO - [generated in 0.00054s] (10004,)
+2021-12-08 11:59:38,038 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[ProjectId] AS [Issues_ProjectId], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[PriorityId] AS [Issues_PriorityId], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[StatusId] AS [Issues_StatusId], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[TimeTrackingId] AS [Issues_TimeTrackingId], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[AggregateProgressId] AS [Issues_AggregateProgressId], [Issues].[DueDate] AS [Issues_DueDate], [Issues].[ProgressId] AS [Issues_ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,038 sqlalchemy.engine.Engine - INFO - [generated in 0.00055s] (55962,)
+2021-12-08 11:59:38,044 sqlalchemy.engine.Engine - INFO - UPDATE [Issues] SET [IssueTypeId]=? WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,044 sqlalchemy.engine.Engine - INFO - [generated in 0.00055s] (10004, 55962)
+2021-12-08 11:59:38,047 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,049 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,050 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,051 sqlalchemy.engine.Engine - INFO - [cached since 0.04859s ago] (55962,)
+2021-12-08 11:59:38,056 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [Priorities].[Id] AS [Priorities_Id], [Priorities].[Name] AS [Priorities_Name] 
+FROM [Priorities] 
+WHERE [Priorities].[Id] = ?
+2021-12-08 11:59:38,056 sqlalchemy.engine.Engine - INFO - [generated in 0.00062s] ('3',)
+2021-12-08 11:59:38,060 sqlalchemy.engine.Engine - INFO - SET IDENTITY_INSERT [Priorities] ON
+2021-12-08 11:59:38,061 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-08 11:59:38,062 sqlalchemy.engine.Engine - INFO - INSERT INTO [Priorities] ([Id], [Name]) VALUES (?, ?)
+2021-12-08 11:59:38,062 sqlalchemy.engine.Engine - INFO - [generated in 0.00189s] ('3', 'Medium')
+2021-12-08 11:59:38,064 sqlalchemy.engine.Engine - INFO - SET IDENTITY_INSERT [Priorities] OFF
+2021-12-08 11:59:38,064 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-08 11:59:38,066 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,068 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,070 sqlalchemy.engine.Engine - INFO - SELECT [Priorities].[Id], [Priorities].[Name] 
+FROM [Priorities] 
+WHERE [Priorities].[Id] = ?
+2021-12-08 11:59:38,070 sqlalchemy.engine.Engine - INFO - [generated in 0.00051s] ('3',)
+2021-12-08 11:59:38,079 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[IssueTypeId] AS [Issues_IssueTypeId], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[ProjectId] AS [Issues_ProjectId], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[StatusId] AS [Issues_StatusId], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[TimeTrackingId] AS [Issues_TimeTrackingId], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[AggregateProgressId] AS [Issues_AggregateProgressId], [Issues].[DueDate] AS [Issues_DueDate], [Issues].[ProgressId] AS [Issues_ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,079 sqlalchemy.engine.Engine - INFO - [generated in 0.00067s] (55962,)
+2021-12-08 11:59:38,084 sqlalchemy.engine.Engine - INFO - UPDATE [Issues] SET [PriorityId]=? WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,084 sqlalchemy.engine.Engine - INFO - [generated in 0.00053s] (3, 55962)
+2021-12-08 11:59:38,087 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,089 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,090 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,090 sqlalchemy.engine.Engine - INFO - [cached since 0.08822s ago] (55962,)
+2021-12-08 11:59:38,095 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [Statuses].[Id] AS [Statuses_Id], [Statuses].[Description] AS [Statuses_Description], [Statuses].[Name] AS [Statuses_Name] 
+FROM [Statuses] 
+WHERE [Statuses].[Id] = ?
+2021-12-08 11:59:38,096 sqlalchemy.engine.Engine - INFO - [generated in 0.00065s] ('10005',)
+2021-12-08 11:59:38,102 sqlalchemy.engine.Engine - INFO - SET IDENTITY_INSERT [Statuses] ON
+2021-12-08 11:59:38,102 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-08 11:59:38,103 sqlalchemy.engine.Engine - INFO - INSERT INTO [Statuses] ([Id], [Description], [Name]) VALUES (?, ?, ?)
+2021-12-08 11:59:38,103 sqlalchemy.engine.Engine - INFO - [generated in 0.00150s] ('10005', '', 'In Review')
+2021-12-08 11:59:38,105 sqlalchemy.engine.Engine - INFO - SET IDENTITY_INSERT [Statuses] OFF
+2021-12-08 11:59:38,106 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-08 11:59:38,107 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,109 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,112 sqlalchemy.engine.Engine - INFO - SELECT [Statuses].[Id], [Statuses].[Description], [Statuses].[Name] 
+FROM [Statuses] 
+WHERE [Statuses].[Id] = ?
+2021-12-08 11:59:38,112 sqlalchemy.engine.Engine - INFO - [generated in 0.00085s] ('10005',)
+2021-12-08 11:59:38,121 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[IssueTypeId] AS [Issues_IssueTypeId], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[ProjectId] AS [Issues_ProjectId], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[PriorityId] AS [Issues_PriorityId], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[TimeTrackingId] AS [Issues_TimeTrackingId], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[AggregateProgressId] AS [Issues_AggregateProgressId], [Issues].[DueDate] AS [Issues_DueDate], [Issues].[ProgressId] AS [Issues_ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,121 sqlalchemy.engine.Engine - INFO - [generated in 0.00057s] (55962,)
+2021-12-08 11:59:38,125 sqlalchemy.engine.Engine - INFO - UPDATE [Issues] SET [StatusId]=? WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,126 sqlalchemy.engine.Engine - INFO - [generated in 0.00068s] (10005, 55962)
+2021-12-08 11:59:38,129 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,131 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,132 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,133 sqlalchemy.engine.Engine - INFO - [cached since 0.1305s ago] (55962,)
+2021-12-08 11:59:38,138 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [Projects].[Id] AS [Projects_Id], [Projects].[Key] AS [Projects_Key], [Projects].[Name] AS [Projects_Name], [Projects].[ProjectTypeKey] AS [Projects_ProjectTypeKey] 
+FROM [Projects] 
+WHERE [Projects].[Id] = ?
+2021-12-08 11:59:38,138 sqlalchemy.engine.Engine - INFO - [generated in 0.00058s] ('12516',)
+2021-12-08 11:59:38,143 sqlalchemy.engine.Engine - INFO - SET IDENTITY_INSERT [Projects] ON
+2021-12-08 11:59:38,143 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-08 11:59:38,144 sqlalchemy.engine.Engine - INFO - INSERT INTO [Projects] ([Id], [Key], [Name], [ProjectTypeKey]) VALUES (?, ?, ?, ?)
+2021-12-08 11:59:38,145 sqlalchemy.engine.Engine - INFO - [generated in 0.00193s] (12516, 'CONBR', 'CON Brouwers', 'software')
+2021-12-08 11:59:38,147 sqlalchemy.engine.Engine - INFO - SET IDENTITY_INSERT [Projects] OFF
+2021-12-08 11:59:38,147 sqlalchemy.engine.Engine - INFO - [raw sql] ()
+2021-12-08 11:59:38,149 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,151 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,153 sqlalchemy.engine.Engine - INFO - SELECT [Projects].[Id], [Projects].[Key], [Projects].[Name], [Projects].[ProjectTypeKey] 
+FROM [Projects] 
+WHERE [Projects].[Id] = ?
+2021-12-08 11:59:38,153 sqlalchemy.engine.Engine - INFO - [generated in 0.00054s] (12516,)
+2021-12-08 11:59:38,161 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[IssueTypeId] AS [Issues_IssueTypeId], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[PriorityId] AS [Issues_PriorityId], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[StatusId] AS [Issues_StatusId], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[TimeTrackingId] AS [Issues_TimeTrackingId], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[AggregateProgressId] AS [Issues_AggregateProgressId], [Issues].[DueDate] AS [Issues_DueDate], [Issues].[ProgressId] AS [Issues_ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,162 sqlalchemy.engine.Engine - INFO - [generated in 0.00058s] (55962,)
+2021-12-08 11:59:38,167 sqlalchemy.engine.Engine - INFO - UPDATE [Issues] SET [ProjectId]=? WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,167 sqlalchemy.engine.Engine - INFO - [generated in 0.00053s] (12516, 55962)
+2021-12-08 11:59:38,170 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,172 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,173 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,173 sqlalchemy.engine.Engine - INFO - [cached since 0.1711s ago] (55962,)
+2021-12-08 11:59:38,179 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-08 11:59:38,179 sqlalchemy.engine.Engine - INFO - [generated in 0.00066s] ('JIRAUSER12417',)
+2021-12-08 11:59:38,185 sqlalchemy.engine.Engine - INFO - INSERT INTO [TeamMembers] ([Key], [DisplayName], [Name], [Active], [Type]) VALUES (?, ?, ?, ?, ?)
+2021-12-08 11:59:38,185 sqlalchemy.engine.Engine - INFO - [generated in 0.00059s] ('JIRAUSER12417', 'Aaron Kannangara', 'aaron.kannangara', 1, '')
+2021-12-08 11:59:38,188 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,190 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,192 sqlalchemy.engine.Engine - INFO - SELECT [TeamMembers].[Key], [TeamMembers].[DisplayName], [TeamMembers].[Name], [TeamMembers].[Active], [TeamMembers].[Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-08 11:59:38,193 sqlalchemy.engine.Engine - INFO - [generated in 0.00074s] ('JIRAUSER12417',)
+2021-12-08 11:59:38,195 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,197 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,198 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,198 sqlalchemy.engine.Engine - INFO - [cached since 0.1962s ago] (55962,)
+2021-12-08 11:59:38,201 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-08 11:59:38,201 sqlalchemy.engine.Engine - INFO - [cached since 0.02262s ago] ('JIRAUSER12417',)
+2021-12-08 11:59:38,203 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,205 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,206 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,206 sqlalchemy.engine.Engine - INFO - [cached since 0.2044s ago] (55962,)
+2021-12-08 11:59:38,210 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-08 11:59:38,210 sqlalchemy.engine.Engine - INFO - [cached since 0.0312s ago] ('JIRAUSER12417',)
+2021-12-08 11:59:38,212 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,213 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,214 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,214 sqlalchemy.engine.Engine - INFO - [cached since 0.2126s ago] (55962,)
+2021-12-08 11:59:38,221 sqlalchemy.engine.Engine - INFO - INSERT INTO [Progress] ([Progress], [Total], [Percent], [IssueId]) OUTPUT inserted.[Id] VALUES (?, ?, ?, ?)
+2021-12-08 11:59:38,221 sqlalchemy.engine.Engine - INFO - [generated in 0.00064s] (-999, 14400, 75, 55962)
+2021-12-08 11:59:38,226 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,228 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,231 sqlalchemy.engine.Engine - INFO - SELECT [Progress].[Id], [Progress].[Progress], [Progress].[Total], [Progress].[Percent], [Progress].[IssueId] 
+FROM [Progress] 
+WHERE [Progress].[Id] = ?
+2021-12-08 11:59:38,231 sqlalchemy.engine.Engine - INFO - [generated in 0.00055s] (1,)
+2021-12-08 11:59:38,240 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[IssueTypeId] AS [Issues_IssueTypeId], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[ProjectId] AS [Issues_ProjectId], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[PriorityId] AS [Issues_PriorityId], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[StatusId] AS [Issues_StatusId], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[TimeTrackingId] AS [Issues_TimeTrackingId], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[DueDate] AS [Issues_DueDate], [Issues].[ProgressId] AS [Issues_ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,240 sqlalchemy.engine.Engine - INFO - [generated in 0.00068s] (55962,)
+2021-12-08 11:59:38,245 sqlalchemy.engine.Engine - INFO - UPDATE [Issues] SET [AggregateProgressId]=? WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,246 sqlalchemy.engine.Engine - INFO - [generated in 0.00060s] (1, 55962)
+2021-12-08 11:59:38,249 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,251 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,252 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,252 sqlalchemy.engine.Engine - INFO - [cached since 0.2506s ago] (55962,)
+2021-12-08 11:59:38,256 sqlalchemy.engine.Engine - INFO - INSERT INTO [Progress] ([Progress], [Total], [Percent], [IssueId]) OUTPUT inserted.[Id] VALUES (?, ?, ?, ?)
+2021-12-08 11:59:38,256 sqlalchemy.engine.Engine - INFO - [cached since 0.03577s ago] (-999, 14400, 75, 55962)
+2021-12-08 11:59:38,258 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,261 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,262 sqlalchemy.engine.Engine - INFO - SELECT [Progress].[Id], [Progress].[Progress], [Progress].[Total], [Progress].[Percent], [Progress].[IssueId] 
+FROM [Progress] 
+WHERE [Progress].[Id] = ?
+2021-12-08 11:59:38,262 sqlalchemy.engine.Engine - INFO - [cached since 0.03132s ago] (2,)
+2021-12-08 11:59:38,270 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[IssueTypeId] AS [Issues_IssueTypeId], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[ProjectId] AS [Issues_ProjectId], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[PriorityId] AS [Issues_PriorityId], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[StatusId] AS [Issues_StatusId], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[TimeTrackingId] AS [Issues_TimeTrackingId], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[AggregateProgressId] AS [Issues_AggregateProgressId], [Issues].[DueDate] AS [Issues_DueDate] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,270 sqlalchemy.engine.Engine - INFO - [generated in 0.00071s] (55962,)
+2021-12-08 11:59:38,275 sqlalchemy.engine.Engine - INFO - UPDATE [Issues] SET [ProgressId]=? WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,275 sqlalchemy.engine.Engine - INFO - [generated in 0.00055s] (2, 55962)
+2021-12-08 11:59:38,278 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,280 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,281 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,282 sqlalchemy.engine.Engine - INFO - [cached since 0.2798s ago] (55962,)
+2021-12-08 11:59:38,287 sqlalchemy.engine.Engine - INFO - INSERT INTO [TimeTracking] ([OriginalEstimate], [RemainingEstimate], [TimeSpent], [IssueId]) OUTPUT inserted.[Id] VALUES (?, ?, ?, ?)
+2021-12-08 11:59:38,288 sqlalchemy.engine.Engine - INFO - [generated in 0.00063s] (14400, 3600, 10800, 55962)
+2021-12-08 11:59:38,291 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,293 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,296 sqlalchemy.engine.Engine - INFO - SELECT [TimeTracking].[Id], [TimeTracking].[OriginalEstimate], [TimeTracking].[RemainingEstimate], [TimeTracking].[TimeSpent], [TimeTracking].[IssueId] 
+FROM [TimeTracking] 
+WHERE [TimeTracking].[Id] = ?
+2021-12-08 11:59:38,296 sqlalchemy.engine.Engine - INFO - [generated in 0.00057s] (1,)
+2021-12-08 11:59:38,305 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[IssueTypeId] AS [Issues_IssueTypeId], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[ProjectId] AS [Issues_ProjectId], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[PriorityId] AS [Issues_PriorityId], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[StatusId] AS [Issues_StatusId], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[AggregateProgressId] AS [Issues_AggregateProgressId], [Issues].[DueDate] AS [Issues_DueDate], [Issues].[ProgressId] AS [Issues_ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,306 sqlalchemy.engine.Engine - INFO - [generated in 0.00076s] (55962,)
+2021-12-08 11:59:38,310 sqlalchemy.engine.Engine - INFO - UPDATE [Issues] SET [TimeTrackingId]=? WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,311 sqlalchemy.engine.Engine - INFO - [generated in 0.00053s] (1, 55962)
+2021-12-08 11:59:38,313 sqlalchemy.engine.Engine - INFO - COMMIT
+2021-12-08 11:59:38,315 sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2021-12-08 11:59:38,317 sqlalchemy.engine.Engine - INFO - SELECT [Issues].[Id], [Issues].[Key], [Issues].[IssueTypeId], [Issues].[TimeSpent], [Issues].[ProjectId], [Issues].[AggregateTimeSpent], [Issues].[ResolutionId], [Issues].[ResolutionDate], [Issues].[WorkRatio], [Issues].[Created], [Issues].[PriorityId], [Issues].[TimeEstimate], [Issues].[AggregateTimeOriginalEstimate], [Issues].[AssigneeId], [Issues].[Updated], [Issues].[StatusId], [Issues].[TimeOriginalEstimate], [Issues].[TimeTrackingId], [Issues].[AggregateTimeEstimate], [Issues].[ReporterId], [Issues].[CreatorId], [Issues].[Summary], [Issues].[AggregateProgressId], [Issues].[DueDate], [Issues].[ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Id] = ?
+2021-12-08 11:59:38,317 sqlalchemy.engine.Engine - INFO - [cached since 0.3154s ago] (55962,)
+2021-12-08 11:59:38,325 sqlalchemy.engine.Engine - INFO - SELECT TOP 1 [Issues].[Id] AS [Issues_Id], [Issues].[Key] AS [Issues_Key], [Issues].[IssueTypeId] AS [Issues_IssueTypeId], [Issues].[TimeSpent] AS [Issues_TimeSpent], [Issues].[ProjectId] AS [Issues_ProjectId], [Issues].[AggregateTimeSpent] AS [Issues_AggregateTimeSpent], [Issues].[ResolutionId] AS [Issues_ResolutionId], [Issues].[ResolutionDate] AS [Issues_ResolutionDate], [Issues].[WorkRatio] AS [Issues_WorkRatio], [Issues].[Created] AS [Issues_Created], [Issues].[PriorityId] AS [Issues_PriorityId], [Issues].[TimeEstimate] AS [Issues_TimeEstimate], [Issues].[AggregateTimeOriginalEstimate] AS [Issues_AggregateTimeOriginalEstimate], [Issues].[AssigneeId] AS [Issues_AssigneeId], [Issues].[Updated] AS [Issues_Updated], [Issues].[StatusId] AS [Issues_StatusId], [Issues].[TimeOriginalEstimate] AS [Issues_TimeOriginalEstimate], [Issues].[TimeTrackingId] AS [Issues_TimeTrackingId], [Issues].[AggregateTimeEstimate] AS [Issues_AggregateTimeEstimate], [Issues].[ReporterId] AS [Issues_ReporterId], [Issues].[CreatorId] AS [Issues_CreatorId], [Issues].[Summary] AS [Issues_Summary], [Issues].[AggregateProgressId] AS [Issues_AggregateProgressId], [Issues].[DueDate] AS [Issues_DueDate], [Issues].[ProgressId] AS [Issues_ProgressId] 
+FROM [Issues] 
+WHERE [Issues].[Key] = ?
+2021-12-08 11:59:38,325 sqlalchemy.engine.Engine - INFO - [generated in 0.00068s] ('CONBR-121',)
+2021-12-08 11:59:46,556 sqlalchemy.engine.Engine - INFO - SELECT [Progress].[Id] AS [Progress_Id], [Progress].[Progress] AS [Progress_Progress], [Progress].[Total] AS [Progress_Total], [Progress].[Percent] AS [Progress_Percent], [Progress].[IssueId] AS [Progress_IssueId] 
+FROM [Progress] 
+WHERE [Progress].[Id] = ?
+2021-12-08 11:59:46,556 sqlalchemy.engine.Engine - INFO - [generated in 0.00031s] (1,)
+2021-12-08 11:59:46,559 sqlalchemy.engine.Engine - INFO - SELECT [IssueType].[Id] AS [IssueType_Id], [IssueType].[Description] AS [IssueType_Description], [IssueType].[Name] AS [IssueType_Name], [IssueType].[Subtask] AS [IssueType_Subtask] 
+FROM [IssueType] 
+WHERE [IssueType].[Id] = ?
+2021-12-08 11:59:46,560 sqlalchemy.engine.Engine - INFO - [generated in 0.00031s] (10004,)
+2021-12-08 11:59:46,562 sqlalchemy.engine.Engine - INFO - SELECT [Priorities].[Id] AS [Priorities_Id], [Priorities].[Name] AS [Priorities_Name] 
+FROM [Priorities] 
+WHERE [Priorities].[Id] = ?
+2021-12-08 11:59:46,562 sqlalchemy.engine.Engine - INFO - [generated in 0.00027s] (3,)
+2021-12-08 11:59:46,564 sqlalchemy.engine.Engine - INFO - SELECT [Progress].[Id] AS [Progress_Id], [Progress].[Progress] AS [Progress_Progress], [Progress].[Total] AS [Progress_Total], [Progress].[Percent] AS [Progress_Percent], [Progress].[IssueId] AS [Progress_IssueId] 
+FROM [Progress] 
+WHERE [Progress].[Id] = ?
+2021-12-08 11:59:46,564 sqlalchemy.engine.Engine - INFO - [generated in 0.00025s] (2,)
+2021-12-08 11:59:46,566 sqlalchemy.engine.Engine - INFO - SELECT [Projects].[Id] AS [Projects_Id], [Projects].[Key] AS [Projects_Key], [Projects].[Name] AS [Projects_Name], [Projects].[ProjectTypeKey] AS [Projects_ProjectTypeKey] 
+FROM [Projects] 
+WHERE [Projects].[Id] = ?
+2021-12-08 11:59:46,566 sqlalchemy.engine.Engine - INFO - [generated in 0.00026s] (12516,)
+2021-12-08 11:59:46,569 sqlalchemy.engine.Engine - INFO - SELECT [Statuses].[Id] AS [Statuses_Id], [Statuses].[Description] AS [Statuses_Description], [Statuses].[Name] AS [Statuses_Name] 
+FROM [Statuses] 
+WHERE [Statuses].[Id] = ?
+2021-12-08 11:59:46,569 sqlalchemy.engine.Engine - INFO - [generated in 0.00029s] (10005,)
+2021-12-08 11:59:46,572 sqlalchemy.engine.Engine - INFO - SELECT [TimeTracking].[Id] AS [TimeTracking_Id], [TimeTracking].[OriginalEstimate] AS [TimeTracking_OriginalEstimate], [TimeTracking].[RemainingEstimate] AS [TimeTracking_RemainingEstimate], [TimeTracking].[TimeSpent] AS [TimeTracking_TimeSpent], [TimeTracking].[IssueId] AS [TimeTracking_IssueId] 
+FROM [TimeTracking] 
+WHERE [TimeTracking].[Id] = ?
+2021-12-08 11:59:46,572 sqlalchemy.engine.Engine - INFO - [generated in 0.00033s] (1,)

@@ -15,7 +15,7 @@ from JiraTimeTracking import JiraTimeTracking
 class TTimeTracking(Base):
 		__tablename__ = 'TimeTracking'
 
-		Id = Column(Integer, primary_key=True, autoincrement=1)
+		Id = Column(Integer, primary_key=True, autoincrement=True)
 
 		OriginalEstimate = Column(Integer)
 		RemainingEstimate = Column(Integer)

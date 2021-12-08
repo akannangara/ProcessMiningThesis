@@ -58,11 +58,34 @@ class DbContext:
         issue = self.AddToDb(TIssue(jiraIssue))
 
         #add IssueType
-        issue = self.__AddIssueTypeToIssue(jiraIssue.issuetype, issue)
-        issue = self.__AddPriorityToIssue(jiraIssue.priority, issue)
-        
+        issue = self.__AddAttributeWithIdToIssue(issue, TIssueType, jiraIssue.issuetype, 'IssueType', 'Id')
+        issue = self.__AddAttributeWithIdToIssue(issue, TPriority, jiraIssue.priority, 'Priority', 'Id')
+        issue = self.__AddAttributeWithIdToIssue(issue, TStatus, jiraIssue.status, 'Status', 'Id')
+        issue = self.__AddAttributeWithIdToIssue(issue, TProject, jiraIssue.project, 'Project', 'Id')
+        if jiraIssue.resolution.id:
+            issue = self.__AddAttributeWithIdToIssue(issue, TResolution, jiraIssue.resolution, 'Resolution', 'Id')
+        issue = self.__AddAttributeWithIdToIssue(issue, TTeamMember, jiraIssue.reporter, 'Reporter', 'Key')
+        issue = self.__AddAttributeWithIdToIssue(issue, TTeamMember, jiraIssue.assignee, 'Assignee', 'Key')
+        issue = self.__AddAttributeWithIdToIssue(issue, TTeamMember, jiraIssue.creator, 'Creator', 'Key')
+        issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.aggregateprogress, 'AggregateProgress')
+        issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.progress, 'Progress')
+        issue = self.__AddAttributeWithoutIdToIssue(issue, TTimeTracking, jiraIssue.timetracking, 'TimeTracking')
 
 
+    def __AddAttributeWithoutIdToIssue(self, issue : TIssue, entityType, jiraEntity, entityTypeAttribute : str):
+        entity = self.AddToDb(entityType(jiraEntity, issue.Id))
+        setattr(issue, entityTypeAttribute+'Id', entity.Id)
+        return self.UpdateEntity(issue)
+
+    def __AddAttributeWithIdToIssue(self, issue : TIssue, entityType, jiraEntity, 
+                              entityTypeAttribute : str, identityAttribute : str):
+        entity =  DbContext.__session.query(entityType).filter(
+                getattr(entityType, identityAttribute)==getattr(jiraEntity, identityAttribute.lower())).first()
+        if entity == None:
+            entity = entityType(jiraEntity)
+            entity = self.AddToDb(entity)
+        setattr(issue, entityTypeAttribute+identityAttribute, getattr(entity, identityAttribute))
+        return self.UpdateEntity(issue)
 
 
     def __AddIssueTypeToIssue(self, jiraIssueType, issue : TIssue):
@@ -82,11 +105,21 @@ class DbContext:
         issue.PriorityId = priority.Id
         return self.UpdateEntity(issue)
 
+    def __AddStatusToIssue(self, jiraStatus, issue : TIssue):
+        status = DbContext.__session.query(TStatus).filter_by(Id=jiraStatus.id).first()
+        if priority == None:
+            entity = TStatus(jiraStatus)
+            status = self.AddToDb(entity)
+        issue.StatusId = status.Id
+        return self.UpdateEntity(issue)
 
-
-
-
-
+    def __AddProjectToIssue(self, jiraProject, issue : TIssue):
+        project = DbContext.__session.query(TProject).filter_by(Id=jiraProject.id).first()
+        if priority == None:
+            entity = TStatus(jiraStatus)
+            project = self.AddToDb(entity)
+        issue.ProjectId = project.Id
+        return self.UpdateEntity(issue)
 
     
 

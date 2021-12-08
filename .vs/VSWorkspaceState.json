@@ -11,6 +11,6 @@
     "\\Services\\JiraDataCollection",
     "\\Services\\JiraDataCollection\\Support"
   ],
-  "SelectedNode": "\\Domain\\Models\\DbModels\\TIssue.py",
+  "SelectedNode": "\\Services\\JiraDataCollection\\JiraImporter.py",
   "PreviewInSolutionExplorer": false
 }
