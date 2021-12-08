@@ -36,28 +36,32 @@ class DbContext:
             logging.error("Exception occurred when creating DbContext", exc_info=True)
             return e
 
-    def AddMultipleToDb(self, entitiesList):
-        #session = DbContext.__sessionMaker()
-        DbContext.__session.add_all(entitiesList)
-        DbContext.__session.commit()
+    def AddMultipleEntitiesToDb(self, entitiesList):
+        try:
+            DbContext.__session.add_all(entitiesList)
+            DbContext.__session.commit()
+        except Exception as e:
+            logging.error("Exception occurred when adding multiple entities to DbContext", exc_info=True)
 
-    def AddToDb(self, entity):
-        #session = DbContext.__sessionMaker()
-        DbContext.__session.add(entity)
-        DbContext.__session.commit()
-        DbContext.__session.refresh(entity)
-        return entity
+    def AddEntityToDb(self, entity):
+        try:
+            DbContext.__session.add(entity)
+            DbContext.__session.commit()
+            DbContext.__session.refresh(entity)
+            return entity
+        except Exception as e:
+            logging.error("Exception occurred when adding entity to database. Entity was {entity}", exc_info=True)
     
     def UpdateEntity(self, entity):
-        #session = DbContext.__sessionMaker()
-        DbContext.__session.commit()
-        DbContext.__session.refresh(entity)
-        return entity
+        try:
+            DbContext.__session.commit()
+            DbContext.__session.refresh(entity)
+            return entity
+        except Exception as e:
+            logging.error("Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
 
     def AddIssueToDb(self, jiraIssue : JiraIssue):
-        issue = self.AddToDb(TIssue(jiraIssue))
-
-        #add IssueType
+        issue = self.AddEntityToDb(TIssue(jiraIssue))
         issue = self.__AddAttributeWithIdToIssue(issue, TIssueType, jiraIssue.issuetype, 'IssueType', 'Id')
         issue = self.__AddAttributeWithIdToIssue(issue, TPriority, jiraIssue.priority, 'Priority', 'Id')
         issue = self.__AddAttributeWithIdToIssue(issue, TStatus, jiraIssue.status, 'Status', 'Id')
@@ -71,9 +75,8 @@ class DbContext:
         issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.progress, 'Progress')
         issue = self.__AddAttributeWithoutIdToIssue(issue, TTimeTracking, jiraIssue.timetracking, 'TimeTracking')
 
-
     def __AddAttributeWithoutIdToIssue(self, issue : TIssue, entityType, jiraEntity, entityTypeAttribute : str):
-        entity = self.AddToDb(entityType(jiraEntity, issue.Id))
+        entity = self.AddEntityToDb(entityType(jiraEntity, issue.Id))
         setattr(issue, entityTypeAttribute+'Id', entity.Id)
         return self.UpdateEntity(issue)
 
@@ -83,54 +86,10 @@ class DbContext:
                 getattr(entityType, identityAttribute)==getattr(jiraEntity, identityAttribute.lower())).first()
         if entity == None:
             entity = entityType(jiraEntity)
-            entity = self.AddToDb(entity)
-        setattr(issue, entityTypeAttribute+identityAttribute, getattr(entity, identityAttribute))
-        return self.UpdateEntity(issue)
+            entity = self.AddEntityToDb(entity)
+        setattr(issue, entityTypeAttribute+'Id', getattr(entity, identityAttribute))
+        return self.UpdateEntity(issue)    
 
-
-    def __AddIssueTypeToIssue(self, jiraIssueType, issue : TIssue):
-        #session = DbContext.__sessionMaker()
-        issueType = DbContext.__session.query(TIssueType).filter_by(Id=jiraIssueType.id).first()
-        if issueType == None:
-            entity = TIssueType(jiraIssueType)
-            issueType = self.AddToDb(entity)
-        issue.IssueTypeId = issueType.Id
-        return self.UpdateEntity(issue)
-
-    def __AddPriorityToIssue(self, jiraPriority, issue : TIssue):
-        priority = DbContext.__session.query(TPriority).filter_by(Id=jiraPriority.id).first()
-        if priority == None:
-            entity = TPriority(jiraPriority)
-            priority = self.AddToDb(entity)
-        issue.PriorityId = priority.Id
-        return self.UpdateEntity(issue)
-
-    def __AddStatusToIssue(self, jiraStatus, issue : TIssue):
-        status = DbContext.__session.query(TStatus).filter_by(Id=jiraStatus.id).first()
-        if priority == None:
-            entity = TStatus(jiraStatus)
-            status = self.AddToDb(entity)
-        issue.StatusId = status.Id
-        return self.UpdateEntity(issue)
-
-    def __AddProjectToIssue(self, jiraProject, issue : TIssue):
-        project = DbContext.__session.query(TProject).filter_by(Id=jiraProject.id).first()
-        if priority == None:
-            entity = TStatus(jiraStatus)
-            project = self.AddToDb(entity)
-        issue.ProjectId = project.Id
-        return self.UpdateEntity(issue)
-
-    
-
-    def GetIssue(self, issueKey):
-        #session = DbContext.__sessionMaker()
+    def GetIssue(self, issueKey : str):
         queryResult = DbContext.__session.query(TIssue).filter_by(Key=issueKey).first()
         return queryResult
-
-    def EntityExists(self, entityType, idValue : str):
-        #session = DbContext.__sessionMaker()
-        query = DbContext.__session.query(entityType).filter_by(Id=idValue).first()
-        if query == None:
-            return False
-        return True

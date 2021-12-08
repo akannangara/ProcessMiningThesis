@@ -25,4 +25,4 @@ class TResolution(Base):
 		def __init__(self, jiraResolution : JiraResolution):
 				self.Id = int(jiraResolution.id)
 				self.Description = jiraResolution.description
-				self.Name = jiraResolution.Name
+				self.Name = jiraResolution.name

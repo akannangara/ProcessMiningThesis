@@ -7,13 +7,14 @@ from JiraDataCollection.Support.JiraClient import JiraClient
 from JiraIssue import JiraIssue
 
 from TIssue import TIssue
+from DbContext import DbContext
 
-class JiraImporter(BaseModel):
+class JiraDataImporter(BaseModel):
     __settings = None
     __client = None
     __dbContext = None
 
-    def __init__(self, settings, dbContext):
+    def __init__(self, settings, dbContext : DbContext):
         JiraImporter.___settings = settings
         jiraConnectionSettings = JiraConnectionModel(settings.Jira["Servername"],
                                                  settings.Jira["Username"],
@@ -74,19 +75,6 @@ class JiraImporter(BaseModel):
             logging.error("Exception occurred with imporing all project issues using JiraImporter",
                           exc_info=True)
 
-    def StoreIssuesToDb(self, issuesList: List[JiraIssue]):
+    def StoreIssuesToDatabase(self, issuesList : List[JiraIssue]):
         for issue in issuesList:
-            JiraImporter.__dbContext.AddIssueToDb(issue)
-
-
-    #def __StoreIssueType(jiraIssueType : JiraIssueType):
-    #    if not(JiraImporter.__dbContext.EntityExists(TIssueType, issueType.id)):
-    #        entity = TIssueType(jiraIssueType)
-            
-
-
-    def __StoreIssue(self, jiraIssue : JiraIssue):
-        entity = TIssue(jiraIssue)
-        JiraImporter.__dbContext.AddIssueToDb(entity)
-
-        y=0
+            JiraDataImporter.__dbContext.AddIssueToDb(issue)

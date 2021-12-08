@@ -21,12 +21,13 @@ sys.path.append(SERVICES_DIR)
 
 
 import pdb
+import time
 import logging
 
 import ProgramSettings as settings
 
 from Support.JiraConnectionModel import JiraConnectionModel
-from JiraDataCollection.JiraImporter import JiraImporter
+from JiraDataCollector.JiraDataImporter import JiraDataImporter
 
 from DbContext import DbContext
 
@@ -39,11 +40,9 @@ if __name__ == "__main__":
     except Exception as e:
         logging.error("Could not create db context")
         exit(1)
-    jiraImporter = JiraImporter(settings, dbContext)
+    startTime = time.time()
+    jiraImporter = JiraDataImporter(settings, dbContext)
     jiraImporter.GetProjectsList()
-    issue = jiraImporter.GetIssue('CONBR-121')
-    x = jiraImporter.StoreIssuesToDb([issue])
-    y = dbContext.GetIssue('CONBR-121')
-    issue = jiraImporter.GetIssue('PSH-589')
-    jiraImporter.StoreIssuesToDb([issue])
-    z = 0
+    issues = jiraImporter.GetIssuesFromProjectsList(["PSH", "CONBR"])
+    jiraImporter.StoreIssuesToDatabase(issues)
+    print("Execution time was "+(time.time()-startTime))
