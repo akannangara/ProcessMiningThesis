@@ -82,6 +82,9 @@ class TIssue(Base):
 		ProgressId = Column(Integer, ForeignKey('Progress.Id'))
 		Progress = relationship("TProgress", foreign_keys=[ProgressId], uselist=False)
 
+		WorkLogs = relationship("TWorkLog", backref="Issue")
+		ChangeLogs = relationship("TChangeLog", backref="Issue")
+
 
 		def __repr__(self):
 				return "<Issue(Id='%d', Key='%s', IssueTypeId='%d' TimeSpent='%d', ProjectId='%d', AggregateTimeSpent='%d', \
@@ -111,36 +114,3 @@ class TIssue(Base):
 				self.Summary = jiraIssue.summary
 				self.DueDate = jiraIssue.duedate
 				self.DueDate = jiraIssue.duedate
-
-
-				#self.Priority = TPriority(jiraIssue.priority)
-				#self.PriorityId = self.Priority.Id
-
-				#self.IssueType = TIssueType(jiraIssue.issuetype)
-				#self.IssueTypeId = self.IssueType.Id
-
-				#self.Status = TStatus(jiraIssue.status)
-				#self.StatusId = self.Status.Id
-
-				#self.Project = TProject(jiraIssue.project)
-				#self.ProjectId = self.Project.Id
-
-				#if jiraIssue.resolution.id:
-				#		self.Resolution = TResolution(jiraIssue.resolution)
-				#		self.ResolutionId = self.Resolution.Id
-
-				#self.Reporter = TTeamMember(jiraIssue.reporter)
-				#self.ReporterId = self.Reporter.Key
-				#self.Assignee = TTeamMember(jiraIssue.assignee)
-				#self.AssigneeId = self.Assignee.Key
-				#self.Creator = TTeamMember(jiraIssue.creator)
-				#self.CreatorId = self.Creator.Key
-
-				#self.TimeTracking = TTimeTracking(jiraIssue.timetracking, self.Id)
-				#self.TimeTrackingId = self.TimeTracking.Id
-
-				#self.AggregateProgress = TProgress(jiraIssue.aggregateprogress, self.Id)
-				#self.AggregateProgressId = self.AggregateProgress.Id
-
-				#self.Progress = TProgress(jiraIssue.progress, self.Id)
-				#self.ProgressId = self.Progress.Id

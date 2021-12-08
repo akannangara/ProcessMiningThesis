@@ -29,13 +29,14 @@ import logging
 import ProgramSettings as settings
 
 from Support.JiraConnectionModel import JiraConnectionModel
-from JiraDataImporter import JiraDataImporter
+from JiraDataCollector.JiraDataImporter import JiraDataImporter
 
 from DbContext import DbContext
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+    logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
+                                            %(levelname)s - %(message)s', level=logging.INFO)
     
     try:
         dbContext = DbContext(settings)
@@ -44,7 +45,8 @@ if __name__ == "__main__":
         exit(1)
     startTime = time.time()
     jiraImporter = JiraDataImporter(settings, dbContext)
-    jiraImporter.GetProjectsList()
-    issues = jiraImporter.GetIssuesFromProjectsList(["PSH", "CONBR"])
-    jiraImporter.StoreIssuesToDatabase(issues)
-    print("Execution time was "+(time.time()-startTime))
+    projectsList = jiraImporter.GetProjectsList()
+    for project in ["CONBR"]:
+        issues = jiraImporter.GetProjectIssues(project)
+        jiraImporter.StoreIssuesToDatabase(issues)
+    print("Execution time was "+str(time.time()-startTime))

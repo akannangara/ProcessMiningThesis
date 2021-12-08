@@ -67,4 +67,4 @@ class JiraIssue:
 				self.progress = JiraProgress(jiraIssue.fields.progress)
 				if hasattr(jiraIssue.fields, 'worklog'):
 						self.worklogs = JiraWorkLog(jiraIssue.fields.worklog)
-				self.changelog = JiraChangeLog(jiraIssue.changelog)
+				self.changelog = JiraChangeLog(jiraIssue.changelog, self.id)
