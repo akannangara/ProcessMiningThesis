@@ -17,7 +17,9 @@ sys.path.append(DOMAIN_MODELS_DBMODELS_DIR)
 sys.path.append(DOMAIN_REPOSITORIES_DIR)
 
 SERVICES_DIR = os.path.join(ROOT_DIR, 'Services')
+SERVICES_JIRADATACOLLECTOR_DIR = os.path.join(SERVICES_DIR, 'JiraDataCollector')
 sys.path.append(SERVICES_DIR)
+sys.path.append(SERVICES_JIRADATACOLLECTOR_DIR)
 
 
 import pdb
@@ -27,7 +29,7 @@ import logging
 import ProgramSettings as settings
 
 from Support.JiraConnectionModel import JiraConnectionModel
-from JiraDataCollector.JiraDataImporter import JiraDataImporter
+from JiraDataImporter import JiraDataImporter
 
 from DbContext import DbContext
 

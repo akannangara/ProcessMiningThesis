@@ -2,15 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\Common",
+    "\\Common\\Support",
     "\\Domain",
     "\\Domain\\Models",
-    "\\Domain\\Models\\DbModels",
     "\\Domain\\Models\\JiraModels",
-    "\\Domain\\Repositories",
+    "\\ProcessMining\\Jira\\Models",
     "\\Services",
-    "\\Services\\JiraDataCollection",
-    "\\Services\\JiraDataCollection\\Support"
+    "\\Services\\JiraDataCollector",
+    "\\Services\\JiraDataCollector\\Support"
   ],
-  "SelectedNode": "\\Services\\JiraDataCollection\\JiraImporter.py",
+  "SelectedNode": "\\main.py",
   "PreviewInSolutionExplorer": false
 }

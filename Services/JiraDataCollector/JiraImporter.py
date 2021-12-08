@@ -3,7 +3,7 @@ from typing import List
 from pydantic import BaseModel
 
 from JiraConnectionModel import JiraConnectionModel
-from JiraDataCollection.Support.JiraClient import JiraClient
+from Support.JiraClient import JiraClient
 from JiraIssue import JiraIssue
 
 from TIssue import TIssue
