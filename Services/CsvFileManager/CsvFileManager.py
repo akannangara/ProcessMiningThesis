@@ -27,11 +27,11 @@ class CsvFileManager(BaseModel):
 				try:
 						allChangeLogs = None
 						if not(projectsList):
+								allChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "", "")
+						else:
 								for project in projectsList:
 										projectChangeLogs = CsvFileManager.__DbContext.QueryLike(TChangeLog, 'IssueKey', project+"%")
 										allChangeLogs.extend(projectChangeLogs)
-						else:
-								allChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "", "")
 						dataframe = pd.DataFrame()
 						for logItem in allChangeLogs:
 								event = EventLogItem(logItem)

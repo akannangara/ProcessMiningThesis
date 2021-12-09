@@ -43,7 +43,7 @@ class TIssue(Base):
 		ResolutionId = Column(Integer, ForeignKey('Resolutions.Id'))
 		Resolution = relationship("TResolution")
 
-		ResolutionDate = Column(DateTime)
+		ResolutionDate = Column(DateTime, nullable=True)
 		WorkRatio = Column(Float)
 		Created = Column(DateTime)
 		
@@ -104,14 +104,14 @@ class TIssue(Base):
 				self.TimeSpent = jiraIssue.timespent
 				self.AggregateTimeSpent = jiraIssue.aggregatetimespent
 				if jiraIssue.resolutiondate:
-						self.ResolutionDate = DateTimeConverter.Convert(jiraIssue.resolutiondate[:-5])
+						self.ResolutionDate = DateTimeConverter.ConvertDatetime(jiraIssue.resolutiondate[:-5])
 				self.WorkRatio = jiraIssue.workratio
-				self.Created =  DateTimeConverter.Convert(jiraIssue.created[:-5])
+				self.Created =  DateTimeConverter.ConvertDatetime(jiraIssue.created[:-5])
 				self.TimeEstimate = jiraIssue.timeestimate
 				self.AggregateTimeOriginalEstimate = jiraIssue.aggregatetimeoriginalestimate
-				self.Updated =  DateTimeConverter.Convert(jiraIssue.updated[:-5])
+				self.Updated =  DateTimeConverter.ConvertDatetime(jiraIssue.updated[:-5])
 				self.TimeOriginalEstimate = jiraIssue.timeoriginalestimate
 				self.AggregateTimeEstimate = jiraIssue.aggregatetimeestimate
 				self.Summary = jiraIssue.summary
-				self.DueDate = jiraIssue.duedate
-				self.DueDate = jiraIssue.duedate
+				if jiraIssue.duedate:
+						self.DueDate = DateTimeConverter.ConvertDate(jiraIssue.duedate)

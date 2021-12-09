@@ -17,6 +17,7 @@ from TTimeTracking import TTimeTracking
 from TProgress import TProgress
 from TWorkLog import TWorkLog
 from TChangeLog import TChangeLog
+from JiraChangeLog import JiraChangeLogItem
 
 from Base import Base
 
@@ -28,9 +29,10 @@ class DbContext:
 
     def __init__(self, settings):
         logging.info("Initializing DbContext")
+        logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
         try:
             connectionString = settings.SqlDb["ConnectionString"]
-            DbContext.__engine = sql.create_engine(connectionString, echo=True)
+            DbContext.__engine = sql.create_engine(connectionString, echo=settings.SqlDb["Debug"])
             Base.metadata.create_all(DbContext.__engine)
             sessionMaker = sql.orm.sessionmaker(bind=DbContext.__engine)
             DbContext.__session = sessionMaker()
@@ -76,7 +78,8 @@ class DbContext:
         return queryResult
 
     def AddIssueToDb(self, jiraIssue : JiraIssue):
-        if not(self.GetIssue(jiraIssue.key) == None):
+        logging.info("Adding jiraIssue "+ jiraIssue.key+ " to the database.")
+        if self.GetIssue(jiraIssue.key):
             logging.error("Tried to add jiraIssue that already exists with key "+ jiraIssue.key+ "and Id "+jiraIssue.id)
             return None
         issue = self.__AddEntityToDb(TIssue(jiraIssue))
@@ -91,13 +94,17 @@ class DbContext:
         issue = self.__AddAttributeWithIdToEntity(issue, TTeamMember, jiraIssue.creator, 'Creator', 'Key')
         issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.aggregateprogress, 'AggregateProgress')
         issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.progress, 'Progress')
-        if not(jiraIssue.timetracking == None):
+        if jiraIssue.timetracking:
             issue = self.__AddAttributeWithoutIdToIssue(issue, TTimeTracking, jiraIssue.timetracking, 'TimeTracking')
-        if not(jiraIssue.worklogs == None):
+        if jiraIssue.worklogs:
             for workLog in jiraIssue.worklogs:
                 logItem = self.__AddEntityToDb(TWorkLog(workLog))
                 logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, workLog.author, 'Author', 'Key')
                 logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, workLog.updateAuthor, 'UpdateAuthor', 'Key')
+        #TODO: this could become a problem... setting the changelogid = jiraIssue.Id * 1000000
+        initialChangelog = JiraChangeLogItem(None, str(int(jiraIssue.id)*-1), jiraIssue.creator, jiraIssue.created, jiraIssue.id, jiraIssue.key)
+        initialChangeLogItem = self.__AddEntityToDb(TChangeLog(initialChangelog))
+        initialChangeLogItem = self.__AddAttributeWithIdToEntity(initialChangeLogItem, TTeamMember, initialChangelog.author, 'Author', 'Key')
         for changeLog in jiraIssue.changelog.logs:
             logItem = self.__AddEntityToDb(TChangeLog(changeLog))
             logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, changeLog.author, 'Author', 'Key')
