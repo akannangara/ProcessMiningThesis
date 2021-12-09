@@ -1,9 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\ProcessMining",
-    "\\ProcessMining\\Jira"
+    "\\Domain",
+    "\\Domain\\Models",
+    "\\Domain\\Models\\DbModels",
+    "\\Domain\\Models\\JiraModels",
+    "\\Domain\\Repositories",
+    "\\ProcessMining\\Jira",
+    "\\ProcessMining\\Jira\\DataStore",
+    "\\ProcessMining\\Jira\\Models",
+    "\\Services"
   ],
-  "SelectedNode": "\\ProcessMining\\Jira\\ProcessMiner.py",
+  "SelectedNode": "\\main.py",
   "PreviewInSolutionExplorer": false
 }
