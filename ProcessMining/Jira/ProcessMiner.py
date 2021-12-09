@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import JiraConfig as cfg
 
 import pm4py as pm4py
 
@@ -31,11 +30,11 @@ class ProcessMiner:
         os.environ["PATH"] += os.pathsep + cfg.GraphVizLocation
         self._csvEventLog, self._eventLog = self.readCSVlog()
 
-    def readCSVlog(self, logfile=cfg.DataStoreFolder+"\EventLogCollection.csv"):
+    def readCSVlog(self, logfile=cfg.DataStoreFolder+"\EventLog.csv"):
         log = pd.read_csv(logfile, sep=',')
         log.rename(columns={'IssueId' : 'case:clientId',
-                                'Activity':'concept:name',
-                                'Key':'case:concept:name',
+                                'To':'concept:name',
+                                'IssueKey':'case:concept:name',
                                 'TimeStamp':'timestamp'}, inplace=True)
         log = dataframe_utils.convert_timestamp_columns_in_df(log)
         return log, log_converter.apply(log)

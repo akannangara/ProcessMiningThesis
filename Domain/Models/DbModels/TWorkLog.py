@@ -40,8 +40,8 @@ class TWorkLog(Base):
 
 		def __init__(self, jiraWorkLogItem : JiraWorkLogItem):
 				self.Id = int(jiraWorkLogItem.id)
-				self.Created = DateTimeConverter.Convert(jiraWorkLogItem.created[:-5])
-				self.Updated = DateTimeConverter.Convert(jiraWorkLogItem.updated[:-5])
-				self.Started = DateTimeConverter.Convert(jiraWorkLogItem.started[:-5])
+				self.Created = DateTimeConverter.ConvertDatetime(jiraWorkLogItem.created[:-5])
+				self.Updated = DateTimeConverter.ConvertDatetime(jiraWorkLogItem.updated[:-5])
+				self.Started = DateTimeConverter.ConvertDatetime(jiraWorkLogItem.started[:-5])
 				self.TimeSpent = jiraWorkLogItem.timeSpentSeconds
 				self.IssueId = int(jiraWorkLogItem.issueId)

@@ -39,9 +39,15 @@ class JiraChangeLogItem:
         self.id = id
         self.author = author
         self.created = created
-        self.field = changeLog.field
-        self.fieldtype = changeLog.fieldtype
-        self.fromString = changeLog.fromString
-        self.toString = changeLog.toString
+        if changeLog == None:
+            self.field = 'status'
+            self.field = 'jira'
+            self.fromString = 'Create Card'
+            self.toString = 'To Do'
+        else:
+            self.field = changeLog.field
+            self.fieldtype = changeLog.fieldtype
+            self.fromString = changeLog.fromString
+            self.toString = changeLog.toString
         self.issueId = issueId
         self.issueKey = issueKey

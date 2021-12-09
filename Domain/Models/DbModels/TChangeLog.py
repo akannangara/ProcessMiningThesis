@@ -1,4 +1,4 @@
-﻿from sqlalchemy import Column, Integer, String, Boolean, DateTime
+﻿from sqlalchemy import Column, Integer, String, Boolean, DateTime, BigInteger
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
@@ -12,7 +12,7 @@ from DateTimeConverter import DateTimeConverter
 class TChangeLog(Base):
 		__tablename__ = 'ChangeLog'
 
-		Id = Column(Integer, primary_key=True)
+		Id = Column(BigInteger, primary_key=True)
 
 		AuthorId = Column(String(255), ForeignKey('TeamMembers.Key'))
 		Author = relationship("TTeamMember")
@@ -34,7 +34,7 @@ class TChangeLog(Base):
 
 		def __init__(self, jiraChangeLog : JiraChangeLog):
 				self.Id = jiraChangeLog.id
-				self.Created = DateTimeConverter.Convert(jiraChangeLog.created[:-5])
+				self.Created = DateTimeConverter.ConvertDatetime(jiraChangeLog.created[:-5])
 				self.Field = jiraChangeLog.field
 				self.FieldType = jiraChangeLog.fieldtype
 				self.FromString = jiraChangeLog.fromString

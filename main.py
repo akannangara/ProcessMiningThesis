@@ -25,7 +25,6 @@ sys.path.append(SERVICES_DIR)
 sys.path.append(SERVICES_JIRADATACOLLECTOR_DIR)
 sys.path.append(SERVICES_CSVFILEMANAGER_DIR)
 
-import pdb
 import time
 import logging
 
@@ -43,7 +42,6 @@ from TIssue import TIssue
 if __name__ == "__main__":
     logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
-    
     try:
         dbContext = DbContext(settings)
     except Exception as e:
@@ -51,12 +49,12 @@ if __name__ == "__main__":
         exit(1)
     startTime = time.time()
     jiraImporter = JiraDataImporter(settings, dbContext)
-    #projectsList = jiraImporter.GetProjectsList()
-    #for project in ["CONBR"]:
-    #    issues = jiraImporter.GetProjectIssues(project)
-    #    jiraImporter.StoreIssuesToDatabase(issues)
+    projectsList = jiraImporter.GetProjectsList()
+    for project in projectsList:
+        issues = jiraImporter.GetProjectIssues(project)
+        jiraImporter.StoreIssuesToDatabase(issues)
     #queryResult = dbContext.Query(TIssue, 'Key', 'CONBR-121')
     #queryresult2 = dbContext.GetAllIssues(['CONBR'])
     fileManager = CsvFileManager(dbContext, settings)
-    fileManager.CreateEventLogFromDb(["CONBR"])
-    print("Execution time was "+str(time.time()-startTime))
+    fileManager.CreateEventLogFromDb([])
+    logging.info("Execution time was "+str(time.time()-startTime))
