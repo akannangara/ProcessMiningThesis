@@ -23,6 +23,6 @@ SqlDb = {
     "ConnectionStringFile": "sqlite:///Database.db"
 }
 
-CsvStorageHelper = {
-    "SinkDirectory":"CsvSinkDirectory"
+CsvStorageManager = {
+    "SinkDirectory":"CsvCollection"
 }

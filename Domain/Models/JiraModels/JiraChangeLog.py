@@ -5,15 +5,15 @@ AcceptedActivities = ['status']
 class JiraChangeLog:
     logs = []
 
-    def __init__(self, jiraChangeLog, issueId : str):
+    def __init__(self, jiraChangeLog, issueId : str, issueKey : str):
         self.logs = []
         for x in jiraChangeLog.histories:
-            self.logs.extend(JiraChangeLogHistories(x, issueId).logs)
+            self.logs.extend(JiraChangeLogHistories(x, issueId, issueKey).logs)
 
 class JiraChangeLogHistories:
     logs = []
 
-    def __init__(self, changeLogsHistories, issueId : str):
+    def __init__(self, changeLogsHistories, issueId : str, issueKey : str):
         self.logs = []
         for x in changeLogsHistories.items:
             if (x.field in AcceptedActivities):
@@ -21,7 +21,8 @@ class JiraChangeLogHistories:
                     JiraChangeLogItem(x, changeLogsHistories.id,
                             changeLogsHistories.author,
                             changeLogsHistories.created,
-                            issueId))
+                            issueId,
+                            issueKey))
 
 class JiraChangeLogItem:
     id = "" #string value
@@ -32,8 +33,9 @@ class JiraChangeLogItem:
     fromString = "" #string value
     toString = "" #string value
     issueId = "" #string value
+    issueKey = "" #string value
 
-    def __init__(self, changeLog, id, author, created, issueId : str):
+    def __init__(self, changeLog, id, author, created, issueId : str, issueKey : str):
         self.id = id
         self.author = author
         self.created = created
@@ -42,3 +44,4 @@ class JiraChangeLogItem:
         self.fromString = changeLog.fromString
         self.toString = changeLog.toString
         self.issueId = issueId
+        self.issueKey = issueKey

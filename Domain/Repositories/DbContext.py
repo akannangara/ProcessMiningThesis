@@ -45,25 +45,41 @@ class DbContext:
         except Exception as e:
             logging.error("Exception occurred when adding multiple entities to DbContext", exc_info=True)
 
-    def AddEntityToDb(self, entity):
-        try:
-            DbContext.__session.add(entity)
-            DbContext.__session.commit()
-            DbContext.__session.refresh(entity)
-            return entity
-        except Exception as e:
-            logging.error("Exception occurred when adding entity to database.", exc_info=True)
-    
-    def UpdateEntity(self, entity):
-        try:
-            DbContext.__session.commit()
-            DbContext.__session.refresh(entity)
-            return entity
-        except Exception as e:
-            logging.error("Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
+    def GetIssue(self, issueKey : str):
+        queryResult = DbContext.__session.query(TIssue).filter_by(Key=issueKey).first()
+        return queryResult
+
+    def GetAllIssues(self, projectsList : List[str] = []) -> List[TIssue]:
+        if not(projectsList):
+            issues = DbContext.__session.query(TIssue).all()
+            return issues
+        else:
+            issues = []
+            for project in projectsList:
+                query = self.Query(TProject, 'Key', project)
+                if query:
+                    project = query[0]
+                    projectIssues = self.Query(TIssue, 'ProjectId', project.Id)
+                    issues.extend(projectIssues)
+            return issues
+        
+    def Query(self, entity, attribute : str, query : str):
+        if not(query):
+            queryResult = DbContext.__session.query(entity).all()
+            return queryResult
+        else:
+            queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute) == query).all()
+            return queryResult
+
+    def QueryLike(self, entity, attribute : str, query : str):
+        queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute).like(query)).all()
+        return queryResult
 
     def AddIssueToDb(self, jiraIssue : JiraIssue):
-        issue = self.AddEntityToDb(TIssue(jiraIssue))
+        if not(self.GetIssue(jiraIssue.key) == None):
+            logging.error("Tried to add jiraIssue that already exists with key "+ jiraIssue.key+ "and Id "+jiraIssue.id)
+            return None
+        issue = self.__AddEntityToDb(TIssue(jiraIssue))
         issue = self.__AddAttributeWithIdToEntity(issue, TIssueType, jiraIssue.issuetype, 'IssueType', 'Id')
         issue = self.__AddAttributeWithIdToEntity(issue, TPriority, jiraIssue.priority, 'Priority', 'Id')
         issue = self.__AddAttributeWithIdToEntity(issue, TStatus, jiraIssue.status, 'Status', 'Id')
@@ -79,18 +95,35 @@ class DbContext:
             issue = self.__AddAttributeWithoutIdToIssue(issue, TTimeTracking, jiraIssue.timetracking, 'TimeTracking')
         if not(jiraIssue.worklogs == None):
             for workLog in jiraIssue.worklogs:
-                logItem = self.AddEntityToDb(TWorkLog(workLog))
+                logItem = self.__AddEntityToDb(TWorkLog(workLog))
                 logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, workLog.author, 'Author', 'Key')
                 logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, workLog.updateAuthor, 'UpdateAuthor', 'Key')
         for changeLog in jiraIssue.changelog.logs:
-            logItem = self.AddEntityToDb(TChangeLog(changeLog))
+            logItem = self.__AddEntityToDb(TChangeLog(changeLog))
             logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, changeLog.author, 'Author', 'Key')
+        return issue
 
+    def __AddEntityToDb(self, entity):
+        try:
+            DbContext.__session.add(entity)
+            DbContext.__session.commit()
+            DbContext.__session.refresh(entity)
+            return entity
+        except Exception as e:
+            logging.error("Exception occurred when adding entity to database.", exc_info=True)
+    
+    def __UpdateEntity(self, entity):
+        try:
+            DbContext.__session.commit()
+            DbContext.__session.refresh(entity)
+            return entity
+        except Exception as e:
+            logging.error("Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
 
     def __AddAttributeWithoutIdToIssue(self, issue : TIssue, entityType, jiraEntity, entityTypeAttribute : str):
-        entity = self.AddEntityToDb(entityType(jiraEntity, issue.Id))
+        entity = self.__AddEntityToDb(entityType(jiraEntity, issue.Id))
         setattr(issue, entityTypeAttribute+'Id', entity.Id)
-        return self.UpdateEntity(issue)
+        return self.__UpdateEntity(issue)
 
     def __AddAttributeWithIdToEntity(self, entity, SubEntityType, jiraEntity, 
                               subEntityTypeAttribute : str, identityAttribute : str):
@@ -98,10 +131,6 @@ class DbContext:
                 getattr(SubEntityType, identityAttribute)==getattr(jiraEntity, identityAttribute.lower())).first()
         if subEntity == None:
             subEntity = SubEntityType(jiraEntity)
-            subEntity = self.AddEntityToDb(subEntity)
+            subEntity = self.__AddEntityToDb(subEntity)
         setattr(entity, subEntityTypeAttribute+'Id', getattr(subEntity, identityAttribute))
-        return self.UpdateEntity(entity)    
-
-    def GetIssue(self, issueKey : str):
-        queryResult = DbContext.__session.query(TIssue).filter_by(Key=issueKey).first()
-        return queryResult
+        return self.__UpdateEntity(entity)

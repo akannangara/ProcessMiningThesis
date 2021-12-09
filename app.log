@@ -1,0 +1,90 @@
+2021-12-09 20:30:59,022 root -                                             INFO - Initializing DbContext
+2021-12-09 20:30:59,151 sqlalchemy.engine.Engine -                                             INFO - SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
+2021-12-09 20:30:59,151 sqlalchemy.engine.Engine -                                             INFO - [raw sql] ()
+2021-12-09 20:30:59,156 sqlalchemy.engine.Engine -                                             INFO - SELECT schema_name()
+2021-12-09 20:30:59,156 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00079s] ()
+2021-12-09 20:30:59,160 sqlalchemy.engine.Engine -                                             INFO - SELECT CAST('test max support' AS NVARCHAR(max))
+2021-12-09 20:30:59,161 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00052s] ()
+2021-12-09 20:30:59,164 sqlalchemy.engine.Engine -                                             INFO - BEGIN (implicit)
+2021-12-09 20:30:59,176 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,177 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00131s] ('BASE TABLE', 'IssueType', 'dbo')
+2021-12-09 20:30:59,192 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,192 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.01715s ago] ('BASE TABLE', 'Projects', 'dbo')
+2021-12-09 20:30:59,202 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,203 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.02727s ago] ('BASE TABLE', 'Resolutions', 'dbo')
+2021-12-09 20:30:59,213 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,213 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.03753s ago] ('BASE TABLE', 'Priorities', 'dbo')
+2021-12-09 20:30:59,222 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,223 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.04729s ago] ('BASE TABLE', 'TeamMembers', 'dbo')
+2021-12-09 20:30:59,226 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,227 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.05116s ago] ('BASE TABLE', 'Statuses', 'dbo')
+2021-12-09 20:30:59,229 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,230 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.05445s ago] ('BASE TABLE', 'TimeTracking', 'dbo')
+2021-12-09 20:30:59,239 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,240 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.06453s ago] ('BASE TABLE', 'Progress', 'dbo')
+2021-12-09 20:30:59,243 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,243 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.06784s ago] ('BASE TABLE', 'Issues', 'dbo')
+2021-12-09 20:30:59,253 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,253 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.07787s ago] ('BASE TABLE', 'WorkLog', 'dbo')
+2021-12-09 20:30:59,264 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:30:59,264 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.08811s ago] ('BASE TABLE', 'ChangeLog', 'dbo')
+2021-12-09 20:30:59,266 sqlalchemy.engine.Engine -                                             INFO - COMMIT
+2021-12-09 20:30:59,268 root -                                             INFO - Storing events from projects list CONBR as csv
+2021-12-09 20:30:59,352 sqlalchemy.engine.Engine -                                             INFO - BEGIN (implicit)
+2021-12-09 20:30:59,359 sqlalchemy.engine.Engine -                                             INFO - SELECT [ChangeLog].[Id] AS [ChangeLog_Id], [ChangeLog].[AuthorId] AS [ChangeLog_AuthorId], [ChangeLog].[Created] AS [ChangeLog_Created], [ChangeLog].[Field] AS [ChangeLog_Field], [ChangeLog].[FieldType] AS [ChangeLog_FieldType], [ChangeLog].[FromString] AS [ChangeLog_FromString], [ChangeLog].[ToString] AS [ChangeLog_ToString], [ChangeLog].[IssueId] AS [ChangeLog_IssueId], [ChangeLog].[IssueKey] AS [ChangeLog_IssueKey] 
+FROM [ChangeLog]
+2021-12-09 20:30:59,360 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00060s] ()
+2021-12-09 20:30:59,387 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:30:59,387 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00056s] ('imli.de.voogd',)
+2021-12-09 20:30:59,404 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:30:59,404 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.01733s ago] ('daan.de.krosse',)
+2021-12-09 20:30:59,434 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:30:59,434 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.0477s ago] ('jesse.klaasse',)
+2021-12-09 20:30:59,451 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:30:59,451 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.06439s ago] ('bjorn.vande.ruit',)
+2021-12-09 20:30:59,504 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:30:59,505 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.1182s ago] ('jaap.van.hengstum',)
+2021-12-09 20:30:59,522 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:30:59,523 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.136s ago] ('sander.jongbloets',)
+2021-12-09 20:30:59,588 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:30:59,588 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.2017s ago] ('luuk.naaijen',)
+2021-12-09 20:31:00,034 sqlalchemy.engine.Engine -                                             INFO - SELECT [TeamMembers].[Key] AS [TeamMembers_Key], [TeamMembers].[DisplayName] AS [TeamMembers_DisplayName], [TeamMembers].[Name] AS [TeamMembers_Name], [TeamMembers].[Active] AS [TeamMembers_Active], [TeamMembers].[Type] AS [TeamMembers_Type] 
+FROM [TeamMembers] 
+WHERE [TeamMembers].[Key] = ?
+2021-12-09 20:31:00,035 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.6483s ago] ('JIRAUSER12417',)
