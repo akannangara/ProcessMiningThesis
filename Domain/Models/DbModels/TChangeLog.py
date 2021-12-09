@@ -32,7 +32,7 @@ class TChangeLog(Base):
 
 		def __init__(self, jiraChangeLog : JiraChangeLog):
 				self.Id = jiraChangeLog.id
-				self.Created = jiraChangeLog.created[:-5]
+				self.Created = DateTimeConverter.Convert(jiraChangeLog.created[:-5])
 				self.Field = jiraChangeLog.field
 				self.FieldType = jiraChangeLog.fieldtype
 				self.FromString = jiraChangeLog.fromString

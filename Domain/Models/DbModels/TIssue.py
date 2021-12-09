@@ -9,6 +9,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 from Base import Base
+from DateTimeConverter import DateTimeConverter
 
 from JiraIssue import JiraIssue
 
@@ -103,12 +104,12 @@ class TIssue(Base):
 				self.TimeSpent = jiraIssue.timespent
 				self.AggregateTimeSpent = jiraIssue.aggregatetimespent
 				if jiraIssue.resolutiondate:
-						self.ResolutionDate = jiraIssue.resolutiondate[:-5]
+						self.ResolutionDate = DateTimeConverter.Convert(jiraIssue.resolutiondate[:-5])
 				self.WorkRatio = jiraIssue.workratio
-				self.Created = jiraIssue.created[:-5]
+				self.Created =  DateTimeConverter.Convert(jiraIssue.created[:-5])
 				self.TimeEstimate = jiraIssue.timeestimate
 				self.AggregateTimeOriginalEstimate = jiraIssue.aggregatetimeoriginalestimate
-				self.Updated = jiraIssue.updated[:-5]
+				self.Updated =  DateTimeConverter.Convert(jiraIssue.updated[:-5])
 				self.TimeOriginalEstimate = jiraIssue.timeoriginalestimate
 				self.AggregateTimeEstimate = jiraIssue.aggregatetimeestimate
 				self.Summary = jiraIssue.summary

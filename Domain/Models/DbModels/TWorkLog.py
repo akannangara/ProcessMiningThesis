@@ -7,6 +7,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 from Base import Base
+from DateTimeConverter import DateTimeConverter
 
 from JiraWorkLog import JiraWorkLogItem
 
@@ -39,8 +40,8 @@ class TWorkLog(Base):
 
 		def __init__(self, jiraWorkLogItem : JiraWorkLogItem):
 				self.Id = int(jiraWorkLogItem.id)
-				self.Created = jiraWorkLogItem.created[:-5]
-				self.Updated = jiraWorkLogItem.updated[:-5]
-				self.Started = jiraWorkLogItem.started[:-5]
+				self.Created = DateTimeConverter.Convert(jiraWorkLogItem.created[:-5])
+				self.Updated = DateTimeConverter.Convert(jiraWorkLogItem.updated[:-5])
+				self.Started = DateTimeConverter.Convert(jiraWorkLogItem.started[:-5])
 				self.TimeSpent = jiraWorkLogItem.timeSpentSeconds
 				self.IssueId = int(jiraWorkLogItem.issueId)
