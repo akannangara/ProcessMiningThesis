@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 from Base import Base
 
 from JiraChangeLog import JiraChangeLog
+from DateTimeConverter import DateTimeConverter
 
 
 #TODO check if this works with foreign key and stuff
@@ -24,6 +25,7 @@ class TChangeLog(Base):
 		ToString = Column(String)
 
 		IssueId = Column(Integer, ForeignKey('Issues.Id'))
+		IssueKey = Column(String(255))
 
 
 		def __repr__(self):
@@ -38,3 +40,4 @@ class TChangeLog(Base):
 				self.FromString = jiraChangeLog.fromString
 				self.ToString = jiraChangeLog.toString
 				self.IssueId = int(jiraChangeLog.issueId)
+				self.IssueKey = jiraChangeLog.issueKey

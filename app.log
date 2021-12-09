@@ -1,0 +1,36 @@
+2021-12-09 20:24:16,928 root -                                             INFO - Initializing DbContext
+2021-12-09 20:24:17,073 sqlalchemy.engine.Engine -                                             INFO - SELECT CAST(SERVERPROPERTY('ProductVersion') AS VARCHAR)
+2021-12-09 20:24:17,073 sqlalchemy.engine.Engine -                                             INFO - [raw sql] ()
+2021-12-09 20:24:17,078 sqlalchemy.engine.Engine -                                             INFO - SELECT schema_name()
+2021-12-09 20:24:17,078 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00083s] ()
+2021-12-09 20:24:17,082 sqlalchemy.engine.Engine -                                             INFO - SELECT CAST('test max support' AS NVARCHAR(max))
+2021-12-09 20:24:17,083 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00044s] ()
+2021-12-09 20:24:17,086 sqlalchemy.engine.Engine -                                             INFO - BEGIN (implicit)
+2021-12-09 20:24:17,098 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:24:17,098 sqlalchemy.engine.Engine -                                             INFO - [generated in 0.00104s] ('BASE TABLE', 'IssueType', 'dbo')
+2021-12-09 20:24:17,119 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:24:17,119 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.02206s ago] ('BASE TABLE', 'Projects', 'dbo')
+2021-12-09 20:24:17,131 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:24:17,131 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.03411s ago] ('BASE TABLE', 'Resolutions', 'dbo')
+2021-12-09 20:24:17,143 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:24:17,143 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.04633s ago] ('BASE TABLE', 'Priorities', 'dbo')
+2021-12-09 20:24:17,152 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:24:17,153 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.05634s ago] ('BASE TABLE', 'TeamMembers', 'dbo')
+2021-12-09 20:24:17,155 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:24:17,156 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.05929s ago] ('BASE TABLE', 'Statuses', 'dbo')
+2021-12-09 20:24:17,159 sqlalchemy.engine.Engine -                                             INFO - SELECT [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] 
+FROM [INFORMATION_SCHEMA].[TABLES] 
+WHERE [INFORMATION_SCHEMA].[TABLES].[TABLE_TYPE] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_NAME] = CAST(? AS NVARCHAR(max)) AND [INFORMATION_SCHEMA].[TABLES].[TABLE_SCHEMA] = CAST(? AS NVARCHAR(max))
+2021-12-09 20:24:17,159 sqlalchemy.engine.Engine -                                             INFO - [cached since 0.06238s ago] ('BASE TABLE', 'TimeTracking', 'dbo')
