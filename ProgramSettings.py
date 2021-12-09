@@ -24,5 +24,5 @@ SqlDb = {
 }
 
 CsvStorageManager = {
-    "SinkDirectory":"../../Domain/Repositories/CsvCollection"
+    "SinkDirectory":"CsvCollection"
 }

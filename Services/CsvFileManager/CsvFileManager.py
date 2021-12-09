@@ -17,7 +17,10 @@ class CsvFileManager(BaseModel):
 		def __init__(self, dbContext : DbContext, settings):
 				CsvFileManager.__DbContext = dbContext
 				CsvFileManager.__Settings = settings
-				CsvFileManager.__SinkDirectory = CsvFileManager.__Settings.CsvStorageManager["SinkDirectory"]
+				fileDir = os.path.dirname(os.path.abspath(__file__))
+				pathToRepository = os.path.join(fileDir, "../../Domain/Repositories")
+
+				CsvFileManager.__SinkDirectory = os.path.join(pathToRepository, CsvFileManager.__Settings.CsvStorageManager["SinkDirectory"])
 
 		def CreateEventLogFromDb(self, projectsList : List[str] = []):
 				logging.info("Storing events from projects list " +(' '.join(str(x) for x in projectsList))+ " as csv")
