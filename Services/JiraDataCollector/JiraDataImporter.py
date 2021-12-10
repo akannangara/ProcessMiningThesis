@@ -64,12 +64,11 @@ class JiraDataImporter(BaseModel):
     def GetAllProjectIssues(self):
         logging.info("Importing all project issues using JiraImporter")
         try:
-            allProjectIssuesDictionary = {}
+            allProjectIssues = []
             allProjects = JiraDataImporter.__client.GetProjects()
-            allProjects = ["CONBR", "PSH"]
             for project in allProjects:
-                allProjectIssuesDictionary = allProjectIssuesDictionary | self.ImportProjectIssues(project)
-            return allProjectIssuesDictionary
+                allProjectIssues.append(self.GetProjectIssues(project))
+            return allProjectIssues
         except Exception as e:
             logging.error("Exception occurred with imporing all project issues using JiraImporter",
                           exc_info=True)

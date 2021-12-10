@@ -1,9 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Common\\Support",
-    "\\Domain\\Repositories"
+    "\\Common",
+    "\\Domain\\Models",
+    "\\Domain\\Models\\CsvModels",
+    "\\Domain\\Models\\DbModels",
+    "\\Domain\\Models\\JiraModels",
+    "\\Domain\\Repositories",
+    "\\Domain\\Repositories\\CsvCollection",
+    "\\ProcessMining\\Jira",
+    "\\ProcessMining\\Jira\\Models"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\Common",
   "PreviewInSolutionExplorer": false
 }

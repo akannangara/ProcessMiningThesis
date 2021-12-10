@@ -84,7 +84,8 @@ class DbContext:
             return None
         issue = self.__AddEntityToDb(TIssue(jiraIssue))
         issue = self.__AddAttributeWithIdToEntity(issue, TIssueType, jiraIssue.issuetype, 'IssueType', 'Id')
-        issue = self.__AddAttributeWithIdToEntity(issue, TPriority, jiraIssue.priority, 'Priority', 'Id')
+        if jiraIssue.priority:
+            issue = self.__AddAttributeWithIdToEntity(issue, TPriority, jiraIssue.priority, 'Priority', 'Id')
         issue = self.__AddAttributeWithIdToEntity(issue, TStatus, jiraIssue.status, 'Status', 'Id')
         issue = self.__AddAttributeWithIdToEntity(issue, TProject, jiraIssue.project, 'Project', 'Id')
         if jiraIssue.resolution.id:
@@ -92,8 +93,10 @@ class DbContext:
         issue = self.__AddAttributeWithIdToEntity(issue, TTeamMember, jiraIssue.reporter, 'Reporter', 'Key')
         issue = self.__AddAttributeWithIdToEntity(issue, TTeamMember, jiraIssue.assignee, 'Assignee', 'Key')
         issue = self.__AddAttributeWithIdToEntity(issue, TTeamMember, jiraIssue.creator, 'Creator', 'Key')
-        issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.aggregateprogress, 'AggregateProgress')
-        issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.progress, 'Progress')
+        if jiraIssue.aggregateprogress:
+            issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.aggregateprogress, 'AggregateProgress')
+        if jiraIssue.progress:
+            issue = self.__AddAttributeWithoutIdToIssue(issue, TProgress, jiraIssue.progress, 'Progress')
         if jiraIssue.timetracking:
             issue = self.__AddAttributeWithoutIdToIssue(issue, TTimeTracking, jiraIssue.timetracking, 'TimeTracking')
         if jiraIssue.worklogs:

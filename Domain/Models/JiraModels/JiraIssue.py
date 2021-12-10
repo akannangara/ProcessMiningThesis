@@ -1,4 +1,6 @@
-﻿from JiraIssueType import JiraIssueType
+﻿import logging
+
+from JiraIssueType import JiraIssueType
 from JiraProject import JiraProject
 from JiraResolution import JiraResolution
 from JiraPriority import JiraPriority
@@ -39,32 +41,39 @@ class JiraIssue:
 		changelog = None #[] #collection of JiraChangeLogs
 
 		def __init__(self, jiraIssue):
-				self.id = jiraIssue.id
-				self.key = jiraIssue.key
-				self.issuetype = JiraIssueType(jiraIssue.fields.issuetype)
-				self.timetimespent = jiraIssue.fields.timespent
-				self.project = JiraProject(jiraIssue.fields.project)
-				self.aggregatetimespent = jiraIssue.fields.aggregatetimespent
-				self.resolution = JiraResolution(jiraIssue.fields.resolution)
-				self.resolutiondate= jiraIssue.fields.resolutiondate
-				self.workratio = jiraIssue.fields.workratio
-				self.created = jiraIssue.fields.created
-				self.priority = JiraPriority(jiraIssue.fields.priority)
-				self.timeestimate = jiraIssue.fields.timeestimate
-				self.aggregatetimeoriginalestimate = jiraIssue.fields.aggregatetimeoriginalestimate
-				self.assignee = JiraTeamMember(jiraIssue.fields.assignee)
-				self.updated = jiraIssue.fields.updated
-				self.status = JiraStatus(jiraIssue.fields.status)
-				self.timeoriginalestimate = jiraIssue.fields.timeoriginalestimate
-				if hasattr(jiraIssue.fields, 'timetracking'):
-						self.timetracking = JiraTimeTracking(jiraIssue.fields.timetracking)
-				self.aggregatetimeestimate = jiraIssue.fields.aggregatetimeestimate
-				self.reporter = JiraTeamMember(jiraIssue.fields.reporter)
-				self.creator = JiraTeamMember(jiraIssue.fields.creator)
-				self.summary = jiraIssue.fields.summary
-				self.aggregateprogress = JiraProgress(jiraIssue.fields.aggregateprogress)
-				self.duedate= jiraIssue.fields.duedate
-				self.progress = JiraProgress(jiraIssue.fields.progress)
-				if hasattr(jiraIssue.fields, 'worklog'):
-						self.worklogs = JiraWorkLog(jiraIssue.fields.worklog)
-				self.changelog = JiraChangeLog(jiraIssue.changelog, self.id, self.key)
+				logging.info("Binding Jira data to JiraIssue object for issue key "+jiraIssue.key)
+				try:
+						self.id = jiraIssue.id
+						self.key = jiraIssue.key
+						self.issuetype = JiraIssueType(jiraIssue.fields.issuetype)
+						self.timetimespent = jiraIssue.fields.timespent
+						self.project = JiraProject(jiraIssue.fields.project)
+						self.aggregatetimespent = jiraIssue.fields.aggregatetimespent
+						self.resolution = JiraResolution(jiraIssue.fields.resolution)
+						self.resolutiondate= jiraIssue.fields.resolutiondate
+						self.workratio = jiraIssue.fields.workratio
+						self.created = jiraIssue.fields.created
+						if jiraIssue.fields.priority:
+								self.priority = JiraPriority(jiraIssue.fields.priority)
+						self.timeestimate = jiraIssue.fields.timeestimate
+						self.aggregatetimeoriginalestimate = jiraIssue.fields.aggregatetimeoriginalestimate
+						self.assignee = JiraTeamMember(jiraIssue.fields.assignee)
+						self.updated = jiraIssue.fields.updated
+						self.status = JiraStatus(jiraIssue.fields.status)
+						self.timeoriginalestimate = jiraIssue.fields.timeoriginalestimate
+						if hasattr(jiraIssue.fields, 'timetracking'):
+								self.timetracking = JiraTimeTracking(jiraIssue.fields.timetracking)
+						self.aggregatetimeestimate = jiraIssue.fields.aggregatetimeestimate
+						self.reporter = JiraTeamMember(jiraIssue.fields.reporter)
+						self.creator = JiraTeamMember(jiraIssue.fields.creator)
+						self.summary = jiraIssue.fields.summary
+						if jiraIssue.fields.aggregateprogress:
+								self.aggregateprogress = JiraProgress(jiraIssue.fields.aggregateprogress)
+						self.duedate= jiraIssue.fields.duedate
+						if jiraIssue.fields.progress:
+								self.progress = JiraProgress(jiraIssue.fields.progress)
+						if hasattr(jiraIssue.fields, 'worklog'):
+								self.worklogs = JiraWorkLog(jiraIssue.fields.worklog)
+						self.changelog = JiraChangeLog(jiraIssue.changelog, self.id, self.key)
+				except Exception as e:
+						logging.error("Error occurred when trying to bind Jira Issue to JiraIssue object.", exc_info=True)

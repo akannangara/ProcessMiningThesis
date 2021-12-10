@@ -40,7 +40,10 @@ from TIssue import TIssue
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
+    if settings.Debug:
+        logging.basicConfig(format='%(asctime)s %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+    else:
+        logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     try:
         dbContext = DbContext(settings)

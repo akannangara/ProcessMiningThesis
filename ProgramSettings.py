@@ -5,6 +5,8 @@ Jira = {
     "ConnectionRefreshTimer": 600
 }
 
+Debug=True
+
 DataStoreFolder = "C:\_thesis\DataStore"
 
 GraphVizLocation = "C:\Program Files\Graphviz\bin"
