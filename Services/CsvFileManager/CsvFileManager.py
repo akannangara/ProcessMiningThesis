@@ -7,7 +7,9 @@ import pandas as pd
 
 from DbContext import DbContext
 from EventLogItem import EventLogItem
+from TeamMember import TeamMember
 from TChangeLog import TChangeLog
+from TTeamMember import TTeamMember
 
 class CsvFileManager(BaseModel):
 		__DbContext = None
@@ -16,32 +18,65 @@ class CsvFileManager(BaseModel):
 
 		def __init__(self, dbContext : DbContext, settings):
 				CsvFileManager.__DbContext = dbContext
-				CsvFileManager.__Settings = settings
+				CsvFileManager.__Settings = settings.CsvStorageManager
 				fileDir = os.path.dirname(os.path.abspath(__file__))
 				pathToRepository = os.path.join(fileDir, "../../Domain/Repositories")
 
-				CsvFileManager.__SinkDirectory = os.path.join(pathToRepository, CsvFileManager.__Settings.CsvStorageManager["SinkDirectory"])
+				CsvFileManager.__SinkDirectory = os.path.join(pathToRepository, CsvFileManager.__Settings["SinkDirectory"])
 
 		def CreateEventLogFromDb(self, projectsList : List[str] = []):
 				logging.info("Storing events from projects list " +(' '.join(str(x) for x in projectsList))+ " as csv")
 				try:
-						allChangeLogs = None
+						allChangeLogs = []
 						if not(projectsList):
 								allChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "", "")
 						else:
 								for project in projectsList:
 										projectChangeLogs = CsvFileManager.__DbContext.QueryLike(TChangeLog, 'IssueKey', project+"%")
 										allChangeLogs.extend(projectChangeLogs)
-						dataframe = pd.DataFrame()
-						for logItem in allChangeLogs:
-								event = EventLogItem(logItem)
-								properties = event.__dict__
-								data = {}
-								for key, value in properties.items():
-										data[key] = [value]
-								dataframe = pd.concat([dataframe, pd.DataFrame(data)], ignore_index=True)
-						filename = "Eventlog.csv"
-						dataframe.index.name = "df_index"
-						dataframe.to_csv(os.path.join(CsvFileManager.__SinkDirectory, filename))
+						self.__CreateAndStoreDataFrameFromEntityList(allChangeLogs, EventLogItem, CsvFileManager.__Settings["EventLogFileName"])
 				except Exception as e:
 						logging.error("Error storing projects list as csv", exc_info=True)
+
+		def CreateTeamMemberCollectionFromDb(self):
+				logging.info("Creating team member collection as csv")
+				try:
+						allTeamMembers = allTeamMembers = CsvFileManager.__DbContext.Query(TTeamMember, "", "")
+						if not(allTeamMembers):
+								logging.error("No teamMembers found when creating team member collection as csv")
+								return
+						self.__CreateAndStoreDataFrameFromEntityList(allTeamMembers, TeamMember,  CsvFileManager.__Settings["TeamMembersFileName"])
+				except Exception as e:
+						logging.error("Error storing teamMember collection to csv", exc_info=True)
+
+		def UpdateTeamMemberTypeFromCsv(self):
+				logging.info("Updating TeamMember collection from csv")
+				try:
+						dataframe = pd.read_csv(os.path.join(CsvFileManager.__SinkDirectory, CsvFileManager.__Settings["TeamMembersFileName"]))
+						for index, row in dataframe.iterrows():
+								dbEntity = CsvFileManager.__DbContext.Query(TTeamMember, "Key", row["Key"])
+								dbEntity.Type = row["Type"]
+								CsvFileManager.__DbContext.UpdateEntity(dbEntity)
+				except Exception as e:
+						logging.error("Error updating teamMember from csv", exc_info=True)
+
+
+		def __CreateAndStoreDataFrameFromEntityList(self, entityList : List, entityType, filename : str):
+				dataframe = pd.DataFrame()
+				for entity in entityList:
+						row = entityType(entity)
+						dataframe = self.__AddEntityToDataFrame(row, dataframe)
+				self.__SaveDataFrameToCsv(dataframe, filename)
+
+
+		def __AddEntityToDataFrame(self, entity, dataframe : pd.DataFrame):
+				properties = entity.__dict__
+				data = {}
+				for key, value in properties.items():
+						data[key] = [value]
+				dataframe = pd.concat([dataframe, pd.DataFrame(data)], ignore_index=True)
+				return dataframe
+
+		def __SaveDataFrameToCsv(self, dataframe : pd.DataFrame, filename : str):
+				dataframe.index.name = "df_index"
+				dataframe.to_csv(os.path.join(CsvFileManager.__SinkDirectory, filename))

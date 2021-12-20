@@ -1,16 +1,13 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Common",
-    "\\Domain\\Models",
-    "\\Domain\\Models\\CsvModels",
     "\\Domain\\Models\\DbModels",
-    "\\Domain\\Models\\JiraModels",
-    "\\Domain\\Repositories",
-    "\\Domain\\Repositories\\CsvCollection",
-    "\\ProcessMining\\Jira",
-    "\\ProcessMining\\Jira\\Models"
+    "\\Services",
+    "\\Services\\CsvFileManager",
+    "\\Services\\JiraDataCollector",
+    "\\Services\\JiraDataCollector\\Support",
+    "\\Services\\ProcessMining"
   ],
-  "SelectedNode": "\\Common",
+  "SelectedNode": "\\Services\\CsvFileManager\\CsvFileManager.py",
   "PreviewInSolutionExplorer": false
 }

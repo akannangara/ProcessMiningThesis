@@ -21,9 +21,11 @@ sys.path.append(DOMAIN_REPOSITORIES_DIR)
 SERVICES_DIR = os.path.join(ROOT_DIR, 'Services')
 SERVICES_JIRADATACOLLECTOR_DIR = os.path.join(SERVICES_DIR, 'JiraDataCollector')
 SERVICES_CSVFILEMANAGER_DIR = os.path.join(SERVICES_DIR, 'CsvFileManager')
+SERVICES_PROCESSMINING_DIR = os.path.join(SERVICES_DIR, 'ProcessMining')
 sys.path.append(SERVICES_DIR)
 sys.path.append(SERVICES_JIRADATACOLLECTOR_DIR)
 sys.path.append(SERVICES_CSVFILEMANAGER_DIR)
+sys.path.append(SERVICES_PROCESSMINING_DIR)
 
 import time
 import logging
@@ -35,6 +37,7 @@ from JiraDataCollector.JiraDataImporter import JiraDataImporter
 
 from DbContext import DbContext
 from CsvFileManager import CsvFileManager
+from ProcessMining import ProcessMining
 
 from TIssue import TIssue
 
@@ -51,13 +54,15 @@ if __name__ == "__main__":
         logging.error("Could not create db context")
         exit(1)
     startTime = time.time()
-    jiraImporter = JiraDataImporter(settings, dbContext)
-    projectsList = jiraImporter.GetProjectsList()
-    for project in projectsList:
-        issues = jiraImporter.GetProjectIssues(project)
-        jiraImporter.StoreIssuesToDatabase(issues)
-    #queryResult = dbContext.Query(TIssue, 'Key', 'CONBR-121')
-    #queryresult2 = dbContext.GetAllIssues(['CONBR'])
-    fileManager = CsvFileManager(dbContext, settings)
-    fileManager.CreateEventLogFromDb([])
-    logging.info("Execution time was "+str(time.time()-startTime))
+    #jiraImporter = JiraDataImporter(settings, dbContext)
+    #projectsList = jiraImporter.GetProjectsList()
+    #for project in ["CONBR", "PSH"]:
+    #    issues = jiraImporter.GetProjectIssues(project)
+    #    jiraImporter.StoreIssuesToDatabase(issues)
+    #fileManager = CsvFileManager(dbContext, settings)
+    #fileManager.CreateEventLogFromDb()
+    #fileManager.CreateTeamMemberCollectionFromDb()
+    processMiner = ProcessMining(settings)
+    processMiner.RunAllDiscoveryAlgorithms()
+    #alphaResults = processDiscovery.PetriNetAlphaMiner(save=True)
+    logging.info("Execution time was "+str(time.time()-startTime)+" s")

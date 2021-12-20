@@ -113,6 +113,14 @@ class DbContext:
             logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, changeLog.author, 'Author', 'Key')
         return issue
 
+    def UpdateEntity(self, entity):
+        try:
+            DbContext.__session.commit()
+            DbContext.__session.refresh(entity)
+            return entity
+        except Exception as e:
+            logging.error("Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
+
     def __AddEntityToDb(self, entity):
         try:
             DbContext.__session.add(entity)
@@ -121,19 +129,11 @@ class DbContext:
             return entity
         except Exception as e:
             logging.error("Exception occurred when adding entity to database.", exc_info=True)
-    
-    def __UpdateEntity(self, entity):
-        try:
-            DbContext.__session.commit()
-            DbContext.__session.refresh(entity)
-            return entity
-        except Exception as e:
-            logging.error("Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
 
     def __AddAttributeWithoutIdToIssue(self, issue : TIssue, entityType, jiraEntity, entityTypeAttribute : str):
         entity = self.__AddEntityToDb(entityType(jiraEntity, issue.Id))
         setattr(issue, entityTypeAttribute+'Id', entity.Id)
-        return self.__UpdateEntity(issue)
+        return self.UpdateEntity(issue)
 
     def __AddAttributeWithIdToEntity(self, entity, SubEntityType, jiraEntity, 
                               subEntityTypeAttribute : str, identityAttribute : str):
@@ -143,4 +143,4 @@ class DbContext:
             subEntity = SubEntityType(jiraEntity)
             subEntity = self.__AddEntityToDb(subEntity)
         setattr(entity, subEntityTypeAttribute+'Id', getattr(subEntity, identityAttribute))
-        return self.__UpdateEntity(entity)
+        return self.UpdateEntity(entity)
