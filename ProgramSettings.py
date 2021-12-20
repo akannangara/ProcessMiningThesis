@@ -12,13 +12,14 @@ DataStoreFolder = "C:\_thesis\DataStore"
 GraphVizLocation = "C:\Program Files\Graphviz\bin"
 
 ImageStorage = {
-    "ImagesSink":"ProcessDiscoveryImages",
+    "ImagesSinkProcessDiscovery":"ProcessDiscoveryImages",
     "alphaMiner":"Alphaminer.png",
     "alphaPlusMiner": "AlphaPlusMiner.png",
     "inductiveMiner":"InductiveMiner.png",
     "heuristicsMiner":"HeuristicsMiner.png",
     "processTreeInductive": "ProcessTreeInductive.png",
-    "dfg":"DFG.png"
+    "dfg":"DFG.png",
+    "ImagesSinkProcessConformance":"ProcessConformanceImages"
 }
 
 SqlDb = {

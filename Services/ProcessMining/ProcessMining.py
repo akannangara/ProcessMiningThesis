@@ -28,27 +28,37 @@ from pm4py.visualization.footprints import visualizer as fps_visualizer
 from pm4py.objects.petri_net.obj import PetriNet, Marking
 
 from ProcessDiscovery import ProcessDiscovery
+from ConformanceChecking import ConformanceChecking
+from ModelEvaluator import ModelEvaluator
 
 class ProcessMining(BaseModel):
     __Settings = None
-    __EventLog = ""
+    __EventLog = None
+    __ConformantEventLogLocation = None
 
     def __init__(self, settings, onlyDone=False):
         ProcessMining.__Settings = settings
         csvRepository = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories/CsvCollection")
-        ProcessMining.__EventLog = self.__ReadCsvEventLogAsEventLog(csvRepository, onlyDone)
-
-    def __ReadCsvEventLogAsEventLog(self, csvRepositoryLocation, onlyDone):
-        if (onlyDone):
-            log = pd.read_csv(os.path.join(csvRepositoryLocation, ProcessMining.__Settings.CsvStorageManager["OnlyDoneEventLogFileName"]))
+        self.__AddGraphVizLocation(settings)
+        if onlyDone:
+            csvLocation = os.path.join(csvRepository, ProcessMining.__Settings.CsvStorageManager["OnlyDoneEventLogFileName"])
         else:
-            log = pd.read_csv(os.path.join(csvRepositoryLocation, ProcessMining.__Settings.CsvStorageManager["EventLogFileName"]))
+            csvLocation = os.path.join(csvRepository, ProcessMining.__Settings.CsvStorageManager["EventLogFileName"])
+        ProcessMining.__EventLog = self.__ReadCsvEventLogAsEventLog(csvLocation)
+        ProcessMining.__ConformantEventLogLocation = os.path.join(csvRepository, "ConformantEventLog.csv")
+
+    def __ReadCsvEventLogAsEventLog(self, csvLocation):
+        log = pd.read_csv(csvLocation)
         log.rename(columns={'IssueId' : 'case:clientId',
                             'To':'concept:name',
                             'IssueKey':'case:concept:name',
                             'TimeStamp':'time:timestamp'}, inplace=True)
         log = dataframe_utils.convert_timestamp_columns_in_df(log)
         return log_converter.apply(log)
+
+    def __AddGraphVizLocation(self, settings):
+        os.environ["PATH"] += os.pathsep + settings.GraphViz["binLocation"]
+        os.environ["PATH"] += os.pathsep + settings.GraphViz["exeLocation"]
 
     def GetEventLog(self):
         return ProcessMining.__EventLog
@@ -74,3 +84,12 @@ class ProcessMining(BaseModel):
         processDiscovery.PetriNetHeuristicsMiner(threshold=0.60)
         processDiscovery.PetriNetHeuristicsMiner(threshold=0.50)
         processDiscovery.PetriNetHeuristicsMiner(threshold=1.00)
+
+    def ConformanceChecking(self):
+        conformanceChecking = ConformanceChecking(ProcessMining.__Settings)
+        conformantEventLog = self.__ReadCsvEventLogAsEventLog(ProcessMining.__ConformantEventLogLocation)
+        processDiscoveryFromConformance = ProcessDiscovery(ProcessMining.__Settings, conformantEventLog)
+        net, initial, final = processDiscoveryFromConformance.PetriNetHeuristicsMiner(save=False)
+        x = conformanceChecking.ConformanceCheckDiagnosticsAlignment(ProcessMining.__EventLog, net, initial, final)
+        y = ModelEvaluator.FitnessAlignment(ProcessMining.__EventLog, net, initial, final)
+        return x

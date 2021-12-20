@@ -35,15 +35,10 @@ class ProcessDiscovery(BaseModel):
     def __init__(self, settings, eventLog, onlyDone=False):
         ProcessDiscovery.__Settings = settings
         repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
-        ProcessDiscovery.__ImagesSink = os.path.join(repsoitoryLocation, settings.ImageStorage["ImagesSink"])
+        ProcessDiscovery.__ImagesSink = os.path.join(repsoitoryLocation, settings.ImageStorage["ImagesSinkProcessDiscovery"])
         if onlyDone:
              ProcessDiscovery.__ImagesSink = os.path.join(ProcessDiscovery.__ImagesSink, "OnlyDone")
-        self.__AddGraphVizLocation(settings)
         ProcessDiscovery.__EventLog = eventLog
-
-    def __AddGraphVizLocation(self, settings):
-        os.environ["PATH"] += os.pathsep + settings.GraphViz["binLocation"]
-        os.environ["PATH"] += os.pathsep + settings.GraphViz["exeLocation"]
 
     #-----DISCOVERY ALGORITHMS - return the created model + initial/final markings if relevant
     #petrinets

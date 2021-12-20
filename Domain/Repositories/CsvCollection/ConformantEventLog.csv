@@ -1,0 +1,7 @@
+df_index,IssueId,IssueKey,TimeStamp,From,To,Field,FieldType
+0,1,1,15-12-2021 10:57,Create Card,To Do,jira,
+1,1,1,16-12-2021 16:29,To Do,In Progress,jira,
+2,1,1,17-12-2021 10:42,In Progress,Done,jira,
+3,2,2,15-12-2021 10:57,Create Card,To Do,jira,
+4,2,2,16-12-2021 16:29,To Do,In Progress,jira,
+5,2,2,17-12-2021 10:42,In Progress,Done,jira,
