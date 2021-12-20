@@ -43,14 +43,19 @@ class ProcessDiscovery(BaseModel):
     #-----DISCOVERY ALGORITHMS - return the created model + initial/final markings if relevant
     #petrinets
     def PetriNetAlphaMiner(self, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        net, initial_marking, final_marking = alpha_miner.apply(eventLog)
-        parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
-        gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
-        #pn_visualizer.view(gviz)
-        if (save):
-            pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink, ProcessDiscovery.__Settings.ImageStorage['alphaMiner']))
-        return net, initial_marking, final_marking
+        logging.info("Running alpha miner")
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            net, initial_marking, final_marking = alpha_miner.apply(eventLog)
+            parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
+            gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
+            #pn_visualizer.view(gviz)
+            if (save):
+                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink, ProcessDiscovery.__Settings.ImageStorage['alphaMiner']))
+            return net, initial_marking, final_marking
+        except Exception as e:
+            logging.error("Exception occurred while running alpha miner", exc_info=True)
+
 
     def PetriNetAlphaPlusMiner(self, save=True):
         eventLog = ProcessDiscovery.__EventLog

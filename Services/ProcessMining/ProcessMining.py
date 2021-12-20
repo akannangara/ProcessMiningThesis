@@ -35,11 +35,13 @@ class ProcessMining(BaseModel):
     __Settings = None
     __EventLog = None
     __ConformantEventLogLocation = None
+    __OnlyDone = False
 
     def __init__(self, settings, onlyDone=False):
         ProcessMining.__Settings = settings
         csvRepository = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories/CsvCollection")
-        self.__AddGraphVizLocation(settings)
+        self.__AddGraphVizLocation(settings) #todo server: remove
+        ProcessMining.__OnlyDone = onlyDone
         if onlyDone:
             csvLocation = os.path.join(csvRepository, ProcessMining.__Settings.CsvStorageManager["OnlyDoneEventLogFileName"])
         else:
@@ -64,26 +66,30 @@ class ProcessMining(BaseModel):
         return ProcessMining.__EventLog
 
     def RunAllDiscoveryAlgorithms(self):
-        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, onlyDone=True)
-        dfg = processDiscovery.DFG()
-        efg = processDiscovery.EFG()
-        fps = processDiscovery.FPS()
-        processTree = processDiscovery.ProcessTreeInductive()
-        processTree005 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.05)
-        processTree010 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.1)
-        processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.25)
-        processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.5)
-        alphaNet, alphaInitial, alphaFinal = processDiscovery.PetriNetAlphaMiner()
-        processDiscovery.PetriNetAlphaPlusMiner()
-        processDiscovery.PetriNetInductiveMiner()
-        processDiscovery.PetriNetHeuristicsMiner()
-        processDiscovery.PetriNetHeuristicsMiner(threshold=0.95)
-        processDiscovery.PetriNetHeuristicsMiner(threshold=0.90)
-        processDiscovery.PetriNetHeuristicsMiner(threshold=0.85)
-        processDiscovery.PetriNetHeuristicsMiner(threshold=0.75)
-        processDiscovery.PetriNetHeuristicsMiner(threshold=0.60)
-        processDiscovery.PetriNetHeuristicsMiner(threshold=0.50)
-        processDiscovery.PetriNetHeuristicsMiner(threshold=1.00)
+        logging.info("Running all discovery algorithms")
+        try:
+            processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
+            dfg = processDiscovery.DFG()
+            efg = processDiscovery.EFG()
+            fps = processDiscovery.FPS()
+            processTree = processDiscovery.ProcessTreeInductive()
+            processTree005 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.05)
+            processTree010 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.1)
+            processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.25)
+            processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.5)
+            alphaNet, alphaInitial, alphaFinal = processDiscovery.PetriNetAlphaMiner()
+            processDiscovery.PetriNetAlphaPlusMiner()
+            processDiscovery.PetriNetInductiveMiner()
+            processDiscovery.PetriNetHeuristicsMiner()
+            processDiscovery.PetriNetHeuristicsMiner(threshold=0.95)
+            processDiscovery.PetriNetHeuristicsMiner(threshold=0.90)
+            processDiscovery.PetriNetHeuristicsMiner(threshold=0.85)
+            processDiscovery.PetriNetHeuristicsMiner(threshold=0.75)
+            processDiscovery.PetriNetHeuristicsMiner(threshold=0.60)
+            processDiscovery.PetriNetHeuristicsMiner(threshold=0.50)
+            processDiscovery.PetriNetHeuristicsMiner(threshold=1.00)
+        except Exception as e:
+            logging.error("Exception occurred when running all discovery algorithms", exc_info=True)
 
     def ConformanceChecking(self):
         conformanceChecking = ConformanceChecking(ProcessMining.__Settings)
