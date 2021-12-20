@@ -32,10 +32,12 @@ class ProcessDiscovery(BaseModel):
     __EventLog = None
     __ImagesSink = None
 
-    def __init__(self, settings, eventLog):
+    def __init__(self, settings, eventLog, onlyDone=False):
         ProcessDiscovery.__Settings = settings
         repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
         ProcessDiscovery.__ImagesSink = os.path.join(repsoitoryLocation, settings.ImageStorage["ImagesSink"])
+        if onlyDone:
+             ProcessDiscovery.__ImagesSink = os.path.join(ProcessDiscovery.__ImagesSink, "OnlyDone")
         self.__AddGraphVizLocation(settings)
         ProcessDiscovery.__EventLog = eventLog
 
@@ -100,9 +102,8 @@ class ProcessDiscovery(BaseModel):
     #directlyFollowsGraph
     def DFG(self, save=True):
         eventLog = ProcessDiscovery.__EventLog
-        eventLog = self.eventLogTimeConverter(csvEventLog)
         dfg = dfg_discovery.apply(eventLog)
-        gviz = dfg_visualization.apply(dfg, log=event_log, variant=dfg_visualization.Variants.FREQUENCY)
+        gviz = dfg_visualization.apply(dfg, log=eventLog, variant=dfg_visualization.Variants.FREQUENCY)
         #dfg_visualization.view(gviz)
         if (save):
             pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['dfg']))
@@ -115,13 +116,12 @@ class ProcessDiscovery(BaseModel):
         gviz = pt_visualizer.apply(processTree, variant=pt_visualizer.Variants.WO_DECORATION)
         #pt_visualizer.view(gviz)
         if (save):
-            pt_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['heuristicsMiner']))
+            pt_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(noiseThreshold)+ProcessDiscovery.__Settings.ImageStorage['processTreeInductive']))
         return processTree
 
     #eventuallyFollowsGraph
     def EFG(self, save=True):
         eventLog = ProcessDiscovery.__EventLog
-        eventLog = self.eventLogTimeConverter(csvEventLog)
         efg = pm4py.discover_eventually_follows_graph(eventLog)
         #print(efg)
         return efg

@@ -3,6 +3,8 @@ from typing import List
 from pydantic import BaseModel
 
 import sqlalchemy as sql
+from sqlalchemy import or_
+from sqlalchemy import and_
 
 from TIssue import TIssue
 
@@ -73,8 +75,22 @@ class DbContext:
             queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute) == query).all()
             return queryResult
 
+    def QueryChainOrLike(self, entity, attribute1: str, query11 : str, query12 : str, attribute2 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity)\
+            .filter(or_(getattr(entity, attribute1) == query11, getattr(entity, attribute1) == query12))\
+            .filter(getattr(entity, attribute2).like(query2)).all()
+        return queryResult
+
     def QueryLike(self, entity, attribute : str, query : str):
         queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute).like(query)).all()
+        return queryResult
+
+    def QueryOr(self, entity, attribute : str, query1 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(or_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
+        return queryResult
+
+    def QueryAnd(self, entity, attribute : str, query1 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
         return queryResult
 
     def AddIssueToDb(self, jiraIssue : JiraIssue):

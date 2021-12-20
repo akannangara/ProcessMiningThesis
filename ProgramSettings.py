@@ -17,6 +17,7 @@ ImageStorage = {
     "alphaPlusMiner": "AlphaPlusMiner.png",
     "inductiveMiner":"InductiveMiner.png",
     "heuristicsMiner":"HeuristicsMiner.png",
+    "processTreeInductive": "ProcessTreeInductive.png",
     "dfg":"DFG.png"
 }
 
@@ -30,6 +31,7 @@ SqlDb = {
 CsvStorageManager = {
     "SinkDirectory":"CsvCollection",
     "EventLogFileName": "Eventlog.csv",
+    "OnlyDoneEventLogFileName": "OnlyDoneEventLog.csv",
     "TeamMembersFileName": "TeamMembers.csv"
 }
 

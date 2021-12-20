@@ -8,6 +8,7 @@ import pandas as pd
 from DbContext import DbContext
 from EventLogItem import EventLogItem
 from TeamMember import TeamMember
+from TIssue import TIssue
 from TChangeLog import TChangeLog
 from TTeamMember import TTeamMember
 
@@ -24,17 +25,38 @@ class CsvFileManager(BaseModel):
 
 				CsvFileManager.__SinkDirectory = os.path.join(pathToRepository, CsvFileManager.__Settings["SinkDirectory"])
 
-		def CreateEventLogFromDb(self, projectsList : List[str] = []):
+		def CreateEventLogFromDb(self, projectsList : List[str] = [], onlyDone=False):
 				logging.info("Storing events from projects list " +(' '.join(str(x) for x in projectsList))+ " as csv")
 				try:
+						eventLogName = CsvFileManager.__Settings["EventLogFileName"]
 						allChangeLogs = []
 						if not(projectsList):
-								allChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "", "")
+								if onlyDone:
+										#10001 == Done and 10003 == Rejected
+										issues = CsvFileManager.__DbContext.QueryOr(TIssue, "StatusId", "10001", "10003")
+										for issue in issues:
+												issueChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "IssueId", issue.Id)
+												allChangeLogs.extend(issueChangeLogs)
+								else:
+										allChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "", "")
 						else:
 								for project in projectsList:
-										projectChangeLogs = CsvFileManager.__DbContext.QueryLike(TChangeLog, 'IssueKey', project+"%")
+										projectChangeLogs = []
+										if onlyDone:
+												issues = CsvFileManager.__DbContext.QueryChainOrLike(TIssue, 'StatusId', "10001", "10003", 'IssueKey', project+"%")
+												for issue in issues:
+														issueChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "IssueId", issue.Id)
+														projectChangeLogs.extend(issueChangeLogs)
+										else:
+												projectChangeLogs = CsvFileManager.__DbContext.QueryLike(TChangeLog, 'IssueKey', project+"%")
 										allChangeLogs.extend(projectChangeLogs)
-						self.__CreateAndStoreDataFrameFromEntityList(allChangeLogs, EventLogItem, CsvFileManager.__Settings["EventLogFileName"])
+						if onlyDone:
+								eventLogName = CsvFileManager.__Settings["OnlyDoneEventLogFileName"]
+						else:
+								eventLogName = CsvFileManager.__Settings["EventLogFileName"]
+						self.__CreateAndStoreDataFrameFromEntityList(allChangeLogs, EventLogItem, eventLogName)
+						if onlyDone:
+								CsvFileManager.__Settings["EventLogFileName"] = eventLogName
 				except Exception as e:
 						logging.error("Error storing projects list as csv", exc_info=True)
 
@@ -60,14 +82,12 @@ class CsvFileManager(BaseModel):
 				except Exception as e:
 						logging.error("Error updating teamMember from csv", exc_info=True)
 
-
 		def __CreateAndStoreDataFrameFromEntityList(self, entityList : List, entityType, filename : str):
 				dataframe = pd.DataFrame()
 				for entity in entityList:
 						row = entityType(entity)
 						dataframe = self.__AddEntityToDataFrame(row, dataframe)
 				self.__SaveDataFrameToCsv(dataframe, filename)
-
 
 		def __AddEntityToDataFrame(self, entity, dataframe : pd.DataFrame):
 				properties = entity.__dict__

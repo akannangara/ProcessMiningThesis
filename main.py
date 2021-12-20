@@ -59,10 +59,10 @@ if __name__ == "__main__":
     #for project in ["CONBR", "PSH"]:
     #    issues = jiraImporter.GetProjectIssues(project)
     #    jiraImporter.StoreIssuesToDatabase(issues)
-    #fileManager = CsvFileManager(dbContext, settings)
-    #fileManager.CreateEventLogFromDb()
+    fileManager = CsvFileManager(dbContext, settings)
+    fileManager.CreateEventLogFromDb(onlyDone=True)
     #fileManager.CreateTeamMemberCollectionFromDb()
-    processMiner = ProcessMining(settings)
+    processMiner = ProcessMining(settings, onlyDone=True)
     processMiner.RunAllDiscoveryAlgorithms()
     #alphaResults = processDiscovery.PetriNetAlphaMiner(save=True)
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

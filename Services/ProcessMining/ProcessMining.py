@@ -33,13 +33,16 @@ class ProcessMining(BaseModel):
     __Settings = None
     __EventLog = ""
 
-    def __init__(self, settings):
+    def __init__(self, settings, onlyDone=False):
         ProcessMining.__Settings = settings
         csvRepository = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories/CsvCollection")
-        ProcessMining.__EventLog = self.__ReadCsvEventLogAsEventLog(csvRepository)
+        ProcessMining.__EventLog = self.__ReadCsvEventLogAsEventLog(csvRepository, onlyDone)
 
-    def __ReadCsvEventLogAsEventLog(self, csvRepositoryLocation):
-        log = pd.read_csv(os.path.join(csvRepositoryLocation, ProcessMining.__Settings.CsvStorageManager["EventLogFileName"]))
+    def __ReadCsvEventLogAsEventLog(self, csvRepositoryLocation, onlyDone):
+        if (onlyDone):
+            log = pd.read_csv(os.path.join(csvRepositoryLocation, ProcessMining.__Settings.CsvStorageManager["OnlyDoneEventLogFileName"]))
+        else:
+            log = pd.read_csv(os.path.join(csvRepositoryLocation, ProcessMining.__Settings.CsvStorageManager["EventLogFileName"]))
         log.rename(columns={'IssueId' : 'case:clientId',
                             'To':'concept:name',
                             'IssueKey':'case:concept:name',
@@ -51,7 +54,15 @@ class ProcessMining(BaseModel):
         return ProcessMining.__EventLog
 
     def RunAllDiscoveryAlgorithms(self):
-        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog)
+        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, onlyDone=True)
+        dfg = processDiscovery.DFG()
+        efg = processDiscovery.EFG()
+        fps = processDiscovery.FPS()
+        processTree = processDiscovery.ProcessTreeInductive()
+        processTree005 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.05)
+        processTree010 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.1)
+        processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.25)
+        processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.5)
         alphaNet, alphaInitial, alphaFinal = processDiscovery.PetriNetAlphaMiner()
         processDiscovery.PetriNetAlphaPlusMiner()
         processDiscovery.PetriNetInductiveMiner()
