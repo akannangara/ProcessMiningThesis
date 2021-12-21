@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Common\\Support",
-    "\\Domain",
     "\\Domain\\Models",
+    "\\Domain\\Models\\CsvModels",
+    "\\Domain\\Models\\DbModels",
+    "\\Domain\\Models\\JiraModels",
     "\\Domain\\Repositories",
-    "\\Domain\\Repositories\\CsvCollection",
+    "\\Domain\\Repositories\\ProcessConformanceImages",
+    "\\Domain\\Repositories\\ProcessDiscoveryImages",
     "\\Services",
-    "\\Services\\CsvFileManager",
-    "\\Services\\JiraDataCollector\\Support",
-    "\\Services\\ProcessMining"
+    "\\Services\\JiraDataCollector"
   ],
-  "SelectedNode": "\\Services\\ProcessMining\\ProcessDiscovery.py",
+  "SelectedNode": "\\Services\\ProcessMining\\ProcessMining.py",
   "PreviewInSolutionExplorer": false
 }

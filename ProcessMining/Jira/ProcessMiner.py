@@ -31,7 +31,7 @@ class ProcessMiner:
         self._csvEventLog, self._eventLog = self.readCSVlog()
 
     def readCSVlog(self, logfile=cfg.DataStoreFolder+"\EventLog.csv"):
-        log = pd.read_csv(logfile, sep=',')
+        log = pd.read_csv(logfile, sep=';')
         log.rename(columns={'IssueId' : 'case:clientId',
                                 'To':'concept:name',
                                 'IssueKey':'case:concept:name',

@@ -33,7 +33,10 @@ class DbContext:
         logging.info("Initializing DbContext")
         logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
         try:
-            connectionString = settings.SqlDb["ConnectionString"]
+            if settings.Debug:
+                connectionString = settings.SqlDb["ConnectionStringServer"]
+            else:
+                connectionString = settings.SqlDb["ConnectionStringFile"]
             DbContext.__engine = sql.create_engine(connectionString, echo=settings.SqlDb["Debug"])
             Base.metadata.create_all(DbContext.__engine)
             sessionMaker = sql.orm.sessionmaker(bind=DbContext.__engine)

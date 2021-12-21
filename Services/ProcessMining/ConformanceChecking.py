@@ -24,3 +24,21 @@ class ConformanceChecking(BaseModel):
 
     def ConformanceCheckDiagnosticsAlignment(self, log, petrinet, initial, final):
         return pm4py.conformance_diagnostics_alignments(log, petrinet, initial, final)
+
+    def FitnessAlignment(self, log, model, initial, final):
+        return pm4py.fitness_alignments(log, model, initial, final)
+
+    def FitnessTokenBasedReply(self, log, model, inital, final):
+        return pm4py.fitness_token_based_replay(log, model, inital, final)
+
+    def PrecisionAlignment(self, log, model, initial, final):
+        return pm4py.precision_alignments(log, model, initial, final)
+
+    def PrecisionTokenBasedReplay(self, log, model, initial, final):
+        return pm4py.precision_token_based_replay(log, model, initial, final)
+
+    def Generalization(self, log, model, initial, final):
+        return pm4py.algo.evaluation.generalization.algorithm.apply(log, model, initial, final)
+
+    def Simplicity(self, model):
+        return pm4py.algo.evaluation.simplicity.algorithm.apply(model)

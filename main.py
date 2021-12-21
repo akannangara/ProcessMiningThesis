@@ -20,11 +20,9 @@ sys.path.append(DOMAIN_REPOSITORIES_DIR)
 
 SERVICES_DIR = os.path.join(ROOT_DIR, 'Services')
 SERVICES_JIRADATACOLLECTOR_DIR = os.path.join(SERVICES_DIR, 'JiraDataCollector')
-SERVICES_CSVFILEMANAGER_DIR = os.path.join(SERVICES_DIR, 'CsvFileManager')
 SERVICES_PROCESSMINING_DIR = os.path.join(SERVICES_DIR, 'ProcessMining')
 sys.path.append(SERVICES_DIR)
 sys.path.append(SERVICES_JIRADATACOLLECTOR_DIR)
-sys.path.append(SERVICES_CSVFILEMANAGER_DIR)
 sys.path.append(SERVICES_PROCESSMINING_DIR)
 
 import time
@@ -48,24 +46,20 @@ if __name__ == "__main__":
     else:
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
-    try:
-        dbContext = DbContext(settings)
-    except Exception as e:
-        logging.error("Could not create db context")
-        exit(1)
     startTime = time.time()
-    #jiraImporter = JiraDataImporter(settings, dbContext)
+    #jiraImporter = JiraDataImporter(settings, DbContext(settings))
     #projectsList = jiraImporter.GetProjectsList()
     #for project in ["CONBR", "PSH"]:
     #    issues = jiraImporter.GetProjectIssues(project)
     #    jiraImporter.StoreIssuesToDatabase(issues)
-    fileManager = CsvFileManager(dbContext, settings)
+    fileManager = CsvFileManager(DbContext(settings), settings)
     fileManager.CreateEventLogFromDb(onlyDone=False)
     fileManager.CreateEventLogFromDb(onlyDone=True)
     fileManager.CreateTeamMemberCollectionFromDb()
-    processMiner = ProcessMining(settings)
+    fileManager.CreateStatusCollectionFromDb()
+    processMiner = ProcessMining(settings, DbContext(settings))
     processMiner.RunAllDiscoveryAlgorithms()
-    processMiner2 = ProcessMining(settings, onlyDone=True)
+    processMiner2 = ProcessMining(settings, DbContext(settings), onlyDone=True)
     processMiner2.RunAllDiscoveryAlgorithms()
     #processMiner.ConformanceChecking()
     #alphaResults = processDiscovery.PetriNetAlphaMiner(save=True)

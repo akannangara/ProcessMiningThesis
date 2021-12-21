@@ -48,7 +48,7 @@ class ProcessDiscovery(BaseModel):
             eventLog = ProcessDiscovery.__EventLog
             net, initial_marking, final_marking = alpha_miner.apply(eventLog)
             parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
-            gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
+            gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, log=eventLog)
             #pn_visualizer.view(gviz)
             if (save):
                 pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink, ProcessDiscovery.__Settings.ImageStorage['alphaMiner']))
@@ -56,84 +56,116 @@ class ProcessDiscovery(BaseModel):
         except Exception as e:
             logging.error("Exception occurred while running alpha miner", exc_info=True)
 
-
     def PetriNetAlphaPlusMiner(self, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        net, initial_marking, final_marking = pm4py.discover_petri_net_alpha_plus(eventLog)
-        parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
-        gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
-        #pn_visualizer.view(gviz)
-        if (save):
-            pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['alphaPlusMiner']))
-        return net, initial_marking, final_marking
+        logging.info("Running alpha+ miner")
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            net, initial_marking, final_marking = pm4py.discover_petri_net_alpha_plus(eventLog)
+            parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
+            gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, log=eventLog)
+            #pn_visualizer.view(gviz)
+            if (save):
+                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['alphaPlusMiner']))
+            return net, initial_marking, final_marking
+        except Exception as e:
+            logging.error("Exception occurred while running alpha+ miner", exc_info=True)
 
     def PetriNetInductiveMiner(self, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        net, initial_marking, final_marking = inductive_miner.apply(eventLog)
-        parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
-        gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
-        #pn_visualizer.view(gviz)
-        if (save):
-            pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['inductiveMiner']))
-        return net, initial_marking, final_marking
+        logging.info("Running inductive miner")
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            net, initial_marking, final_marking = inductive_miner.apply(eventLog)
+            parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
+            gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
+            #pn_visualizer.view(gviz)
+            if (save):
+                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['inductiveMiner']))
+            return net, initial_marking, final_marking
+        except Exception as e:
+            logging.error("Exception occurred while running inductive miner", exc_info=True)
 
     def PetriNetHeuristicsMiner(self, threshold=0.99, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        parameters={heuristics_miner.Variants.CLASSIC.value.Parameters.DEPENDENCY_THRESH: threshold}
-        net, initial_marking, final_marking = heuristics_miner.apply(eventLog, parameters=parameters)
-        parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
-        gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
-        #pn_visualizer.view(gviz)
-        if (save):
-            pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(threshold)+ProcessDiscovery.__Settings.ImageStorage['heuristicsMiner']))
-        return net, initial_marking, final_marking
+        logging.info("Running Heuristics miner with threshold "+str(threshold))
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            parameters={heuristics_miner.Variants.CLASSIC.value.Parameters.DEPENDENCY_THRESH: threshold}
+            net, initial_marking, final_marking = heuristics_miner.apply(eventLog, parameters=parameters)
+            parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
+            gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
+            #pn_visualizer.view(gviz)
+            if (save):
+                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(threshold)+ProcessDiscovery.__Settings.ImageStorage['heuristicsMiner']))
+            return net, initial_marking, final_marking
+        except Exception as e:
+            logging.error("Exception occurred while running heuristics minder with threshold "+str(threshold), exc_info=True)
 
     #heuristicsNet
     def HeuristicsNetMiner(self, dependency_threshhold=0.5, and_threshold=0.65, loop_2_threshold=0.5, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        heuristics_net = pm4py.discover_heuristics_net(eventLog, dependency_threshhold, and_threshold, loop_2_threshold)
-        parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
-        gviz = hn_visualizer.apply(heuristics_net, parameters=parameters)
-        #hn_visualizer.view(gviz)
-        if (save):
-            hn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['heuristicsMiner']))
-        return heuristics_net
+        logging.info("Running heuristics net miner with dt="+str(dependency_threshold)+"; at="+str(and_threshold)+"; l2t="+str(loop_2_threshold))
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            heuristics_net = pm4py.discover_heuristics_net(eventLog, dependency_threshhold, and_threshold, loop_2_threshold)
+            parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
+            gviz = hn_visualizer.apply(heuristics_net, parameters=parameters)
+            #hn_visualizer.view(gviz)
+            if (save):
+                hn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['heuristicsNetMiner']))
+            return heuristics_net
+        except Exception as e:
+            logging.error("Exception occurred while running heuristics net minder with dt="+str(dependency_threshold)+"; at="+str(and_threshold)+"; l2t="+str(loop_2_threshold), exc_info=True)
+
 
     #directlyFollowsGraph
     def DFG(self, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        dfg = dfg_discovery.apply(eventLog)
-        gviz = dfg_visualization.apply(dfg, log=eventLog, variant=dfg_visualization.Variants.FREQUENCY)
-        #dfg_visualization.view(gviz)
-        if (save):
-            pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['dfg']))
-        return dfg
+        logging.info("Running DGF")
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            dfg = dfg_discovery.apply(eventLog)
+            gviz = dfg_visualization.apply(dfg, log=eventLog, variant=dfg_visualization.Variants.FREQUENCY)
+            #dfg_visualization.view(gviz)
+            if (save):
+                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['dfg']))
+            return dfg
+        except Exception as e:
+            logging.error("Exception occurred while running DGF", exc_info=True)
 
     #processTree
     def ProcessTreeInductive(self, noiseThreshold=0.0, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        processTree = pm4py.discover_process_tree_inductive(eventLog, noise_threshold=noiseThreshold)
-        gviz = pt_visualizer.apply(processTree, variant=pt_visualizer.Variants.WO_DECORATION)
-        #pt_visualizer.view(gviz)
-        if (save):
-            pt_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(noiseThreshold)+ProcessDiscovery.__Settings.ImageStorage['processTreeInductive']))
-        return processTree
+        logging.info("Running Process tree inductive")
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            processTree = pm4py.discover_process_tree_inductive(eventLog, noise_threshold=noiseThreshold)
+            gviz = pt_visualizer.apply(processTree, variant=pt_visualizer.Variants.WO_DECORATION)
+            #pt_visualizer.view(gviz)
+            if (save):
+                pt_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(noiseThreshold)+ProcessDiscovery.__Settings.ImageStorage['processTreeInductive']))
+            return processTree
+        except Exception as e:
+            logging.error("Exception occurred while running process tree inductive", exc_info=True)
 
     #eventuallyFollowsGraph
     def EFG(self, save=True):
-        eventLog = ProcessDiscovery.__EventLog
-        efg = pm4py.discover_eventually_follows_graph(eventLog)
-        #print(efg)
-        return efg
+        logging.info("Running EFG")
+        try:
+            eventLog = ProcessDiscovery.__EventLog
+            efg = pm4py.discover_eventually_follows_graph(eventLog)
+            #print(efg)
+            return efg
+        except Exception as e:
+            logging.error("Exception occurred while running EFG", exc_info=True)
 
     #FPS
     def FPS(self, logOrModel=None, save=True):
-        if (logOrModel==None):
-            logOrModel= ProcessDiscovery.__EventLog
-        fps = pm4py.discover_footprints(logOrModel)
-#        for fp in range(len(fps)):
-#            gviz = fps_visualizer.apply(fps[fp])
-#            fps_visualizer.view(gviz)
-#        if (save):
-#            fps_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['dfg']))
-        return fps
+        logging.info("FPS")
+        try:
+            if (logOrModel==None):
+                logOrModel= ProcessDiscovery.__EventLog
+            fps = pm4py.discover_footprints(logOrModel)
+    #        for fp in range(len(fps)):
+    #            gviz = fps_visualizer.apply(fps[fp])
+    #            fps_visualizer.view(gviz)
+    #        if (save):
+    #            fps_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,ProcessDiscovery.__Settings.ImageStorage['dfg']))
+            return fps
+        except Exception as e:
+            logging.error("Exception occurred while running FPS", exc_info=True)

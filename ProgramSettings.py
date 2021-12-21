@@ -5,7 +5,7 @@ Jira = {
     "ConnectionRefreshTimer": 600
 }
 
-Debug=True
+Debug=True #todo server: set to false
 
 DataStoreFolder = "C:\_thesis\DataStore"
 
@@ -17,6 +17,7 @@ ImageStorage = {
     "alphaPlusMiner": "AlphaPlusMiner.png",
     "inductiveMiner":"InductiveMiner.png",
     "heuristicsMiner":"HeuristicsMiner.png",
+    "heuristicsNetMiner":"HeuristicsNetMiner.png",
     "processTreeInductive": "ProcessTreeInductive.png",
     "dfg":"DFG.png",
     "ImagesSinkProcessConformance":"ProcessConformanceImages"
@@ -33,7 +34,9 @@ CsvStorageManager = {
     "SinkDirectory":"CsvCollection",
     "EventLogFileName": "Eventlog.csv",
     "OnlyDoneEventLogFileName": "OnlyDoneEventLog.csv",
-    "TeamMembersFileName": "TeamMembers.csv"
+    "TeamMembersFileName": "TeamMembers.csv",
+    "StatusesFileName":"Statuses.csv",
+    "MinerConformanceEvaluation": "MinerConformanceEvaluation.csv"
 }
 
 GraphViz = {
