@@ -32,19 +32,15 @@ from CsvFileManager import CsvFileManager
 
 from ProcessDiscovery import ProcessDiscovery
 from ConformanceChecking import ConformanceChecking
-from ProcessMinerConformance import ProcessMinerConformance
-from DbContext import DbContext
 
 class ProcessMining(BaseModel):
     __Settings = None
     __EventLog = None
     __ConformantEventLogLocation = None
     __OnlyDone = False
-    __DbContext = None
 
-    def __init__(self, settings, dbContext : DbContext, onlyDone=False):
+    def __init__(self, settings, onlyDone=False):
         ProcessMining.__Settings = settings
-        ProcessMining.__DbContext = dbContext
         csvRepository = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories/CsvCollection")
         if settings.Debug:
             self.__AddGraphVizLocation(settings)
@@ -77,7 +73,7 @@ class ProcessMining(BaseModel):
         try:
             eventLog = ProcessMining.__EventLog
             processDiscovery = ProcessDiscovery(ProcessMining.__Settings, eventLog, ProcessMining.__OnlyDone)
-            conformanceCollection = []
+            conformanceChecker = ConformanceChecking(ProcessMining.__Settings)
 
             #dfg, egf and fps
             dfg = processDiscovery.DFG()
@@ -93,46 +89,30 @@ class ProcessMining(BaseModel):
 
             #Discovery Miners
             net, initial, final = processDiscovery.PetriNetAlphaMiner()
-            conformanceCollection.append(self.__EventLogModelConformance('AlphaMiner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('AlphaMiner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetAlphaPlusMiner()
-            conformanceCollection.append(self.__EventLogModelConformance('AlphaPlusMiner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('AlphaPlusMiner', eventLog, net, initial, final)
 
             net, initial, final = processDiscovery.PetriNetInductiveMiner()
-            conformanceCollection.append(self.__EventLogModelConformance('InductiveMiner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('InductiveMiner', eventLog, net, initial, final)
 
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner()
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics0.99Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.99Miner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.95)
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics0.95Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.95Miner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.90)
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics0.90Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.90Miner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.85)
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics0.85Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.85Miner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.75)
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics0.75Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.75Miner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.60)
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics0.60Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.60Miner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.50)
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics0.50Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.50Miner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=1.00)
-            conformanceCollection.append(self.__EventLogModelConformance('Heuristics1.00Miner', eventLog, net, initial, final))
+            conformanceChecker.AddToConfromanceCheckCollection('Heuristics1.00Miner', eventLog, net, initial, final)
 
-            self.__SaveConformanceCollection(conformanceCollection)
+            conformanceChecker.SaveConformanceCollection()
         except Exception as e:
             logging.error("Exception occurred when running all discovery algorithms", exc_info=True)
-
-    def __EventLogModelConformance(self, minerName, eventLog, petrinet, initial, final):
-        conformanceChecker = ConformanceChecking(ProcessMining.__Settings)
-        fitness = conformanceChecker.FitnessAlignment(eventLog, petrinet, initial, final)
-        precision = conformanceChecker.PrecisionAlignment(eventLog, petrinet, initial, final)
-        gerneralization = conformanceChecker.Generalization(eventLog, petrinet, initial, final)
-        simplicity = conformanceChecker.Simplicity(petrinet)
-        conformance = ProcessMinerConformance(minerName, fitness, precision, gerneralization, simplicity)
-        return conformance
-
-    def __SaveConformanceCollection(self, conformanceCollection : List[ProcessMinerConformance]):
-        fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
-        fileName = ProcessMining.__Settings.CsvStorageManager["MinerConformanceEvaluation"]
-        if ProcessMining.__OnlyDone:
-            fileName = "OnlyDone_"+fileName
-        fileManager.StoreMinerConformanceEvaluation(conformanceCollection, fileName)

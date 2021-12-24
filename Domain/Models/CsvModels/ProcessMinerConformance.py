@@ -7,8 +7,8 @@ from dataclasses import dataclass
 @dataclass
 class ProcessMinerConformance:
     MinerName : str
-    AverageFitness : float
-    PercentageOfFittingTraces : float
+    AverageTraceFitness : float
+    PercentageFitTraces : float
     LogFitness : float
     Precision : float
     Generalization : float
@@ -16,8 +16,8 @@ class ProcessMinerConformance:
 
     def __init__(self, minerName: str, fitness, precision : float, generalization : float, simplicity : float):
         self.MinerName = minerName
-        self.AverageFitness = fitness['averageFitness']
-        self.PercentageOfFittingTraces = fitness['percentage_of_fitting_traces']
+        self.AverageFitness = fitness['average_trace_fitness']
+        self.PercentageOfFittingTraces = fitness['perc_fit_traces']
         self.LogFitness = fitness['log_fitness']
         self.Precision = precision
         self.Generalization = generalization

@@ -1,9 +1,27 @@
-df_index;Id;Description;Name
-0;3;This issue is being actively worked on at the moment by the assignee.;In Progress
-1;10000;;To Do
-2;10001;;Done
-3;10002;;Reserved
-4;10003;;Rejected
-5;10004;;Ready to Review
-6;10005;;In Review
-7;10009;;In Acceptance
+df_index;Key;DisplayName;Name;Active;Type
+0;;;;False;
+1;bjorn.vande.ruit;Bjorn van de Ruit;Bjorn.vande.Ruit;True;
+2;bram.kersten;Bram Kersten;bram.kersten;True;
+3;daan.de.krosse;Daan de Krosse;Daan.de.Krosse;True;
+4;drupal@indicia.nl;Portals;drupal@indicia.nl;True;
+5;imli.de.voogd;Imli de Voogd;imli.de.voogd;True;
+6;indicia;Patryk Raba ;indicia;True;
+7;jaap.van.hengstum;Jaap van Hengstum;Jaap.van.Hengstum;True;
+8;jesse.klaasse;Jesse Klaasse;Jesse.Klaasse;True;
+9;JIRAUSER12202;Luuk van der Steen;Luuk.vander.steen;True;
+10;JIRAUSER12404;Nick Thijssen [X];nick.thijssen;False;
+11;JIRAUSER12417;Aaron Kannangara;aaron.kannangara;True;
+12;JIRAUSER12503;Cas Mathijsen;cas.mathijsen;True;
+13;JIRAUSER12603;Rolf Meijer;rolf.meijer;False;
+14;JIRAUSER12701;Dion Klaassen;dion.klaassen;True;
+15;JIRAUSER12817;Onur Temelli;onur.temelli;True;
+16;JIRAUSER12902;Bastiaan van der Spoel;b.vanderspoel;True;
+17;luuk.naaijen;Luuk Naaijen;luuk.naaijen;True;
+18;milou.remmers;Milou Remmers;Milou.Remmers;True;
+19;mitchell.diels;Mitchell Diels;mitchell.diels;True;
+20;niels.van.de.put;Niels Van De Put;niels.vande.put;True;
+21;onno.klien.hofmeijer;Onno Klein Hofmeijer;onno.klien.hofmeijer;True;
+22;patrick.van.tilborg;Patrick van Tilborg;Patrick.van.Tilborg;True;
+23;remy.van.velthuijsen;Remy van Velthuijsen;Remy.van.Velthuijsen;True;
+24;sander.jongbloets;Sander Jongbloets;sander.jongbloets;True;
+25;stijn.bastiaansen;Stijn Bastiaansen;stijn.bastiaansen;True;

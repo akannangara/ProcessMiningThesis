@@ -36,7 +36,8 @@ CsvStorageManager = {
     "OnlyDoneEventLogFileName": "OnlyDoneEventLog.csv",
     "TeamMembersFileName": "TeamMembers.csv",
     "StatusesFileName":"Statuses.csv",
-    "MinerConformanceEvaluation": "MinerConformanceEvaluation.csv"
+    "MinerConformanceEvaluation": "MinerConformanceEvaluation.csv",
+    "DesiredEventLogFileName": "DesiredEventLog.csv"
 }
 
 GraphViz = {

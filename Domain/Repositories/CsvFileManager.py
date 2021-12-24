@@ -71,7 +71,7 @@ class CsvFileManager(BaseModel):
 						if not(allStatuses):
 								logging.error("No Statuses found when creating status collection as csv")
 								return
-						self.__CreateAndStoreDataFrameFromEntityList(allStatuses, StatusCsvItem, CsvFileManager.__Settings["TeamMembersFileName"])
+						self.__CreateAndStoreDataFrameFromEntityList(allStatuses, StatusCsvItem, CsvFileManager.__Settings["StatusesFileName"])
 				except Exception as e:
 						logging.error("Error storing status collection to csv", exc_info=True)
 

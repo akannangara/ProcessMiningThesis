@@ -39,6 +39,26 @@ from ProcessMining import ProcessMining
 
 from TIssue import TIssue
 
+def ImportJiraIssues():
+    jiraImporter = JiraDataImporter(settings, DbContext(settings))
+    projectsList = jiraImporter.GetProjectsList()
+    for project in projectsList:
+        issues = jiraImporter.GetProjectIssues(project)
+        jiraImporter.StoreIssuesToDatabase(issues)
+
+def CreateEventLogsFromDb():
+    fileManager = CsvFileManager(DbContext(settings), settings)
+    fileManager.CreateEventLogFromDb(onlyDone=False)
+    fileManager.CreateEventLogFromDb(onlyDone=True)
+    fileManager.CreateTeamMemberCollectionFromDb()
+    fileManager.CreateStatusCollectionFromDb()
+
+def RunProcessDiscoveryAndConformance():
+    processMiner = ProcessMining(settings)
+    processMiner.RunAllDiscoveryAlgorithms()
+    processMiner2 = ProcessMining(settings, onlyDone=True)
+    processMiner2.RunAllDiscoveryAlgorithms()
+
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -47,20 +67,8 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
-    #jiraImporter = JiraDataImporter(settings, DbContext(settings))
-    #projectsList = jiraImporter.GetProjectsList()
-    #for project in ["CONBR", "PSH"]:
-    #    issues = jiraImporter.GetProjectIssues(project)
-    #    jiraImporter.StoreIssuesToDatabase(issues)
-    fileManager = CsvFileManager(DbContext(settings), settings)
-    fileManager.CreateEventLogFromDb(onlyDone=False)
-    fileManager.CreateEventLogFromDb(onlyDone=True)
-    fileManager.CreateTeamMemberCollectionFromDb()
-    fileManager.CreateStatusCollectionFromDb()
-    processMiner = ProcessMining(settings, DbContext(settings))
-    processMiner.RunAllDiscoveryAlgorithms()
-    processMiner2 = ProcessMining(settings, DbContext(settings), onlyDone=True)
-    processMiner2.RunAllDiscoveryAlgorithms()
+    CreateEventLogsFromDb()
+    RunProcessDiscoveryAndConformance()
     #processMiner.ConformanceChecking()
     #alphaResults = processDiscovery.PetriNetAlphaMiner(save=True)
     logging.info("Execution time was "+str(time.time()-startTime)+" s")
