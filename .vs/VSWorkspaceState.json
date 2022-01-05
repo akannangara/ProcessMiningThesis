@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Domain",
-    "\\Domain\\Repositories"
+    "\\Domain\\Models",
+    "\\Domain\\Models\\CsvModels",
+    "\\Services",
+    "\\Services\\ProcessMining"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\Domain\\Models",
   "PreviewInSolutionExplorer": false
 }

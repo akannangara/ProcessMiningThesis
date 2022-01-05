@@ -116,3 +116,11 @@ class ProcessMining(BaseModel):
             conformanceChecker.SaveConformanceCollection()
         except Exception as e:
             logging.error("Exception occurred when running all discovery algorithms", exc_info=True)
+
+    def ConformanceCheckWithDesiredWorkflow(self):
+        logging.info("Running conformance check compared to desired workflow")
+        eventLog = ProcessMining.__EventLog
+        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, eventLog, ProcessMining.__OnlyDone)
+        net, initial, final = processDiscovery.PetriNetInductiveMiner()
+        conformanceChecker = ConformanceChecking(ProcessMining.__Settings)
+        conformanceChecker.CreateDesiredEventLog("C:/Users/akann/Downloads/FormResponse.xlsx", 'workbook1')

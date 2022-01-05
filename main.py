@@ -59,6 +59,10 @@ def RunProcessDiscoveryAndConformance():
     processMiner2 = ProcessMining(settings, onlyDone=True)
     processMiner2.RunAllDiscoveryAlgorithms()
 
+def RunProcessConformanceWithDesiredWorkflow():
+    processMiner = ProcessMining(settings)
+    processMiner.ConformanceCheckWithDesiredWorkflow()
+
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -67,8 +71,7 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
-    CreateEventLogsFromDb()
-    RunProcessDiscoveryAndConformance()
-    #processMiner.ConformanceChecking()
-    #alphaResults = processDiscovery.PetriNetAlphaMiner(save=True)
+    #CreateEventLogsFromDb()
+    #RunProcessDiscoveryAndConformance()
+    RunProcessConformanceWithDesiredWorkflow()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

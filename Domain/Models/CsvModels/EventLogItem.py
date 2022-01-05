@@ -25,3 +25,15 @@ class EventLogItem():
         self.To = changeLogItem.ToString
         self.Field = changeLogItem.Field
         self.FieldType = changeLogItem.FieldType
+
+    def __init__(self, issueId : str, issueKey : str, teamMember : str,\
+                    timestamp : datetime, fromStatus : str, toStatus : str,\
+                    field : str, fieldType : str):
+        self.IssueId = issueId
+        self.IssueKey = issueKey
+        self.TeamMemberKey = teamMember
+        self.TimeStamp = timestamp
+        self.From = fromStatus
+        self.To = toStatus
+        self.Field = field
+        self.FieldType = fieldType

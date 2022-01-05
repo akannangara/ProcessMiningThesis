@@ -2,6 +2,9 @@
 import os
 import pandas as pd
 from pydantic import BaseModel
+from typing import List
+
+import datetime
 
 import pm4py as pm4py
 
@@ -13,8 +16,11 @@ from pm4py.objects.petri_net.utils import petri_utils
 from pm4py.visualization.petri_net import visualizer as pn_visualizer
 
 from ProcessMinerConformance import ProcessMinerConformance
+from CsvFileManager import CsvFileManager
 from DbContext import DbContext
 from EventLogItem import EventLogItem
+from TStatus import TStatus
+from TChangeLog import TChangeLog
 
 class ConformanceChecking(BaseModel):
     __Settings = None
@@ -27,27 +33,35 @@ class ConformanceChecking(BaseModel):
         ConformanceChecking.__ImagesSink = os.path.join(repsoitoryLocation, settings.ImageStorage["ImagesSinkProcessConformance"])
         ConformanceChecking.__ConformanceCheckCollection = []
 
+    @staticmethod
     def ConformanceCheckDiagnosticsAlignment(self, log, petrinet, initial, final):
         return pm4py.conformance_diagnostics_alignments(log, petrinet, initial, final)
 
+    @staticmethod
     def ConformanceCheckDiagnosticsTokenBasedReplay(self, log, petrinet, initial, final):
         return pm4py.conformance_diagnostics_token_based_replay(log, petrinet, initial, final)
 
+    @staticmethod
     def FitnessAlignment(self, log, model, initial, final):
         return pm4py.fitness_alignments(log, model, initial, final)
 
+    @staticmethod
     def FitnessTokenBasedReply(self, log, model, inital, final):
         return pm4py.fitness_token_based_replay(log, model, inital, final)
 
+    @staticmethod
     def PrecisionAlignment(self, log, model, initial, final):
         return pm4py.precision_alignments(log, model, initial, final)
 
+    @staticmethod
     def PrecisionTokenBasedReplay(self, log, model, initial, final):
         return pm4py.precision_token_based_replay(log, model, initial, final)
 
+    @staticmethod
     def Generalization(self, log, model, initial, final):
         return pm4py.algo.evaluation.generalization.algorithm.apply(log, model, initial, final)
 
+    @staticmethod
     def Simplicity(self, model):
         return pm4py.algo.evaluation.simplicity.algorithm.apply(model)
 
@@ -80,42 +94,58 @@ class ConformanceChecking(BaseModel):
     def CreateDesiredEventLog(self, inputFile : str, sheetName : str):
         logging.info("Creating desired eventlog")
         try:
-            x = 0
+            desiredWorkflowEventLog = self.__ReadDesiredWorkflowResponseExcelToEventCollection(inputFile, sheetName)
+            fileManager = CsvFileManager(DbContext(ConformanceChecking.__Settings), ConformanceChecking.__Settings)
+            fileManager.CreateFileFromEntityCollection(desiredWorkflowEventLog, EventLogItem, "DesiredWorkflowEventLog.csv")
         except Exception as e:
-            logging.error("Error occurred when creating desired eventlog")
+            logging.error("Error occurred when creating desired eventlog", exc_info=True)
 
     def __ReadDesiredWorkflowResponseExcelToEventCollection(self, inputFile : str, sheetName : str) -> List[EventLogItem]:
         eventCollection = []
-        dataframe = pd.ExcelFile(os.path.abspath(inputFile), sheet_name=sheetName)
+        dataframe = pd.read_excel(os.path.abspath(inputFile), sheet_name=sheetName, engine='openpyxl', header=0)
         desiredWorkflowColumnNamePrefix = "Desired workflow "
-        desiredWorkflowColumnNameSuffix = " (for example \"To Do; In Progress; In Review; Done\")"
+        desiredWorkflowColumnNameSuffix = " (for example \"To do; In Progress; In Review; Done\")"
         maxWorkflowColumns = 15
         teamFunctionColumnName = "Team function (not required)"
         x = 0
-        for _ , row in df.iterrows():
+        for _ , row in dataframe.iterrows():
             teamMember = row[teamFunctionColumnName]
             for i in range (1, maxWorkflowColumns):
                 x+=1
                 columnName = desiredWorkflowColumnNamePrefix+str(i)+desiredWorkflowColumnNameSuffix
-                eventCollection.extend(self.__CreateEventLogFromWorkflow(row[columnName], teamMember), id)
+                eventCollection.extend(self.__CreateEventLogFromWorkflow(row[columnName], teamMember, id))
+        return eventCollection
 
     def __CreateEventLogFromWorkflow(self, workflow : str, teamMember : str, id : int):
         fieldValue = "Jira"
         fieldType = ""
-        issuePrefix = "CONF_DESIRED"+str(id)
-        caseEventLog = []
-        #TODO finish this section
+        issueKey = "CONF_DESIRED"+str(id)
+        caseEventLog = self.__ParseEventWorkflow(workflow, id)
+        initialDateTime = datetime.datetime(2021,12,5)
+        eventCollectionForWorkflow = []
+        for i in range(1, len(caseEventLog)):
+            timestamp = initialDateTime + datetime.timedelta(days=i)
+            fromStatus = caseEventLog[i-1]
+            toStatus = caseEventLog[i]
+            event = EventLogItem(id, issueKey, teamMember, timestamp, fromStatus, toStatus, fieldValue, fieldType)
+            eventCollectionForWorkflow.append(event)
+        return eventCollectionForWorkflow
 
     def __ParseEventWorkflow(self, workflowInput : str, id : int) -> List[str]:
-        acceptedStatuses = ConformanceChecking.__GetStatusNames()
+        acceptedStatuses = self.__GetStatusNames()
         workflow = ["Create Card"]
         workflowInputElements = workflowInput.split(";")
         for element in workflowInputElements:
+            if not element:
+                break
             element = element.rstrip()
             element = element.lstrip()
             elementStatus = ""
             if element.casefold() in (status.casefold() for status in acceptedStatuses):
-                workflow.append(status)
+                for status in acceptedStatuses:
+                    if element.casefold() == status.casefold():
+                        workflow.append(status)
+                        break
             else:
                 logging.error(f"Failed to identify worflow element {element} in workflow id {id}")
         return workflow

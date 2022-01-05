@@ -64,6 +64,13 @@ class CsvFileManager(BaseModel):
 				except Exception as e:
 						logging.error("Error storing projects list as csv", exc_info=True)
 
+		def CreateFileFromEntityCollection(self, entityCollection : List, entityType, filename : str):
+				logging.info(f"Creating csv file {filename} from entity collection")
+				try:
+						self.__CreateAndStoreDataFrameFromEntityList(entityCollection, entityType, filename)
+				except Exception as e:
+						logging.error(f"Error occurred while creating csv {filename} from entity collection")
+
 		def CreateStatusCollectionFromDb(self):
 				logging.info("Creating status collection as csv")
 				try:
