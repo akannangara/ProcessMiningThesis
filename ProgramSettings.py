@@ -16,6 +16,7 @@ ImageStorage = {
     "alphaMiner":"Alphaminer.png",
     "alphaPlusMiner": "AlphaPlusMiner.png",
     "inductiveMiner":"InductiveMiner.png",
+    "desiredInductiveMiner":"DesiredInductiveMiner.png",
     "heuristicsMiner":"HeuristicsMiner.png",
     "heuristicsNetMiner":"HeuristicsNetMiner.png",
     "processTreeInductive": "ProcessTreeInductive.png",
@@ -37,7 +38,7 @@ CsvStorageManager = {
     "TeamMembersFileName": "TeamMembers.csv",
     "StatusesFileName":"Statuses.csv",
     "MinerConformanceEvaluation": "MinerConformanceEvaluation.csv",
-    "DesiredEventLogFileName": "DesiredEventLog.csv"
+    "DesiredEventLogFileName": "DesiredWorkflowEventLog.csv"
 }
 
 GraphViz = {

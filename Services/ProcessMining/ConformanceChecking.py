@@ -22,46 +22,42 @@ from EventLogItem import EventLogItem
 from TStatus import TStatus
 from TChangeLog import TChangeLog
 
+from ProcessDiscovery import ProcessDiscovery
+
 class ConformanceChecking(BaseModel):
     __Settings = None
     __ImagesSink = None
     __ConformanceCheckCollection = None
+    __DbContext = None
 
-    def __init__(self, settings):
+    def __init__(self, settings, dbContext : DbContext):
         ConformanceChecking.__Settings = settings
+        ConformanceChecking.__DbContext = dbContext
         repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
         ConformanceChecking.__ImagesSink = os.path.join(repsoitoryLocation, settings.ImageStorage["ImagesSinkProcessConformance"])
         ConformanceChecking.__ConformanceCheckCollection = []
 
-    @staticmethod
     def ConformanceCheckDiagnosticsAlignment(self, log, petrinet, initial, final):
         return pm4py.conformance_diagnostics_alignments(log, petrinet, initial, final)
 
-    @staticmethod
     def ConformanceCheckDiagnosticsTokenBasedReplay(self, log, petrinet, initial, final):
         return pm4py.conformance_diagnostics_token_based_replay(log, petrinet, initial, final)
 
-    @staticmethod
     def FitnessAlignment(self, log, model, initial, final):
         return pm4py.fitness_alignments(log, model, initial, final)
 
-    @staticmethod
     def FitnessTokenBasedReply(self, log, model, inital, final):
         return pm4py.fitness_token_based_replay(log, model, inital, final)
 
-    @staticmethod
     def PrecisionAlignment(self, log, model, initial, final):
         return pm4py.precision_alignments(log, model, initial, final)
 
-    @staticmethod
     def PrecisionTokenBasedReplay(self, log, model, initial, final):
         return pm4py.precision_token_based_replay(log, model, initial, final)
 
-    @staticmethod
     def Generalization(self, log, model, initial, final):
         return pm4py.algo.evaluation.generalization.algorithm.apply(log, model, initial, final)
 
-    @staticmethod
     def Simplicity(self, model):
         return pm4py.algo.evaluation.simplicity.algorithm.apply(model)
 
@@ -70,9 +66,9 @@ class ConformanceChecking(BaseModel):
         try:
             fitness = self.FitnessTokenBasedReply(eventLog, petrinet, initial, final)
             precision = self.PrecisionTokenBasedReplay(eventLog, petrinet, initial, final)
-            gerneralization = self.Generalization(eventLog, petrinet, initial, final)
+            generalization = self.Generalization(eventLog, petrinet, initial, final)
             simplicity = self.Simplicity(petrinet)
-            conformance = ProcessMinerConformance(minerName, fitness, precision, gerneralization, simplicity)
+            conformance = ProcessMinerConformance(minerName, fitness, precision, generalization, simplicity)
             ConformanceChecking.__ConformanceCheckCollection.append(conformance)
         except Exception as e:
             logging.error(f"Error occurred when trying to add {minierName} data to conformance check collection")
@@ -83,7 +79,7 @@ class ConformanceChecking(BaseModel):
             return
         logging.info("Storing conformance collection as csv")
         try:
-            fileManager = CsvFileManager(DbContext(ConformanceChecking.__Settings), ConformanceChecking.__Settings)
+            fileManager = CsvFileManager(ConformanceChecking.__DbContext, ConformanceChecking.__Settings)
             fileName = ConformanceChecking.__Settings.CsvStorageManager["MinerConformanceEvaluation"]
             if ProcessMining.__OnlyDone:
                 fileName = "OnlyDone_"+fileName
@@ -95,8 +91,8 @@ class ConformanceChecking(BaseModel):
         logging.info("Creating desired eventlog")
         try:
             desiredWorkflowEventLog = self.__ReadDesiredWorkflowResponseExcelToEventCollection(inputFile, sheetName)
-            fileManager = CsvFileManager(DbContext(ConformanceChecking.__Settings), ConformanceChecking.__Settings)
-            fileManager.CreateFileFromEntityCollection(desiredWorkflowEventLog, EventLogItem, "DesiredWorkflowEventLog.csv")
+            fileManager = CsvFileManager(ConformanceChecking.__DbContext, ConformanceChecking.__Settings)
+            fileManager.CreateFileFromEntityCollection(desiredWorkflowEventLog, EventLogItem, ConformanceChecking.__Settings.CsvStorageManager["DesiredEventLogFileName"])
         except Exception as e:
             logging.error("Error occurred when creating desired eventlog", exc_info=True)
 
@@ -104,7 +100,7 @@ class ConformanceChecking(BaseModel):
         eventCollection = []
         dataframe = pd.read_excel(os.path.abspath(inputFile), sheet_name=sheetName, engine='openpyxl', header=0)
         desiredWorkflowColumnNamePrefix = "Desired workflow "
-        desiredWorkflowColumnNameSuffix = " (for example \"To do; In Progress; In Review; Done\")"
+        desiredWorkflowColumnNameSuffix = " (for example \"To Do; In Progress; In Review; Done\")"
         maxWorkflowColumns = 15
         teamFunctionColumnName = "Team function (not required)"
         x = 0
@@ -113,7 +109,9 @@ class ConformanceChecking(BaseModel):
             for i in range (1, maxWorkflowColumns):
                 x+=1
                 columnName = desiredWorkflowColumnNamePrefix+str(i)+desiredWorkflowColumnNameSuffix
-                eventCollection.extend(self.__CreateEventLogFromWorkflow(row[columnName], teamMember, id))
+                if row[columnName] != row[columnName]:
+                    break
+                eventCollection.extend(self.__CreateEventLogFromWorkflow(row[columnName], teamMember, x))
         return eventCollection
 
     def __CreateEventLogFromWorkflow(self, workflow : str, teamMember : str, id : int):
@@ -133,6 +131,7 @@ class ConformanceChecking(BaseModel):
 
     def __ParseEventWorkflow(self, workflowInput : str, id : int) -> List[str]:
         acceptedStatuses = self.__GetStatusNames()
+        acceptedStatuses.extend(["In Test", "Pre-refinement", "Refinement", "Ready to Deploy"])
         workflow = ["Create Card"]
         workflowInputElements = workflowInput.split(";")
         for element in workflowInputElements:
@@ -152,7 +151,7 @@ class ConformanceChecking(BaseModel):
 
     def __GetStatusNames(self) -> List[str]:
         statusCollection = []
-        dbContext = DbContext(ConformanceChecking.__Settings)
+        dbContext = ConformanceChecking.__DbContext
         for status in dbContext.Query(TStatus, "", ""):
             statusCollection.append(status.Name)
         return statusCollection

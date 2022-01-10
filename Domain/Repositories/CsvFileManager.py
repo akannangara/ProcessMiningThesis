@@ -69,7 +69,7 @@ class CsvFileManager(BaseModel):
 				try:
 						self.__CreateAndStoreDataFrameFromEntityList(entityCollection, entityType, filename)
 				except Exception as e:
-						logging.error(f"Error occurred while creating csv {filename} from entity collection")
+						logging.error(f"Error occurred while creating csv {filename} from entity collection", exc_info=True)
 
 		def CreateStatusCollectionFromDb(self):
 				logging.info("Creating status collection as csv")
@@ -113,7 +113,10 @@ class CsvFileManager(BaseModel):
 		def __CreateAndStoreDataFrameFromEntityList(self, entityList : List, entityType, filename : str):
 				dataframe = pd.DataFrame()
 				for entity in entityList:
-						row = entityType(entity)
+						if type(entity) == entityType:
+								row = entity
+						else:
+								row = entityType(entity)
 						dataframe = self.__AddEntityToDataFrame(row, dataframe)
 				self.__SaveDataFrameToCsv(dataframe, filename)
 

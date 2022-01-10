@@ -32,18 +32,21 @@ from CsvFileManager import CsvFileManager
 
 from ProcessDiscovery import ProcessDiscovery
 from ConformanceChecking import ConformanceChecking
+from DbContext import DbContext
 
 class ProcessMining(BaseModel):
     __Settings = None
     __EventLog = None
     __ConformantEventLogLocation = None
     __OnlyDone = False
+    __DbContext = None
 
-    def __init__(self, settings, onlyDone=False):
+    def __init__(self, settings, dbContext : DbContext, onlyDone=False):
         ProcessMining.__Settings = settings
         csvRepository = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories/CsvCollection")
         if settings.Debug:
             self.__AddGraphVizLocation(settings)
+        ProcessMining.__DbContext = dbContext
         ProcessMining.__OnlyDone = onlyDone
         if onlyDone:
             csvLocation = os.path.join(csvRepository, ProcessMining.__Settings.CsvStorageManager["OnlyDoneEventLogFileName"])
@@ -93,7 +96,7 @@ class ProcessMining(BaseModel):
             net, initial, final = processDiscovery.PetriNetAlphaPlusMiner()
             conformanceChecker.AddToConfromanceCheckCollection('AlphaPlusMiner', eventLog, net, initial, final)
 
-            net, initial, final = processDiscovery.PetriNetInductiveMiner()
+            net, initial, final = processDiscovery.PetriNetInductiveMiner(ProcessMining.__Settings.ImageStorage['inductiveMiner'])
             conformanceChecker.AddToConfromanceCheckCollection('InductiveMiner', eventLog, net, initial, final)
 
             net, initial, final = processDiscovery.PetriNetHeuristicsMiner()
@@ -119,8 +122,18 @@ class ProcessMining(BaseModel):
 
     def ConformanceCheckWithDesiredWorkflow(self):
         logging.info("Running conformance check compared to desired workflow")
-        eventLog = ProcessMining.__EventLog
-        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, eventLog, ProcessMining.__OnlyDone)
-        net, initial, final = processDiscovery.PetriNetInductiveMiner()
-        conformanceChecker = ConformanceChecking(ProcessMining.__Settings)
-        conformanceChecker.CreateDesiredEventLog("C:/Users/akann/Downloads/FormResponse.xlsx", 'workbook1')
+        conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
+        #conformanceChecker.CreateDesiredEventLog("C:/Users/akann/Downloads/FormResponse.xlsx", 'workbook1')
+        csvRepository = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories/CsvCollection")
+        csvLocation = os.path.join(csvRepository, ProcessMining.__Settings.CsvStorageManager["DesiredEventLogFileName"])
+        desiredEventLog = self.__ReadCsvEventLogAsEventLog(csvLocation)
+
+        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, desiredEventLog, ProcessMining.__OnlyDone)
+        net, initial, final = processDiscovery.PetriNetInductiveMiner(ProcessMining.__Settings.ImageStorage['desiredInductiveMiner'])
+
+        desiredEventLogConformanceCheck = conformanceChecker.ConformanceCheckDiagnosticsTokenBasedReplay(ProcessMining.__EventLog, net, initial, final)
+        fitness = conformanceChecker.FitnessTokenBasedReply(ProcessMining.__EventLog, net, initial, final)
+        precision = conformanceChecker.PrecisionTokenBasedReplay(ProcessMining.__EventLog, net, initial, final)
+        generalization = conformanceChecker.Generalization(ProcessMining.__EventLog, net, initial, final)
+        simplicity = conformanceChecker.Simplicity(net)
+        logging.info(f"Conformance of desired workflow f{fitness}, p{precision}, g{generalization}, s{simplicity}.")

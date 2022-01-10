@@ -1,12 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Domain",
-    "\\Domain\\Models",
-    "\\Domain\\Models\\CsvModels",
+    "\\Domain\\Repositories\\CsvCollection",
+    "\\ProcessMining\\Jira",
     "\\Services",
+    "\\Services\\JiraDataCollector\\Support",
     "\\Services\\ProcessMining"
   ],
-  "SelectedNode": "\\Domain\\Models",
+  "SelectedNode": "\\Services\\ProcessMining\\ConformanceChecking.py",
   "PreviewInSolutionExplorer": false
 }

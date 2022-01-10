@@ -54,13 +54,13 @@ def CreateEventLogsFromDb():
     fileManager.CreateStatusCollectionFromDb()
 
 def RunProcessDiscoveryAndConformance():
-    processMiner = ProcessMining(settings)
+    processMiner = ProcessMining(settings, DbContext(settings))
     processMiner.RunAllDiscoveryAlgorithms()
-    processMiner2 = ProcessMining(settings, onlyDone=True)
+    processMiner2 = ProcessMining(settings, DbContext(settings), onlyDone=True)
     processMiner2.RunAllDiscoveryAlgorithms()
 
 def RunProcessConformanceWithDesiredWorkflow():
-    processMiner = ProcessMining(settings)
+    processMiner = ProcessMining(settings, DbContext(settings))
     processMiner.ConformanceCheckWithDesiredWorkflow()
 
 

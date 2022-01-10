@@ -86,6 +86,8 @@ class TIssue(Base):
 		WorkLogs = relationship("TWorkLog", backref="Issue")
 		ChangeLogs = relationship("TChangeLog", backref="Issue")
 
+		Fitness = Column(Float)
+
 
 		def __repr__(self):
 				return "<Issue(Id='%d', Key='%s', IssueTypeId='%d' TimeSpent='%d', ProjectId='%d', AggregateTimeSpent='%d', \
@@ -115,3 +117,4 @@ class TIssue(Base):
 				self.Summary = jiraIssue.summary
 				if jiraIssue.duedate:
 						self.DueDate = DateTimeConverter.ConvertDate(jiraIssue.duedate)
+				self.Fitness = -1.0
