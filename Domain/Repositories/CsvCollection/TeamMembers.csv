@@ -1,27 +1,71 @@
 df_index;Key;DisplayName;Name;Active;Type
-0;;;;False;
-1;bjorn.vande.ruit;Bjorn van de Ruit;Bjorn.vande.Ruit;True;
-2;bram.kersten;Bram Kersten;bram.kersten;True;
-3;daan.de.krosse;Daan de Krosse;Daan.de.Krosse;True;
-4;drupal@indicia.nl;Portals;drupal@indicia.nl;True;
-5;imli.de.voogd;Imli de Voogd;imli.de.voogd;True;
-6;indicia;Patryk Raba ;indicia;True;
-7;jaap.van.hengstum;Jaap van Hengstum;Jaap.van.Hengstum;True;
-8;jesse.klaasse;Jesse Klaasse;Jesse.Klaasse;True;
-9;JIRAUSER12202;Luuk van der Steen;Luuk.vander.steen;True;
-10;JIRAUSER12404;Nick Thijssen [X];nick.thijssen;False;
-11;JIRAUSER12417;Aaron Kannangara;aaron.kannangara;True;
-12;JIRAUSER12503;Cas Mathijsen;cas.mathijsen;True;
-13;JIRAUSER12603;Rolf Meijer;rolf.meijer;False;
-14;JIRAUSER12701;Dion Klaassen;dion.klaassen;True;
-15;JIRAUSER12817;Onur Temelli;onur.temelli;True;
-16;JIRAUSER12902;Bastiaan van der Spoel;b.vanderspoel;True;
-17;luuk.naaijen;Luuk Naaijen;luuk.naaijen;True;
-18;milou.remmers;Milou Remmers;Milou.Remmers;True;
-19;mitchell.diels;Mitchell Diels;mitchell.diels;True;
-20;niels.van.de.put;Niels Van De Put;niels.vande.put;True;
-21;onno.klien.hofmeijer;Onno Klein Hofmeijer;onno.klien.hofmeijer;True;
-22;patrick.van.tilborg;Patrick van Tilborg;Patrick.van.Tilborg;True;
-23;remy.van.velthuijsen;Remy van Velthuijsen;Remy.van.Velthuijsen;True;
-24;sander.jongbloets;Sander Jongbloets;sander.jongbloets;True;
-25;stijn.bastiaansen;Stijn Bastiaansen;stijn.bastiaansen;True;
+0;bjorn.vande.ruit;Bjorn van de Ruit;Bjorn.vande.Ruit;TRUE;Delivery manager
+1;jesse.klaasse;Jesse Klaasse;Jesse.Klaasse;TRUE;Senior developer
+2;sander.jongbloets;Sander Jongbloets;sander.jongbloets;TRUE;Medior developer
+4;jaap.van.hengstum;Jaap van Hengstum;Jaap.van.Hengstum;TRUE;Senior developer
+5;imli.de.voogd;Imli de Voogd;imli.de.voogd;TRUE;Designer
+6;patrick.van.tilborg;Patrick van Tilborg;Patrick.van.Tilborg;TRUE;Designer
+7;JIRAUSER12800;Femke Luberti;femke.luberti;TRUE;Klant
+8;danny.janssen;Danny Janssen;danny.janssen;TRUE;Junior developer
+9;daan.de.krosse;Daan de Krosse;Daan.de.Krosse;TRUE;Designer
+10;nino.haar;Nino Haar;nino.haar;TRUE;Senior developer
+11;rob.vanden.muijsenbe;Rob van den Muijsenberg;rob.vanden.muijsenbe;TRUE;Project manager
+12;g.veenhoven;Gert Veenhoven;g.veenhoven;FALSE;Klant
+13;lesley.vente;Lesley Vente [X];lesley.vente;FALSE;Medior developer
+14;luuk.naaijen;Luuk Naaijen;luuk.naaijen;TRUE;Junior developer
+15;sander.quist;Sander Quist [X];sander.quist;FALSE;Junior developer
+16;sjoerd.vanden.berg;Sjoerd van den Berg [X];sjoerd.vanden.berg;FALSE;Senior developer
+17;drupal@indicia.nl;Portals;drupal@indicia.nl;TRUE;Systeem account
+18;JIRAUSER12208;Jaap Broers;jaap.broers;TRUE;Project manager
+19;mitch.portier;Mitch Portier;mitch.portier;TRUE;Senior developer
+20;g.veenhoven@awvn.nl;Gabrielle Koning;g.koning-bakker@awvn.nl;FALSE;Klant
+21;tom.vander.wielen;Tom van der Wielen [X];tom.vander.wielen;FALSE;Medior developer
+22;arjon.bimmel;Arjon Bimmel;arjon.bimmel;TRUE;Medior developer
+23;kevin.brocatus;Kevin Brocatus;kevin.brocatus;TRUE;Medior developer
+24;paul.de.man;Paul de Man [X];paul.de.man;FALSE;Medior developer
+25;quincy.soeliman;Quincy Soeliman;quincy.soeliman;TRUE;Medior developer
+26;ericpolman;Eric Polman [X];ericpolman;FALSE;Medior developer
+27;indicia;Patryk Raba ;indicia;TRUE;Tester
+28;fleur.duffhuis;Fleur Duffhuis [X];fleur.duffhuis;FALSE;Project manager
+29;d.stam;Daan Stam;d.stam;FALSE;Klant
+30;eric.polman;Eric Polman [X];eric.polman;FALSE;Medior developer
+31;shelley.trieling;Shelley Trieling [X];shelley.trieling;FALSE;Project manager
+32;ruben.rutten;Ruben Rutten [X];ruben.rutten;FALSE;Stagiair
+33;sem.rekkers;Sem Rekkers [X];sem.rekkers;FALSE;Stagiair
+34;kerem.ugis;Kerem Ugis [X];kerem.ugis;FALSE;Stagiair
+35;JIRAUSER12600;Ashley Vermaas [X];ashley.vermaas;FALSE;Junior developer
+36;milou.remmers;Milou Remmers;Milou.Remmers;TRUE;Project manager
+37;JIRAUSER12504;Rinke van den Berg;rinke.vanden.berg;FALSE;Medior developer
+38;JIRAUSER12215;rebecca.broens;rebecca.broens;FALSE;Stagiair
+39;gabor.pierpont;Gabor Pierpont;Gabor.Pierpont;TRUE;Senior developer
+40;JIRAUSER12826;Johan Huijben;j.huijben;TRUE;Klant
+41;JIRAUSER12202;Luuk van der Steen;Luuk.vander.steen;TRUE;Junior developer
+42;JIRAUSER11400;Dirk Verspaget;dirk;FALSE;Medior developer
+43;vincent.keltjens;Vincent Keltjens [X];vincent.keltjens;FALSE;Medior developer
+44;JIRAUSER12700;Koen Hanssen;koen.hanssen;TRUE;Klant
+45;JIRAUSER12801;Joost Meulenkamp;joost.meulenkamp;TRUE;Medior developer
+46;JIRAUSER12417;Aaron Kannangara;aaron.kannangara;TRUE;Junior developer
+47;JIRAUSER12807;Stefan Jaspers;stefan.jaspers;TRUE;Stagiair
+48;JIRAUSER12601;Christopher Cheng [X];christopher.cheng;FALSE;Medior developer
+49;rik.deuzeman;Rik Deuzeman;rik.deuzeman;TRUE;Senior developer
+50;tim.vander.linde;Tim van der Linde;tim.vander.linde;TRUE;Junior developer
+51;geert-jan.koelman;Geert-Jan Koelman;Geert-Jan.Koelman;TRUE;Delivery manager
+52;rik.scholten;Rik Scholten;rik.scholten;TRUE;Medior developer
+53;bram.rombouts;Bram Rombouts;bram.rombouts;TRUE;Senior developer
+54;JIRAUSER12902;Bastiaan van der Spoel;b.vanderspoel;TRUE;Klant
+55;onno.klien.hofmeijer;Onno Klein Hofmeijer;onno.klien.hofmeijer;TRUE;Medior developer
+56;JIRAUSER12701;Dion Klaassen;dion.klaassen;TRUE;Junior developer
+57;mitchell.diels;Mitchell Diels;mitchell.diels;TRUE;Senior developer
+58;niels.van.de.put;Niels Van De Put;niels.vande.put;TRUE;Medior developer
+59;JIRAUSER12503;Cas Mathijsen;cas.mathijsen;TRUE;Stagiair
+60;remy.van.velthuijsen;Remy van Velthuijsen;Remy.van.Velthuijsen;TRUE;Senior developer
+61;stijn.bastiaansen;Stijn Bastiaansen;stijn.bastiaansen;TRUE;Junior developer
+62;JIRAUSER12817;Onur Temelli;onur.temelli;TRUE;Stagiair
+63;bram.kersten;Bram Kersten;bram.kersten;TRUE;Medior developer
+64;JIRAUSER12404;Nick Thijssen [X];nick.thijssen;FALSE;Stagiair
+65;JIRAUSER12603;Rolf Meijer;rolf.meijer;FALSE;Medior developer
+66;bas.bakker;Bas Bakker [X];bas.bakker;FALSE;Project manager
+67;JIRAUSER12822;Tim Joosten;tim.joosten;TRUE;Medior developer
+68;jayduard.chapman;Jayduard Chapman;jayduard.chapman;TRUE;Junior developer
+69;jesper.holster;Jesper Holster;jesper.holster;TRUE;Senior developer
+70;nanne;Nanne Visser;Nanne;FALSE;Klant

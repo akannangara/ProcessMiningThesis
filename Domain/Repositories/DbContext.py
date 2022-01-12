@@ -45,6 +45,9 @@ class DbContext:
             logging.error("Exception occurred when creating DbContext", exc_info=True)
             return e
 
+    def GetSession(self):
+        return DbContext.__session
+
     def AddMultipleEntitiesToDb(self, entitiesList):
         try:
             DbContext.__session.add_all(entitiesList)

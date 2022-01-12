@@ -73,7 +73,7 @@ class ConformanceChecking(BaseModel):
         except Exception as e:
             logging.error(f"Error occurred when trying to add {minierName} data to conformance check collection")
 
-    def SaveConformanceCollection(self):
+    def SaveConformanceCollection(self, onlyDone):
         if not(ConformanceChecking.__ConformanceCheckCollection):
             logging.error("Conformance check collection is empty")
             return
@@ -81,11 +81,11 @@ class ConformanceChecking(BaseModel):
         try:
             fileManager = CsvFileManager(ConformanceChecking.__DbContext, ConformanceChecking.__Settings)
             fileName = ConformanceChecking.__Settings.CsvStorageManager["MinerConformanceEvaluation"]
-            if ProcessMining.__OnlyDone:
+            if onlyDone:
                 fileName = "OnlyDone_"+fileName
-            fileManager.StoreMinerConformanceEvaluation(conformanceCollection, fileName)
+            fileManager.StoreMinerConformanceEvaluation(ConformanceChecking.__ConformanceCheckCollection, fileName)
         except Exception as e:
-            logging.error("Error occurred when storing confromance collection as csv")
+            logging.error("Error occurred when storing confromance collection as csv", exc_info=True)
 
     def CreateDesiredEventLog(self, inputFile : str, sheetName : str):
         logging.info("Creating desired eventlog")

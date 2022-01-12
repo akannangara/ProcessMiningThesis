@@ -99,7 +99,9 @@ class CsvFileManager(BaseModel):
 						dataframe = pd.read_csv(os.path.join(CsvFileManager.__SinkDirectory, CsvFileManager.__Settings["TeamMembersFileName"]), sep=';')
 						for index, row in dataframe.iterrows():
 								dbEntity = CsvFileManager.__DbContext.Query(TTeamMember, "Key", row["Key"])
-								dbEntity.Type = row["Type"]
+								if not(dbEntity):
+										continue
+								dbEntity[0].Type = row.Type
 								CsvFileManager.__DbContext.UpdateEntity(dbEntity)
 				except Exception as e:
 						logging.error("Error updating teamMember from csv", exc_info=True)

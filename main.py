@@ -59,10 +59,10 @@ def RunProcessDiscoveryAndConformance():
     processMiner2 = ProcessMining(settings, DbContext(settings), onlyDone=True)
     processMiner2.RunAllDiscoveryAlgorithms()
 
-def RunProcessConformanceWithDesiredWorkflow():
+def RunProcessConformanceWithDesiredWorkflowAndModelEnhancement():
     processMiner = ProcessMining(settings, DbContext(settings))
-    processMiner.ConformanceCheckWithDesiredWorkflow()
-
+    _, tokenBasedReplayConformance = processMiner.ConformanceCheckWithDesiredWorkflow()
+    processMiner.ModelEnhancement(tokenBasedReplayConformance)
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -71,7 +71,8 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
+    #ImportJiraIssues()
     #CreateEventLogsFromDb()
-    #RunProcessDiscoveryAndConformance()
-    RunProcessConformanceWithDesiredWorkflow()
+    RunProcessDiscoveryAndConformance()
+    #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

@@ -70,16 +70,16 @@ class ProcessDiscovery(BaseModel):
         except Exception as e:
             logging.error("Exception occurred while running alpha+ miner", exc_info=True)
 
-    def PetriNetInductiveMiner(self, fileName: str, save=True):
+    def PetriNetInductiveMiner(self, threshold: float, fileName: str, save=True):
         logging.info("Running inductive miner")
         try:
             eventLog = ProcessDiscovery.__EventLog
-            net, initial_marking, final_marking = inductive_miner.apply(eventLog)
+            net, initial_marking, final_marking = pm4py.discover_petri_net_inductive(eventLog, noise_threshold=threshold)
             parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
             gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
             #pn_visualizer.view(gviz)
             if (save):
-                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,fileName))
+                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(threshold)+fileName))
             return net, initial_marking, final_marking
         except Exception as e:
             logging.error("Exception occurred while running inductive miner", exc_info=True)
