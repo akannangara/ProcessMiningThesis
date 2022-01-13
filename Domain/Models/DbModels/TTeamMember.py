@@ -22,8 +22,8 @@ class TTeamMember(Base):
 		Type = Column(String)
 		
 		def __repr__(self):
-				return "<TeamMember(Key='%d', Description='%s', Name='%s', Active='%r', Type='%s'>" % (
-								self.key, self.Description, self.Name, self.Active, self.Type)
+				return "<TeamMember(Key='%s', Description='%s', Name='%s', Active='%r', Type='%s'>" % (
+								self.Key, self.DisplayName, self.Name, self.Active, self.Type)
 
 		def __init__(self, jiraTeamMember : JiraTeamMember):
 				self.Key = jiraTeamMember.key

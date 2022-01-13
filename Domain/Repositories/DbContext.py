@@ -48,6 +48,9 @@ class DbContext:
     def GetSession(self):
         return DbContext.__session
 
+    def GetEngine(self):
+        return DbContext.__engine
+
     def AddMultipleEntitiesToDb(self, entitiesList):
         try:
             DbContext.__session.add_all(entitiesList)
@@ -74,7 +77,7 @@ class DbContext:
             return issues
         
     def Query(self, entity, attribute : str, query : str):
-        if not(query):
+        if not(attribute):
             queryResult = DbContext.__session.query(entity).all()
             return queryResult
         else:
@@ -141,7 +144,7 @@ class DbContext:
             DbContext.__session.refresh(entity)
             return entity
         except Exception as e:
-            logging.error("Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
+            logging.error(f"Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
 
     def __AddEntityToDb(self, entity):
         try:

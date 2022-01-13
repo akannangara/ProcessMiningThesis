@@ -5,7 +5,7 @@ Jira = {
     "ConnectionRefreshTimer": 600
 }
 
-Debug=True #todo server: set to false
+Debug=False #todo server: set to false
 
 DataStoreFolder = "C:\_thesis\DataStore"
 

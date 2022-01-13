@@ -3,6 +3,7 @@ from typing import List
 from pydantic import BaseModel
 
 from dataclasses import dataclass
+from statistics import mean
 
 @dataclass
 class ProcessMinerConformance:
@@ -13,6 +14,8 @@ class ProcessMinerConformance:
     Precision : float
     Generalization : float
     Simplicity : float
+    AverageScore : float
+    AverageScoreIgnoringSimplicity : float
 
     def __init__(self, minerName: str, fitness, precision : float, generalization : float, simplicity : float):
         self.MinerName = minerName
@@ -22,3 +25,5 @@ class ProcessMinerConformance:
         self.Precision = precision
         self.Generalization = generalization
         self.Simplicity = simplicity
+        self.AverageScore = mean([self.AverageFitness, self.Precision, self.Generalization, self.Simplicity])
+        self.AverageScoreIgnoringSimplicity = mean([self.AverageFitness, self.Precision, self.Generalization])

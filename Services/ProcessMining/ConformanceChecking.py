@@ -11,6 +11,7 @@ import pm4py as pm4py
 #Create petri net
 from pm4py.objects.petri_net.obj import PetriNet, Marking
 from pm4py.objects.petri_net.utils import petri_utils
+from pm4py.algo.evaluation.replay_fitness import algorithm as replay_fitness_evaluator
 
 #visualize petrinet
 from pm4py.visualization.petri_net import visualizer as pn_visualizer
@@ -45,9 +46,10 @@ class ConformanceChecking(BaseModel):
 
     def FitnessAlignment(self, log, model, initial, final):
         return pm4py.fitness_alignments(log, model, initial, final)
+        
 
-    def FitnessTokenBasedReply(self, log, model, inital, final):
-        return pm4py.fitness_token_based_replay(log, model, inital, final)
+    def FitnessTokenBasedReply(self, log, model, initial, final):
+        return replay_fitness_evaluator.apply(log, model, initial, final, variant=replay_fitness_evaluator.Variants.TOKEN_BASED)
 
     def PrecisionAlignment(self, log, model, initial, final):
         return pm4py.precision_alignments(log, model, initial, final)
@@ -71,7 +73,7 @@ class ConformanceChecking(BaseModel):
             conformance = ProcessMinerConformance(minerName, fitness, precision, generalization, simplicity)
             ConformanceChecking.__ConformanceCheckCollection.append(conformance)
         except Exception as e:
-            logging.error(f"Error occurred when trying to add {minierName} data to conformance check collection")
+            logging.error(f"Error occurred when trying to add {minerName} data to conformance check collection", exc_info=True)
 
     def SaveConformanceCollection(self, onlyDone):
         if not(ConformanceChecking.__ConformanceCheckCollection):

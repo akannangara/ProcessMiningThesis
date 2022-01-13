@@ -102,7 +102,7 @@ class CsvFileManager(BaseModel):
 								if not(dbEntity):
 										continue
 								dbEntity[0].Type = row.Type
-								CsvFileManager.__DbContext.UpdateEntity(dbEntity)
+								CsvFileManager.__DbContext.UpdateEntity(dbEntity[0])
 				except Exception as e:
 						logging.error("Error updating teamMember from csv", exc_info=True)
 

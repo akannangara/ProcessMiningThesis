@@ -88,8 +88,7 @@ class ProcessDiscovery(BaseModel):
         logging.info("Running Heuristics miner with threshold "+str(threshold))
         try:
             eventLog = ProcessDiscovery.__EventLog
-            parameters={heuristics_miner.Variants.CLASSIC.value.Parameters.DEPENDENCY_THRESH: threshold}
-            net, initial_marking, final_marking = heuristics_miner.apply(eventLog, parameters=parameters)
+            net, initial_marking, final_marking = pm4py.discover_petri_net_heuristics(eventLog, dependency_threshold=threshold, and_threshold=threshold, loop_two_threshold=threshold)
             parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
             gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
             #pn_visualizer.view(gviz)
