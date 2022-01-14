@@ -72,6 +72,111 @@ class ProcessMining(BaseModel):
     def GetEventLog(self):
         return ProcessMining.__EventLog
 
+    def Save4DPlot(self):
+        logging.info("Storing 4d plot")
+        try:
+            #import matplotlib.pyplot as plt
+            import plotly.graph_objs as go
+
+            #Get data
+            fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
+            df = fileManager.ReadFileToDataFrame(ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+            X = df['dependency_threshold'].tolist()
+            Y = df['and_threshold'].tolist()
+            Z = df['loop_two_threshold'].tolist()
+            c_avarageScore = df['AverageScore'].tolist()
+            c_averageScoreWithoutSimplicty = df['AverageScoreIgnoringSimplicity'].tolist()
+
+            averageScoreData = go.Scatter3d(x=X, y=Y, z=Z,
+                                            marker=dict(color=c_avarageScore,
+                                                        opacity=1,
+                                                        reversescale=True,
+                                                        colorscale='Blues',
+                                                        size=2),
+                                            line=dict(width=0.2),
+                                            mode='markers',
+                                            name="Average score")
+            averageScoreWithoutSimplictyDate = go.Scattter3d(x=X, y=Y, z=Z,
+                                                             marker=dict(color=c_averageScoreWithoutSimplicty,
+                                                                         opacity=1,
+                                                                         reversescale=True,
+                                                                         colorscale='Reds',
+                                                                         size=2),
+                                                             line=dict(width=0.2),
+                                                             mode='markers',
+                                                             name="Aaverage score ignoring simplicity")
+
+            #fig = go.Figure(data=[averageScoreData, averageScoreWithoutSimplictyDate])
+
+            #fig.update_layout()
+
+            layout = go.Layout(scene=dict(xaxis=dict(title="dependency threshold"),
+                                          yaxis=dict(title="and threshold"),
+                                          zaxis=dict(title="two loop threshold")),)
+
+            plotly.offline.plot({"data": [averageScoreData, averageScoreWithoutSimplictyDate],
+                                 "layout": layout},
+                                 auto_open=False,
+                                 filename=("4dplot.png"))
+
+            #fig = plt.figure()
+            #axis = fig.add_subplot(111, projection='3d')
+
+            #axis.scatter(X, Y, Z, c=c_avarageScore, cmap=plt.hot(), marker="s", label="Average score")
+            #axis.scatter(X, Y, Z, c=c_averageScoreWithoutSimplicty, cmap=plt.hot(), maker="o", label="Average score ignoring simplicity")
+
+            #repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            #imagesSink = os.path.join(repsoitoryLocation, settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            #plt.savefig(os.path.join(imageSink, ProcessMining.__Settings.ImageStorage['4d_heuristicsPlot']))
+        except Exception as e:
+            logging.error("Error occurred when storing 4d plot", exc_info=True)
+
+    def __4DThresholdHeuristicsMinerDiscovery(self):
+        logging.info("Running multi-dimensional threshold values for heuristics discovery")
+        try:
+            processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
+            conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
+            thresholdValues = [1.0, 0.99, 0.97, 0.95, 0.92, 0.90, 0.85, 0.8, 0.75, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+            for dependency_threshold in thresholdValues:
+                for and_threshold in thresholdValues:
+                    for loop_two_threshold in thresholdValues:
+                        net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold)
+                        conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
+            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+
+            self.Save4DPlot()
+        except Exception as e:
+            logging.error("Error occurred when running multi-dimensional threshold conformance checks for heuristics discovery.", exc_info=True)
+
+    def __RunProcessTreeInductiveDiscovery(self, processDiscovery : ProcessDiscovery):
+        logging.info("Running inductive process tree discovery")
+        try:
+            thresholdValues = [0.0, 0.05, 0.1, 0.25, 0.5]
+            for threshold in thresholdValues:
+                processTree005 = processDiscovery.ProcessTreeInductive(noiseThreshold=threshold)
+        except Exception as e:
+            logging.error("Error occurred when running inductive process tree discovery", exc_info=True)
+
+    def __RunInductiveMinerDiscoveryTests(self, processDiscovery : ProcessDiscovery, conformanceChecker : ConformanceChecking):
+        logging.info("Running Inductive miner discovery")
+        try:
+            thresholdValues = [0.0, 0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+            for threshold in thresholdValues:
+                net, initial, final = processDiscovery.PetriNetInductiveMiner(threshold, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
+                conformanceChecker.AddToConfromanceCheckCollection('Inductive miner w threshold '+str(threshold), ProcessMining.__EventLog, net, initial, final)
+        except Exception as e:
+            logging.error("Error occurred while running inductive miner discovery.", exc_info=True)
+
+    def __RunSingleThresholdHeuristicsMinerDiscovery(self, processDiscovery : ProcessDiscovery, conformanceChecker : ConformanceChecking):
+        logging.info("Running single threshold heuristics miner discovery")
+        try:
+            thresholdValues = [1.0, 0.99, 0.97, 0.95, 0.92, 0.90, 0.85, 0.8, 0.75, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+            for threshold in thresholdValues:
+                net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold, threshold, threshold)
+                conformanceChecker.AddToConfromanceCheckCollection('Heuristics miner w threshold '+str(threshold), ProcessMining.__EventLog, net, initial, final)
+        except Exception as e:
+            logging.error("Error occurred while running single threshold heuristics discovery.", exc_info=True)
+
     def RunAllDiscoveryAlgorithms(self):
         logging.info("Running all discovery algorithms")
         try:
@@ -85,69 +190,28 @@ class ProcessMining(BaseModel):
             fps = processDiscovery.FPS()
 
             #processTrees
-            processTree = processDiscovery.ProcessTreeInductive()
-            processTree005 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.05)
-            processTree010 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.1)
-            processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.25)
-            processTree025 = processDiscovery.ProcessTreeInductive(noiseThreshold=0.5)
+            self.__RunProcessTreeInductiveDiscovery(processDiscovery)
 
             #Discovery Miners
+            #Alpha miners
             net, initial, final = processDiscovery.PetriNetAlphaMiner()
             conformanceChecker.AddToConfromanceCheckCollection('AlphaMiner', eventLog, net, initial, final)
             net, initial, final = processDiscovery.PetriNetAlphaPlusMiner()
             conformanceChecker.AddToConfromanceCheckCollection('AlphaPlusMiner', eventLog, net, initial, final)
 
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.0, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.0Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.01, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.01Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.05, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.05Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.1, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.10Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.15, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.15Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.25, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.25Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.3, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.3Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.4, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.4Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.5, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.5Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.6, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.6Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.7, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.7Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetInductiveMiner(0.8, ProcessMining.__Settings.ImageStorage['inductiveMiner'])
-            conformanceChecker.AddToConfromanceCheckCollection('Inductive0.8Miner', eventLog, net, initial, final)
+            #Inductive miner
+            self.__RunInductiveMinerDiscoveryTests(processDiscovery, conformanceChecker)
 
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=1.00)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics1.00Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner()
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.99Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.95)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.95Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.90)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.90Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.85)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.85Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.75)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.75Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.60)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.60Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.50)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.50Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.40)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.40Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.30)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.30Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.20)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.20Miner', eventLog, net, initial, final)
-            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(threshold=0.10)
-            conformanceChecker.AddToConfromanceCheckCollection('Heuristics0.10Miner', eventLog, net, initial, final)
+            #heuristics miner
+            self.__RunSingleThresholdHeuristicsMinerDiscovery(processDiscovery, conformanceChecker)
 
-            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone)
+            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MinerConformanceEvaluation"])
+            del conformanceChecker
+            del processDiscovery
+
+            #multidimensional threshold heuristics miner
+            self.__4DThresholdHeuristicsMinerDiscovery()
+
         except Exception as e:
             logging.error("Exception occurred when running all discovery algorithms", exc_info=True)
 

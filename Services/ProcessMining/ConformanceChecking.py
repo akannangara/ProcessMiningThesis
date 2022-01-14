@@ -17,6 +17,7 @@ from pm4py.algo.evaluation.replay_fitness import algorithm as replay_fitness_eva
 from pm4py.visualization.petri_net import visualizer as pn_visualizer
 
 from ProcessMinerConformance import ProcessMinerConformance
+from MuliDimensionalHeuristicsConformance import MuliDimensionalHeuristicsConformance
 from CsvFileManager import CsvFileManager
 from DbContext import DbContext
 from EventLogItem import EventLogItem
@@ -63,6 +64,21 @@ class ConformanceChecking(BaseModel):
     def Simplicity(self, model):
         return pm4py.algo.evaluation.simplicity.algorithm.apply(model)
 
+    def Add4DHeuristicsConformanceCheckToCollection(self, minerName, dependency_threshold, and_threshold,
+                                                    loop_two_threshold, eventLog, petrinet, initial, final):
+        logging.info(f"Adding {minerName} 4d conformance summary to conformance check collection")
+        try:
+            fitness = self.FitnessTokenBasedReply(eventLog, petrinet, initial, final)
+            precision = self.PrecisionTokenBasedReplay(eventLog, petrinet, initial, final)
+            generalization = self.Generalization(eventLog, petrinet, initial, final)
+            simplicity = self.Simplicity(petrinet)
+            conformance = MuliDimensionalHeuristicsConformance(minerName, dependency_threshold, and_threshold,
+                                                    loop_two_threshold,fitness, precision, generalization,
+                                                    simplicity)
+            ConformanceChecking.__ConformanceCheckCollection.append(conformance)
+        except Exception as e:
+            logging.error(f"Error occurred when trying to add {minerName} data to conformance check collection", exc_info=True)
+
     def AddToConfromanceCheckCollection(self, minerName, eventLog, petrinet, initial, final):
         logging.info(f"Adding {minerName} conformance summary to conformance check collection")
         try:
@@ -75,14 +91,14 @@ class ConformanceChecking(BaseModel):
         except Exception as e:
             logging.error(f"Error occurred when trying to add {minerName} data to conformance check collection", exc_info=True)
 
-    def SaveConformanceCollection(self, onlyDone):
+    def SaveConformanceCollection(self, onlyDone, saveFileName):
         if not(ConformanceChecking.__ConformanceCheckCollection):
             logging.error("Conformance check collection is empty")
             return
         logging.info("Storing conformance collection as csv")
         try:
             fileManager = CsvFileManager(ConformanceChecking.__DbContext, ConformanceChecking.__Settings)
-            fileName = ConformanceChecking.__Settings.CsvStorageManager["MinerConformanceEvaluation"]
+            fileName = saveFileName
             if onlyDone:
                 fileName = "OnlyDone_"+fileName
             fileManager.StoreMinerConformanceEvaluation(ConformanceChecking.__ConformanceCheckCollection, fileName)

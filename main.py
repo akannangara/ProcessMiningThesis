@@ -45,8 +45,8 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
-    ImportJiraIssues()
-    CreateEventLogsFromDb()
+    #ImportJiraIssues()
+    #CreateEventLogsFromDb()
     RunProcessDiscoveryAndConformance()
     RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

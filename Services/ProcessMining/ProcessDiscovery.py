@@ -84,19 +84,19 @@ class ProcessDiscovery(BaseModel):
         except Exception as e:
             logging.error("Exception occurred while running inductive miner", exc_info=True)
 
-    def PetriNetHeuristicsMiner(self, threshold=0.99, save=True):
-        logging.info("Running Heuristics miner with threshold "+str(threshold))
+    def PetriNetHeuristicsMiner(self, dependency_threshold, and_threshold, loop_two_threshold, save=True):
+        logging.info("Running Heuristics miner with thresholds "+str(dependency_threshold)+","+str(and_threshold)+","+str(loop_two_threshold))
         try:
             eventLog = ProcessDiscovery.__EventLog
-            net, initial_marking, final_marking = pm4py.discover_petri_net_heuristics(eventLog, dependency_threshold=threshold, and_threshold=threshold, loop_two_threshold=threshold)
+            net, initial_marking, final_marking = pm4py.discover_petri_net_heuristics(eventLog, dependency_threshold=dependency_threshold, and_threshold=and_threshold, loop_two_threshold=loop_two_threshold)
             parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
             gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
             #pn_visualizer.view(gviz)
             if (save):
-                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(threshold)+ProcessDiscovery.__Settings.ImageStorage['heuristicsMiner']))
+                pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(dependency_threshold)+"."+str(and_threshold)+"."+str(loop_two_threshold)+ProcessDiscovery.__Settings.ImageStorage['heuristicsMiner']))
             return net, initial_marking, final_marking
         except Exception as e:
-            logging.error("Exception occurred while running heuristics minder with threshold "+str(threshold), exc_info=True)
+            logging.error("Exception occurred while running heuristics minder with threshold "+str(dependency_threshold)+"."+str(and_threshold)+"."+str(loop_two_threshold), exc_info=True)
 
     #heuristicsNet
     def HeuristicsNetMiner(self, dependency_threshhold=0.5, and_threshold=0.65, loop_2_threshold=0.5, save=True):

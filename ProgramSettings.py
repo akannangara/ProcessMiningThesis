@@ -21,7 +21,8 @@ ImageStorage = {
     "heuristicsNetMiner":"HeuristicsNetMiner.png",
     "processTreeInductive": "ProcessTreeInductive.png",
     "dfg":"DFG.png",
-    "ImagesSinkProcessConformance":"ProcessConformanceImages"
+    "ImagesSinkProcessConformance":"ProcessConformanceImages",
+    "4d_heuristicsPlot": "4d_heuristicsPlot.png"
 }
 
 SqlDb = {
@@ -38,6 +39,7 @@ CsvStorageManager = {
     "TeamMembersFileName": "TeamMembers.csv",
     "StatusesFileName":"Statuses.csv",
     "MinerConformanceEvaluation": "MinerConformanceEvaluation.csv",
+    "MultiDimensionalHeuristicConformanceEvaluation":"4dHeuristicsConfromanceEvaluation.csv",
     "DesiredEventLogFileName": "DesiredWorkflowEventLog.csv"
 }
 

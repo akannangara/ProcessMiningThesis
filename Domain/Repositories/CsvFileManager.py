@@ -29,6 +29,15 @@ class CsvFileManager(BaseModel):
 
 				CsvFileManager.__SinkDirectory = os.path.join(pathToRepository, CsvFileManager.__Settings["SinkDirectory"])
 
+		def ReadFileToDataFrame(self, fileName):
+				logging.info(f"Reading {fileName} to dataframe")
+				try:
+						df = pd.read_csv(os.path.join(CsvFileManager.__SinkDirectory, fileName))
+						return df
+				except Exception as e:
+						logging.error(f"Error occurred while reading in {fileName} as dataframe")
+						raise
+
 		def CreateEventLogFromDb(self, projectsList : List[str] = [], onlyDone=False):
 				logging.info("Storing events from projects list " +(' '.join(str(x) for x in projectsList))+ " as csv")
 				try:

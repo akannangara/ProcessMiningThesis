@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Common\\Support",
+    "\\Domain",
     "\\Services",
     "\\Services\\ProcessMining"
   ],
-  "SelectedNode": "\\Services\\ProcessMining\\ProcessDiscovery.py",
+  "SelectedNode": "\\Services\\ProcessMining\\ProcessMining.py",
   "PreviewInSolutionExplorer": false
 }
