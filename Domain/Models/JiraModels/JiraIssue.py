@@ -46,7 +46,7 @@ class JiraIssue:
 						self.id = jiraIssue.id
 						self.key = jiraIssue.key
 						self.issuetype = JiraIssueType(jiraIssue.fields.issuetype)
-						self.timetimespent = jiraIssue.fields.timespent
+						self.timespent = jiraIssue.fields.timespent
 						self.project = JiraProject(jiraIssue.fields.project)
 						self.aggregatetimespent = jiraIssue.fields.aggregatetimespent
 						self.resolution = JiraResolution(jiraIssue.fields.resolution)

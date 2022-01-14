@@ -41,7 +41,7 @@ class JiraChangeLogItem:
         self.created = created
         if changeLog == None:
             self.field = 'status'
-            self.field = 'jira'
+            self.fieldtype = 'jira'
             self.fromString = 'Create Card'
             self.toString = 'To Do'
         else:

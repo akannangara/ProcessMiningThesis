@@ -3,6 +3,8 @@ from typing import List
 from pydantic import BaseModel
 
 import sqlalchemy as sql
+from sqlalchemy import or_
+from sqlalchemy import and_
 
 from TIssue import TIssue
 
@@ -31,7 +33,10 @@ class DbContext:
         logging.info("Initializing DbContext")
         logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
         try:
-            connectionString = settings.SqlDb["ConnectionString"]
+            if settings.Debug:
+                connectionString = settings.SqlDb["ConnectionStringServer"]
+            else:
+                connectionString = settings.SqlDb["ConnectionStringFile"]
             DbContext.__engine = sql.create_engine(connectionString, echo=settings.SqlDb["Debug"])
             Base.metadata.create_all(DbContext.__engine)
             sessionMaker = sql.orm.sessionmaker(bind=DbContext.__engine)
@@ -39,6 +44,12 @@ class DbContext:
         except Exception as e:
             logging.error("Exception occurred when creating DbContext", exc_info=True)
             return e
+
+    def GetSession(self):
+        return DbContext.__session
+
+    def GetEngine(self):
+        return DbContext.__engine
 
     def AddMultipleEntitiesToDb(self, entitiesList):
         try:
@@ -66,15 +77,29 @@ class DbContext:
             return issues
         
     def Query(self, entity, attribute : str, query : str):
-        if not(query):
+        if not(attribute):
             queryResult = DbContext.__session.query(entity).all()
             return queryResult
         else:
             queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute) == query).all()
             return queryResult
 
+    def QueryChainOrLike(self, entity, attribute1: str, query11 : str, query12 : str, attribute2 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity)\
+            .filter(or_(getattr(entity, attribute1) == query11, getattr(entity, attribute1) == query12))\
+            .filter(getattr(entity, attribute2).like(query2)).all()
+        return queryResult
+
     def QueryLike(self, entity, attribute : str, query : str):
         queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute).like(query)).all()
+        return queryResult
+
+    def QueryOr(self, entity, attribute : str, query1 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(or_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
+        return queryResult
+
+    def QueryAnd(self, entity, attribute : str, query1 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
         return queryResult
 
     def AddIssueToDb(self, jiraIssue : JiraIssue):
@@ -113,6 +138,14 @@ class DbContext:
             logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, changeLog.author, 'Author', 'Key')
         return issue
 
+    def UpdateEntity(self, entity):
+        try:
+            DbContext.__session.commit()
+            DbContext.__session.refresh(entity)
+            return entity
+        except Exception as e:
+            logging.error(f"Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
+
     def __AddEntityToDb(self, entity):
         try:
             DbContext.__session.add(entity)
@@ -121,19 +154,11 @@ class DbContext:
             return entity
         except Exception as e:
             logging.error("Exception occurred when adding entity to database.", exc_info=True)
-    
-    def __UpdateEntity(self, entity):
-        try:
-            DbContext.__session.commit()
-            DbContext.__session.refresh(entity)
-            return entity
-        except Exception as e:
-            logging.error("Exception occurred when updating entity in database. Entity was {entity}", exc_info=True)
 
     def __AddAttributeWithoutIdToIssue(self, issue : TIssue, entityType, jiraEntity, entityTypeAttribute : str):
         entity = self.__AddEntityToDb(entityType(jiraEntity, issue.Id))
         setattr(issue, entityTypeAttribute+'Id', entity.Id)
-        return self.__UpdateEntity(issue)
+        return self.UpdateEntity(issue)
 
     def __AddAttributeWithIdToEntity(self, entity, SubEntityType, jiraEntity, 
                               subEntityTypeAttribute : str, identityAttribute : str):
@@ -143,4 +168,4 @@ class DbContext:
             subEntity = SubEntityType(jiraEntity)
             subEntity = self.__AddEntityToDb(subEntity)
         setattr(entity, subEntityTypeAttribute+'Id', getattr(subEntity, identityAttribute))
-        return self.__UpdateEntity(entity)
+        return self.UpdateEntity(entity)
