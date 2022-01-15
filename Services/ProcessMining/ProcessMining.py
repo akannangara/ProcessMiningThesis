@@ -143,7 +143,7 @@ class ProcessMining(BaseModel):
                     for loop_two_threshold in thresholdValues:
                         net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold)
                         conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
-                        conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+                        conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
 
                     del conformanceChecker
                     del processDiscovery
@@ -209,7 +209,7 @@ class ProcessMining(BaseModel):
             #heuristics miner
             self.__RunSingleThresholdHeuristicsMinerDiscovery(processDiscovery, conformanceChecker)
 
-            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MinerConformanceEvaluation"])
+            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MinerConformanceEvaluation"], deleteExistingFile=True)
             del conformanceChecker
             del processDiscovery
 

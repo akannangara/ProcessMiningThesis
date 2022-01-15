@@ -67,6 +67,7 @@ class CsvFileManager(BaseModel):
 								eventLogName = CsvFileManager.__Settings["OnlyDoneEventLogFileName"]
 						else:
 								eventLogName = CsvFileManager.__Settings["EventLogFileName"]
+						self.DeleteFileIfExists(eventLogname)
 						self.__CreateAndStoreDataFrameFromEntityList(allChangeLogs, EventLogItem, eventLogName)
 						if onlyDone:
 								CsvFileManager.__Settings["EventLogFileName"] = eventLogName
@@ -79,6 +80,15 @@ class CsvFileManager(BaseModel):
 						self.__CreateAndStoreDataFrameFromEntityList(entityCollection, entityType, filename)
 				except Exception as e:
 						logging.error(f"Error occurred while creating csv {filename} from entity collection", exc_info=True)
+
+		def DeleteFileIfExists(self, filename):
+				logging.info(f"Deleting {filename} if it exists.")
+				try:
+						fileLocation = os.path.join(CsvFileManager.__SinkDirectory, filename)
+						if os.path.exists(fileLocation):
+								os.remove(fileLocation)
+				except Exception as e:
+						logging.error(f"Error occurred while deleting file {filename} if exits", exc_info=True)
 
 		def CreateStatusCollectionFromDb(self):
 				logging.info("Creating status collection as csv")

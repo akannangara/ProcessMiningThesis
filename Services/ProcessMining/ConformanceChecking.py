@@ -91,7 +91,7 @@ class ConformanceChecking(BaseModel):
         except Exception as e:
             logging.error(f"Error occurred when trying to add {minerName} data to conformance check collection", exc_info=True)
 
-    def SaveConformanceCollection(self, onlyDone, saveFileName):
+    def SaveConformanceCollection(self, onlyDone, saveFileName, deleteExistingFile : bool):
         if not(ConformanceChecking.__ConformanceCheckCollection):
             logging.error("Conformance check collection is empty")
             return
@@ -101,6 +101,8 @@ class ConformanceChecking(BaseModel):
             fileName = saveFileName
             if onlyDone:
                 fileName = "OnlyDone_"+fileName
+            if (deleteExistingFile):
+                fileManager.DeleteFileIfExists(fileName)
             fileManager.StoreMinerConformanceEvaluation(ConformanceChecking.__ConformanceCheckCollection, fileName)
         except Exception as e:
             logging.error("Error occurred when storing confromance collection as csv", exc_info=True)
