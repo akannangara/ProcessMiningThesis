@@ -1,11 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Common\\Support",
     "\\Domain",
+    "\\Domain\\Models",
+    "\\Domain\\Models\\CsvModels",
+    "\\Domain\\Models\\DbModels",
+    "\\Domain\\Repositories\\ProcessDiscoveryImages",
     "\\Services",
     "\\Services\\ProcessMining"
   ],
-  "SelectedNode": "\\Services\\ProcessMining\\ProcessMining.py",
+  "SelectedNode": "\\Domain\\Models\\DbModels\\TPriority.py",
   "PreviewInSolutionExplorer": false
 }

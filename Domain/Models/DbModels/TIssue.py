@@ -74,6 +74,7 @@ class TIssue(Base):
 		Creator = relationship("TTeamMember", foreign_keys=[CreatorId])
 
 		Summary = Column(String)
+		Description = Column(String)
 
 		AggregateProgressId = Column(Integer, ForeignKey('Progress.Id'))
 		AggregateProgress = relationship("TProgress", foreign_keys=[AggregateProgressId], uselist=False)
@@ -115,6 +116,7 @@ class TIssue(Base):
 				self.TimeOriginalEstimate = jiraIssue.timeoriginalestimate
 				self.AggregateTimeEstimate = jiraIssue.aggregatetimeestimate
 				self.Summary = jiraIssue.summary
+				self.Description = jiraIssue.description
 				if jiraIssue.duedate:
 						self.DueDate = DateTimeConverter.ConvertDate(jiraIssue.duedate)
 				self.Fitness = -1.0

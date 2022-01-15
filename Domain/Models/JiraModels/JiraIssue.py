@@ -34,6 +34,7 @@ class JiraIssue:
 		reporter = None #JiraTeamMember
 		creator = None #JiraTeamMember
 		summary = "" #string value
+		description = "" #string value
 		aggregateprogress = None #JiraProgress
 		duedate= "" #string value #date
 		progress = None #JiraProgress
@@ -67,6 +68,8 @@ class JiraIssue:
 						self.reporter = JiraTeamMember(jiraIssue.fields.reporter)
 						self.creator = JiraTeamMember(jiraIssue.fields.creator)
 						self.summary = jiraIssue.fields.summary
+						if jiraIssue.fields.description:
+								self.description = jiraIssue.fields.description
 						if jiraIssue.fields.aggregateprogress:
 								self.aggregateprogress = JiraProgress(jiraIssue.fields.aggregateprogress)
 						self.duedate= jiraIssue.fields.duedate

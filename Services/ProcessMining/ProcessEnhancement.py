@@ -6,6 +6,8 @@ from typing import List, Dict
 
 from DbContext import DbContext
 from CsvFileManager import CsvFileManager
+from TIssue import TIssue
+from MLDataSetModel import MLDataSetModel
 
 class ProcessEnhancement(BaseModel):
     __Settings = None
@@ -28,6 +30,15 @@ class ProcessEnhancement(BaseModel):
         except Exception as e:
             logging.error("Error occurred when adding issue fitness to each issue in db", exc_info=True)
 
-    def AddTeamMemberTypToDbFromCsv(self):
+    def AddTeamMemberTypeToDbFromCsv(self):
         fileManager = CsvFileManager(ProcessEnhancement.__DbContext, ProcessEnhancement.__Settings)
         fileManager.UpdateTeamMemberTypeFromCsv()
+
+    def CreateMLDataSet(self):
+        doneIssues = ProcessEnhancement.__DbContext.QueryOr(TIssue, "StatusId", "10001", "10003")
+        MLDataSetCollection = []
+        for issue in doneIssues:
+            MLDataSetCollection.append(MLDataSetModel(issue))
+        fileManager = CsvFileManager(ProcessEnhancement.__DbContext, ProcessEnhancement.__Settings)
+        fileManager.CreateFileFromEntityCollection(MLDataSetCollection, MLDataSetModel, \
+            ProcessEnhancement.__Settings.CsvStorageManager["mlDataSet"])

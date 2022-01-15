@@ -134,15 +134,19 @@ class ProcessMining(BaseModel):
     def __4DThresholdHeuristicsMinerDiscovery(self):
         logging.info("Running multi-dimensional threshold values for heuristics discovery")
         try:
-            processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
-            conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
             thresholdValues = [1.0, 0.99, 0.97, 0.95, 0.92, 0.90, 0.85, 0.8, 0.75, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
             for dependency_threshold in thresholdValues:
                 for and_threshold in thresholdValues:
+                    processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
+                    conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
+
                     for loop_two_threshold in thresholdValues:
                         net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold)
                         conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
-            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+                        conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+
+                    del conformanceChecker
+                    del processDiscovery
 
             self.Save4DPlot()
         except Exception as e:
@@ -246,4 +250,5 @@ class ProcessMining(BaseModel):
     def ModelEnhancement(self, eventLogTokenBasedReplayConfromance):
         processEnhancement = ProcessEnhancement(ProcessMining.__Settings, ProcessMining.__DbContext)
         processEnhancement.AddFitnessToIssues(eventLogTokenBasedReplayConfromance, ProcessMining.__EventLog)
-        processEnhancement.AddTeamMemberTypToDbFromCsv()
+        #processEnhancement.AddTeamMemberTypeToDbFromCsv()
+        #processEnhancement.CreateMLDataSet()

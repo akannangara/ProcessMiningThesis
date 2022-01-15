@@ -40,7 +40,8 @@ CsvStorageManager = {
     "StatusesFileName":"Statuses.csv",
     "MinerConformanceEvaluation": "MinerConformanceEvaluation.csv",
     "MultiDimensionalHeuristicConformanceEvaluation":"4dHeuristicsConfromanceEvaluation.csv",
-    "DesiredEventLogFileName": "DesiredWorkflowEventLog.csv"
+    "DesiredEventLogFileName": "DesiredWorkflowEventLog.csv",
+    "mlDataSet":"MLDataSet.csv"
 }
 
 GraphViz = {

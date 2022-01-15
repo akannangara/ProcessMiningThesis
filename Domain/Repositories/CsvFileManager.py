@@ -141,4 +141,5 @@ class CsvFileManager(BaseModel):
 
 		def __SaveDataFrameToCsv(self, dataframe : pd.DataFrame, filename : str):
 				dataframe.index.name = "df_index"
-				dataframe.to_csv(os.path.join(CsvFileManager.__SinkDirectory, filename), sep=';')
+				filePath = os.path.join(CsvFileManager.__SinkDirectory, filename)
+				dataframe.to_csv(filePath, sep=';', mode='a', header=not(os.path.exists(filePath)))
