@@ -11,11 +11,12 @@ import datetime
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
-#from sklearn.pipline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from skopt.space import Integer, Categorical, Real
 import numpy as np
 import time
+
+import timeit
 
 from CsvFileManager import CsvFileManager
 
@@ -41,19 +42,30 @@ class SVRML(GaussianProcess):
     def Run(self, x, y):
         logging.info("Running SVRML")
         try:
-            bestScore, bestParameters, scorePerRun = super().RunGp(x, y)
+            start = timeit.default_timer()
+            bestScore, bestParameters, scorePerRun = super().RunGp(x, y, "SVRML")
+            took = timeit.default_timer() - start
+            f = open("SVRML.txt", 'w')
+            f.write(f"dtrml gp took {took}\n\n")
+            f.write(f"SVRML GP bestScore:{bestScore}\n\n\n")
+            f.write(', '.join([str(elem) for elem in bestParameters])+"\n\n")
+            f.write(', '.join([str(elem) for elem in scorePerRun]))
+            f.close()
             logging.info(f"SVRML GP bestScore:{bestScore}")
-            svrStandard = SVR(bestParameters)
+            start = timeit.default_timer()
+            svrStandard = SVR(kernel=bestParameters[0], degree=bestParameters[1],
+                              gamma=bestParameters[2],C=bestParameters[3],
+                              epsilon=bestParameters[4],shrinking=bestParameters[5])
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-            svrStandard.fit(x_train, y_train)
+            svrStandard.fit(x_train.to_numpy(), y_train.to_numpy())
             testScore = svrStandard.score(x_test, y_test)
+            took = timeit.default_timer() - start
             SVRML.__TrainedClassifier = svrStandard
             logging.info(f"SVRML standard run score:{testScore}")
-            f = open("SVRML.txt", 'w')
-            f.write(f"SVRML standard run score:{testScore}\n")
-            f.write(f"SVRML GP bestScore:{bestScore}\n")
-            import json
-            f.write(json.dumps(bestParameters))
-            f.write(json.dumps(scorePerRun))
+            f = open("SVRML.txt", 'a')
+            f.write(f"SVRML took {took}\n\n")
+            f.write(f"SVRML standard run score:{testScore}\n\n")
+            f.write(', '.join([str(elem) for elem in SVRML.__TrainedClassifier.coef_])+"\n\n")
+            f.close()
         except Exception as e:
             logging.error("Error occurred while running SVRML", exc_info=True)

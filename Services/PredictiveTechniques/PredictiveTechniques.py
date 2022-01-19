@@ -35,17 +35,44 @@ class PredictiveTechniques(BaseModel):
         PredictiveTechniques.__DbContext = dbContext
         self.__ReadCsvDataSet()
 
-    def RunWorkRatioEstimation(self):
-        logging.info("Running WorkRatio estimation")
+    def __RunSVR(self):
+        logging.info("Running SVR")
         try:
             svrML = SVRML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext)
             svrML.Run(PredictiveTechniques.__X, PredictiveTechniques.__Y_workRatio)
+        except Exception as e:
+            logging.error("Error occurred running SVR", exc_info=True)
 
-            dtrML = DTRML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext, PredictiveTechniques.__X.size)
-            dtrML.Run(PredictiveTechniques.__X, PredictiveTechniques.__Y_workRatio)
-
+    def __RunMLP(self):
+        logging.info("Running MLP")
+        try:
             mlpML = MLPML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext)
             mlpML.Run(PredictiveTechniques.__X, PredictiveTechniques.__Y_workRatio)
+        except Exception as e:
+            logging.error("Error occurred running MLP", exc_info=True)
+
+    def __RunDTR(self):
+        logging.info("Running DTR")
+        try:
+            dtrML = DTRML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext, PredictiveTechniques.__X.size)
+            dtrML.Run(PredictiveTechniques.__X, PredictiveTechniques.__Y_workRatio)
+        except Exception as e:
+            logging.error("Error occurred running DTR", exc_info=True)
+
+    def __RunInParrallel(self, *fns):
+        from multiprocessing import Process
+        proc = []
+        for fn in fns:
+            p = Process(target=fn)
+            p.start()
+            proc.append(p)
+        for p in proc:
+            p.join()
+
+    def RunWorkRatioEstimation(self):
+        logging.info("Running WorkRatio estimation")
+        try:
+            self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
         except Exception as e:
             logging.error("Error occurred while running workRatio estimation", exc_info=True)
 
