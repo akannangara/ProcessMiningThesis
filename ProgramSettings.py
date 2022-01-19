@@ -44,6 +44,13 @@ CsvStorageManager = {
     "mlDataSet":"MLDataSet.csv"
 }
 
+GaussianProcess = {
+    "acq_func" : "EI",
+    "n_calls" : 10,
+    "n_initial_points": 10,
+    "noise": "gaussian"
+}
+
 GraphViz = {
     "binLocation": "C:\Program Files\Graphviz\\bin",
     "exeLocation": "C:\Program Files\Graphviz\\bin\dot.exe"

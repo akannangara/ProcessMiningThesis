@@ -1,4 +1,4 @@
-﻿import ImportAllLocations
+import ImportAllLocations
 
 import time
 import logging
@@ -47,8 +47,8 @@ def MakeMultiDPlot():
     processMiner.SaveSurfaceMultiDMap()
 
 def RunPredictiveTechniques():
-    processEnhancement = ProcessEnhancement(settings, DbContext(settings))
-    processEnhancement.CreateMLDataSet()
+    #processEnhancement = ProcessEnhancement(settings, DbContext(settings))
+    #processEnhancement.CreateMLDataSet()
     pt = PredictiveTechniques(settings, DbContext(settings))
     pt.RunWorkRatioEstimation()
 
@@ -63,6 +63,6 @@ if __name__ == "__main__":
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
-    #RunPredictiveTechniques()
-    MakeMultiDPlot()
+    RunPredictiveTechniques()
+    #MakeMultiDPlot()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

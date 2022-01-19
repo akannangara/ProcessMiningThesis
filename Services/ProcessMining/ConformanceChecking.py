@@ -17,7 +17,7 @@ from pm4py.algo.evaluation.replay_fitness import algorithm as replay_fitness_eva
 from pm4py.visualization.petri_net import visualizer as pn_visualizer
 
 from ProcessMinerConformance import ProcessMinerConformance
-from MuliDimensionalHeuristicsConformance import MuliDimensionalHeuristicsConformance
+from MultiDimensionalHeuristicsConformance import MultiDimensionalHeuristicsConformance
 from CsvFileManager import CsvFileManager
 from DbContext import DbContext
 from EventLogItem import EventLogItem
@@ -72,7 +72,7 @@ class ConformanceChecking(BaseModel):
             precision = self.PrecisionTokenBasedReplay(eventLog, petrinet, initial, final)
             generalization = self.Generalization(eventLog, petrinet, initial, final)
             simplicity = self.Simplicity(petrinet)
-            conformance = MuliDimensionalHeuristicsConformance(minerName, dependency_threshold, and_threshold,
+            conformance = MultiDimensionalHeuristicsConformance(minerName, dependency_threshold, and_threshold,
                                                     loop_two_threshold,fitness, precision, generalization,
                                                     simplicity)
             ConformanceChecking.__ConformanceCheckCollection.append(conformance)

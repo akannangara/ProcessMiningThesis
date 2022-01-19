@@ -40,5 +40,6 @@ class ProcessEnhancement(BaseModel):
         for issue in doneIssues:
             MLDataSetCollection.append(MLDataSetModel(issue))
         fileManager = CsvFileManager(ProcessEnhancement.__DbContext, ProcessEnhancement.__Settings)
+        fileManager.DeleteFileIfExists(ProcessEnhancement.__Settings.CsvStorageManager["mlDataSet"])
         fileManager.CreateFileFromEntityCollection(MLDataSetCollection, MLDataSetModel, \
-            ProcessEnhancement.__Settings.CsvStorageManager["mlDataSet"])
+        ProcessEnhancement.__Settings.CsvStorageManager["mlDataSet"])

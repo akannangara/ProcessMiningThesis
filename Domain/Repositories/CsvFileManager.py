@@ -32,7 +32,7 @@ class CsvFileManager(BaseModel):
 		def ReadFileToDataFrame(self, fileName):
 				logging.info(f"Reading {fileName} to dataframe")
 				try:
-						df = pd.read_csv(os.path.join(CsvFileManager.__SinkDirectory, fileName))
+						df = pd.read_csv(os.path.join(CsvFileManager.__SinkDirectory, fileName), sep=';')
 						return df
 				except Exception as e:
 						logging.error(f"Error occurred while reading in {fileName} as dataframe")

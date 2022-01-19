@@ -1,4 +1,4 @@
-﻿import ImportAllLocations
+import ImportAllLocations
 
 import time
 import logging
@@ -65,4 +65,5 @@ if __name__ == "__main__":
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
     #RunPredictiveTechniques()
     MakeMultiDPlot()
+    logging.info("Execution time was "+str(time.time()-startTime)+" s")
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

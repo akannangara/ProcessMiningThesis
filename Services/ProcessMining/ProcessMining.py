@@ -33,6 +33,7 @@ from CsvFileManager import CsvFileManager
 from ProcessDiscovery import ProcessDiscovery
 from ConformanceChecking import ConformanceChecking
 from ProcessEnhancement import ProcessEnhancement
+from PredictiveTechniques import PredictiveTechniques
 from DbContext import DbContext
 
 class ProcessMining(BaseModel):
@@ -72,10 +73,87 @@ class ProcessMining(BaseModel):
     def GetEventLog(self):
         return ProcessMining.__EventLog
 
-    def Save4DPlot(self):
-        logging.info("Storing 4d plot")
+    def SaveSurfaceMultiDMap(self, ignoreSimplicity : bool = False):
+        logging.info("Storing multi d surface graph")
         try:
-            #import matplotlib.pyplot as plt
+            from mpl_toolkits.mplot3d import Axes3D
+            import matplotlib.pyplot as plt
+            from matplotlib import cm
+            from matplotlib.ticker import LinearLocator, FormatStrFormatter
+            import numpy as np
+
+            repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            imagesSink = os.path.join(repsoitoryLocation,  ProcessMining.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+
+            #Get data
+            fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
+            df = fileManager.ReadFileToDataFrame(ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+            X = df['dependency_threshold'].tolist()
+            Y = df['and_threshold'].tolist()
+            Z = np.array(df['loop_two_threshold'].tolist())
+            if ignoreSimplicity:
+                C = np.array(df['AverageScore'])
+            else:
+                C =  np.array(df['AverageScoreIgnoringSimplicity'])
+            scamap = plt.cm.ScalarMappable(cmap='inferno')
+
+            
+            plt.figure(figsize=(16,12), dpi=160)
+            fig, axis = plt.subplots(subplot_kw={'projection': '3d'})
+            fcolors = scamap.to_rgba(C)
+            axis.plot_trisurf(X, Y, Z, facecolors=fcolors, cmap='inferno')
+            axis.set_xlabel('Dependency threshold')
+            axis.set_ylabel("And threshold")
+            axis.set_zlabel("Loop two threshold")
+            axis.set_title("Heuristics miner average score for varrying threshold over average quality")
+            axis.view_init(30,10)
+            fig.colorbar(scamap)
+            filePrefix = "matplotsurfaceAverage"
+            if ignoreSimplicity:
+                filePrefix = "IgnoreSimplicity"+filePrefix
+            plt.savefig(os.path.join(imagesSink, filePrefix+ProcessMining.__Settings.ImageStorage['4d_heuristicsPlot']))
+        except Exception as e:
+            logging.error("Error occurred storing multi d surface graphs", exc_info=True)
+
+    def Save4DPlotWithMatplotlib(self):
+        logging.info("storing 4d plot with matplotlib")
+        try:
+            import matplotlib.pyplot as plt
+            import seaborn as sns
+
+            #Get data
+            fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
+            df = fileManager.ReadFileToDataFrame(ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+            X = df['dependency_threshold'].tolist()
+            Y = df['and_threshold'].tolist()
+            Z = df['loop_two_threshold'].tolist()
+            c_avarageScore = df['AverageScore'].tolist()
+            c_averageScoreWithoutSimplicty = df['AverageScoreIgnoringSimplicity'].tolist()
+            fig = plt.figure(figsize=(16,12), dpi=160)
+            axis = fig.add_subplot(111, projection='3d')
+
+            p = axis.scatter(X, Y, Z, c=c_avarageScore, cmap=plt.get_cmap("winter"), marker="x", label="Average score", s=10)
+            axis.scatter(X, Y, Z, c=c_averageScoreWithoutSimplicty, cmap=plt.get_cmap("winter"), marker="v", label="Average score ignoring simplicity", s=10)
+
+            axis.set_xlabel('Dependency threshold')
+            axis.set_ylabel("And threshold")
+            axis.set_zlabel("Loop two threshold")
+            axis.set_title("3D scatter plot of varrying threshold values and quality average score ")
+
+            axis.legend()
+            axis.view_init(15,10)
+            fig.colorbar(p, ax=axis)
+
+            repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            imagesSink = os.path.join(repsoitoryLocation,  ProcessMining.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.savefig(os.path.join(imagesSink, "matplotlib"+ProcessMining.__Settings.ImageStorage['4d_heuristicsPlot']))
+        except Exception as e:
+            logging.error("Error occurred while making matplotlib 3d graph", exc_info=True)
+
+    def Save4DPlot(self):
+        logging.info("Storing 4d plot using plotly")
+        try:
+            import plotly
             import plotly.graph_objs as go
 
             #Get data
@@ -96,7 +174,7 @@ class ProcessMining(BaseModel):
                                             line=dict(width=0.2),
                                             mode='markers',
                                             name="Average score")
-            averageScoreWithoutSimplictyDate = go.Scattter3d(x=X, y=Y, z=Z,
+            averageScoreWithoutSimplictyDate = go.Scatter3d(x=X, y=Y, z=Z,
                                                              marker=dict(color=c_averageScoreWithoutSimplicty,
                                                                          opacity=1,
                                                                          reversescale=True,
@@ -104,9 +182,9 @@ class ProcessMining(BaseModel):
                                                                          size=2),
                                                              line=dict(width=0.2),
                                                              mode='markers',
-                                                             name="Aaverage score ignoring simplicity")
+                                                             name="Average score ignoring simplicity")
 
-            #fig = go.Figure(data=[averageScoreData, averageScoreWithoutSimplictyDate])
+            fig = go.Figure(data=[averageScoreData, averageScoreWithoutSimplictyDate])
 
             #fig.update_layout()
 
@@ -117,36 +195,32 @@ class ProcessMining(BaseModel):
             plotly.offline.plot({"data": [averageScoreData, averageScoreWithoutSimplictyDate],
                                  "layout": layout},
                                  auto_open=False,
-                                 filename=("4dplot.png"))
+                                 filename=("multiDimensional Plot.html"))
 
-            #fig = plt.figure()
-            #axis = fig.add_subplot(111, projection='3d')
-
-            #axis.scatter(X, Y, Z, c=c_avarageScore, cmap=plt.hot(), marker="s", label="Average score")
-            #axis.scatter(X, Y, Z, c=c_averageScoreWithoutSimplicty, cmap=plt.hot(), maker="o", label="Average score ignoring simplicity")
-
-            #repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
-            #imagesSink = os.path.join(repsoitoryLocation, settings.ImageStorage["ImagesSinkProcessDiscovery"])
-            #plt.savefig(os.path.join(imageSink, ProcessMining.__Settings.ImageStorage['4d_heuristicsPlot']))
+            
         except Exception as e:
             logging.error("Error occurred when storing 4d plot", exc_info=True)
 
     def __4DThresholdHeuristicsMinerDiscovery(self):
         logging.info("Running multi-dimensional threshold values for heuristics discovery")
         try:
-            thresholdValues = [1.0, 0.99, 0.97, 0.95, 0.92, 0.90, 0.85, 0.8, 0.75, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
+            fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
+            fileName = ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"]
+            if ProcessMining.__OnlyDone:
+                fileName = "OnlyDone_"+fileName
+            fileManager.DeleteFileIfExists(fileName)
+            del fileManager
+            thresholdValues = [1.0, 0.99, 0.97, 0.95, 0.93, 0.91, 0.90, 0.89, 0.87, 0.85, 0.83, 0.81, 0.75, 0.7, 0.6, 0.5]
             for dependency_threshold in thresholdValues:
                 for and_threshold in thresholdValues:
-                    processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
-                    conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
-
                     for loop_two_threshold in thresholdValues:
-                        net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold)
+                        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
+                        conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
+                        net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold, save=False)
                         conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
                         conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
-
-                    del conformanceChecker
-                    del processDiscovery
+                        del conformanceChecker
+                        del processDiscovery
 
             self.Save4DPlot()
         except Exception as e:
@@ -218,6 +292,10 @@ class ProcessMining(BaseModel):
 
         except Exception as e:
             logging.error("Exception occurred when running all discovery algorithms", exc_info=True)
+
+    def Run4DHeuristicsDiscovery(self):
+        #multidimensional threshold heuristics miner
+        self.__4DThresholdHeuristicsMinerDiscovery()
 
     def ConformanceCheckWithDesiredWorkflow(self) -> (Dict[str, float], List):
         logging.info("Running conformance check compared to desired workflow")
