@@ -127,4 +127,6 @@ class MLDataSetModel:
             self.RUndefined = (int(issue.Reporter.Type==""))
 
         self.WorkRatio = issue.WorkRatio #if really large then rejected if -1 then no originalTimeEstimate
+        if self.WorkRatio > 9000000000:
+            self.WorkRatio = 1000000000
         self.Fitness = issue.Fitness

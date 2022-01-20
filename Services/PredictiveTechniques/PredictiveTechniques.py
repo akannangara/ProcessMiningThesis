@@ -35,27 +35,27 @@ class PredictiveTechniques(BaseModel):
         PredictiveTechniques.__DbContext = dbContext
         self.__ReadCsvDataSet()
 
-    def __RunSVR(self):
+    def __RunSVR(self, Y, name : str):
         logging.info("Running SVR")
         try:
             svrML = SVRML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext)
-            svrML.Run(PredictiveTechniques.__X, PredictiveTechniques.__Y_workRatio)
+            svrML.Run(PredictiveTechniques.__X, Y, name)
         except Exception as e:
             logging.error("Error occurred running SVR", exc_info=True)
 
-    def __RunMLP(self):
+    def __RunMLP(self, Y, name : str):
         logging.info("Running MLP")
         try:
             mlpML = MLPML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext)
-            mlpML.Run(PredictiveTechniques.__X, PredictiveTechniques.__Y_workRatio)
+            mlpML.Run(PredictiveTechniques.__X, Y, name)
         except Exception as e:
             logging.error("Error occurred running MLP", exc_info=True)
 
-    def __RunDTR(self):
+    def __RunDTR(self, Y, name : str):
         logging.info("Running DTR")
         try:
             dtrML = DTRML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext, PredictiveTechniques.__X.size)
-            dtrML.Run(PredictiveTechniques.__X, PredictiveTechniques.__Y_workRatio)
+            dtrML.Run(PredictiveTechniques.__X, Y, name)
         except Exception as e:
             logging.error("Error occurred running DTR", exc_info=True)
 
@@ -72,10 +72,12 @@ class PredictiveTechniques(BaseModel):
     def RunWorkRatioEstimation(self):
         logging.info("Running WorkRatio estimation")
         try:
-            self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
+            #self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
+            self.__RunDTR(PredictiveTechniques.__Y_workRatio, "DTRWORKRATIO")
+            self.__RunMLP(PredictiveTechniques.__Y_workRatio, "MLPWORKRATIO")
+            self.__RunSVR(PredictiveTechniques.__Y_workRatio, "SVRWORKRATIO")
         except Exception as e:
             logging.error("Error occurred while running workRatio estimation", exc_info=True)
-
 
     def __ReadCsvDataSet(self):
         logging.info("Reading in data set for SVR")
@@ -84,8 +86,11 @@ class PredictiveTechniques(BaseModel):
             dataset = fileManager.ReadFileToDataFrame(PredictiveTechniques.__Settings.CsvStorageManager["mlDataSet"])
             columnsToDrop = ['df_index','Key', 'WorkRatio', 'Fitness']
             PredictiveTechniques.__X = dataset.drop(columnsToDrop, axis='columns')
+            #PredictiveTechniques.__X = PredictiveTechniques.__X.reset_index()
             PredictiveTechniques.__Y_workRatio = dataset['WorkRatio']
+            #PredictiveTechniques.__Y_workRatio = PredictiveTechniques.__Y_workRatio.reset_index()
             PredictiveTechniques.__Y_fitness = dataset['Fitness']
+            #PredictiveTechniques.__Y_fitness = PredictiveTechniques.__Y_fitness.reset_index()
             logging.info(f"ML data set shape is {dataset.shape}")
         except Exception as e:
             logging.error("Error occurred while reading in dataset for SVR.", exc_info=True)

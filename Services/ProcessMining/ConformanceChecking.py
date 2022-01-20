@@ -50,7 +50,14 @@ class ConformanceChecking(BaseModel):
         
 
     def FitnessTokenBasedReply(self, log, model, initial, final):
-        return replay_fitness_evaluator.apply(log, model, initial, final, variant=replay_fitness_evaluator.Variants.TOKEN_BASED)
+        try:
+            return pm4py.fitness_token_based_replay(log, model, initial, final)
+        except Exception as e:
+            try:
+                import pm4py as pm4py
+                return replay_fitness_evaluator.apply(log, model, initial, final, variant=replay_fitness_evaluator.Variants.TOKEN_BASED)
+            except Exception as e:
+                raise e
 
     def PrecisionAlignment(self, log, model, initial, final):
         return pm4py.precision_alignments(log, model, initial, final)

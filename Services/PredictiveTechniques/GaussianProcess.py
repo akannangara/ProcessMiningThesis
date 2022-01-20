@@ -29,13 +29,18 @@ class GaussianProcess(BaseModel):
         GaussianProcess.__HyperparameterSpace = hyperparameterSpace
 
     def __f(self, params):
-        X_Use, X_Unused, Y_Use, Y_Unused = train_test_split(GaussianProcess.__X, GaussianProcess.__Y, test_size=0.1)
-        X_train, X_test, Y_train, Y_test = train_test_split(X_Use, Y_Use, test_size = 0.8)
         classifier = GaussianProcess.__Classifier(**{dim.name: val for dim, val in zip(GaussianProcess.__HyperparameterSpace, params) if dim.name != 'dummy'})
-        classifier.fit(X_train.to_numpy(), Y_train.to_numpy())
-        score = abs(Y_test - classifier.predict(X_test)).sum()
-        logging.info(f"{GaussianProcess.__Name} GP__f score is {score}")
-        return score
+        try:
+            X_Use, X_Unused, Y_Use, Y_Unused = train_test_split(GaussianProcess.__X, GaussianProcess.__Y, test_size=0.1)
+            X_train, X_test, Y_train, Y_test = train_test_split(X_Use, Y_Use, test_size = 0.2)
+            classifier.fit(X_train, Y_train)
+            pred = classifier.predict(X_test)
+            score = (abs(Y_test - classifier.predict(X_test)).sum()) / X_test.size
+            logging.info(f"{GaussianProcess.__Name} GP__f score is {score}")
+            return score
+        except Exception as e:
+            logging.error(f"Error occurred in GP__f {GaussianProcess.__Name} with {classifier.get_params()}.", exc_info=True)
+            raise e
 
     def RunGp(self, X, Y, name : str):
         logging.info(f"Running GP optimization for {name}")
@@ -55,6 +60,9 @@ class GaussianProcess(BaseModel):
             bestParameters = clf.x
             scoresPerRun = clf.func_vals
             return bestScore, bestParameters, scoresPerRun
+        except (BrokenPipeError, IOError):
+            logging.error("BrokenPipeError", exc_info=True)
+            pass
         except Exception as e:
-            logging.info(f"Error occurred while running GP optimization { GaussianProcess.__Name}", exc_info=True)
+            logging.error(f"Error occurred while running GP optimization { GaussianProcess.__Name}", exc_info=True)
             raise e

@@ -208,21 +208,32 @@ class ProcessMining(BaseModel):
             fileName = ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"]
             if ProcessMining.__OnlyDone:
                 fileName = "OnlyDone_"+fileName
-            #fileManager.DeleteFileIfExists(fileName)
+            fileManager.DeleteFileIfExists(fileName)
             del fileManager
             thresholdValues = [1.0, 0.99, 0.97, 0.95, 0.93, 0.91, 0.90, 0.89, 0.87, 0.85, 0.83, 0.81, 0.75, 0.7, 0.6, 0.5]
-            for dependency_threshold in [0.97, 0.95, 0.93, 0.91, 0.90, 0.89, 0.87, 0.85, 0.83, 0.81, 0.75, 0.7, 0.6, 0.5]:
+            for dependency_threshold in thresholdValues:
                 for and_threshold in thresholdValues:
                     for loop_two_threshold in thresholdValues:
-                        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
-                        conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
-                        net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold, save=False)
-                        conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
-                        conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
-                        del conformanceChecker
-                        del processDiscovery
-
-            self.Save4DPlot()
+                        try:
+                            processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
+                            conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
+                            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold, save=False)
+                            conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
+                            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
+                            del conformanceChecker
+                            del processDiscovery
+                        except Exception as e:
+                            try:
+                                processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
+                                conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
+                                net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold, save=False)
+                                conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
+                                conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
+                                del conformanceChecker
+                                del processDiscovery
+                            except Exception as e:
+                                logging.error(f"Deep error occurred while running heruritics miner with values  {dependency_threshold};{and_threshold};{loop_two_threshold}", exc_info=True)
+                                raise e
         except Exception as e:
             logging.error("Error occurred when running multi-dimensional threshold conformance checks for heuristics discovery.", exc_info=True)
 

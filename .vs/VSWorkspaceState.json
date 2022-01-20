@@ -1,13 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Common",
-    "\\Common\\Support",
-    "\\Domain\\Models\\JiraModels",
-    "\\Services\\JiraDataCollector",
+    "\\Services",
     "\\Services\\JiraDataCollector\\Support",
     "\\Services\\PredictiveTechniques"
   ],
-  "SelectedNode": "\\Common",
+  "SelectedNode": "\\Services\\PredictiveTechniques\\GaussianProcess.py",
   "PreviewInSolutionExplorer": false
 }

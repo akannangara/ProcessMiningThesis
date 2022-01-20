@@ -44,34 +44,35 @@ class DTRML(GaussianProcess):
         super().__init__(DecisionTreeRegressor, classifierSpace, DTRML.__Settings)
         
 
-    def Run(self, x, y):
-        logging.info("Running DTRML")
+    def Run(self, x, y, name : str):
+        logging.info(f"Running {name}")
         try:
             start = timeit.default_timer()
             bestScore, bestParameters, scorePerRun = super().RunGp(x, y, "DTRML")
             took = timeit.default_timer() - start
-            f = open("dtrml.txt", 'w')
-            f.write(f"dtrml gp took {took}\n\n")
-            f.write(f"DTRML GP bestScore:{bestScore}\n\n")
+            f = open(name+".txt", 'w')
+            f.write(f"{name} gp took {took}\n\n")
+            f.write(f"{name} GP bestScore:{bestScore}\n\n")
             f.write(', '.join([str(elem) for elem in bestParameters])+"\n\n")
             f.write(', '.join([str(elem) for elem in scorePerRun])+"\n\n")
             f.close()
-            logging.info(f"DTRML GP bestScore:{bestScore}")
+            logging.info(f"{name} GP bestScore:{bestScore}")
             start = timeit.default_timer()
             dtrStandard = DecisionTreeRegressor(criterion=bestParameters[0], splitter=bestParameters[1], max_depth=bestParameters[2],
                                                 min_samples_split=bestParameters[3],min_samples_leaf=bestParameters[4],
                                                 min_weight_fraction_leaf=bestParameters[5],max_features=bestParameters[6],
                                                 max_leaf_nodes=bestParameters[7],min_impurity_decrease=bestParameters[8])
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-            dtrStandard.fit(x_train.to_numpy(), y_train.to_numpy())
+            dtrStandard.fit(x_train, y_train)
             testScore = dtrStandard.score(x_test, y_test)
+            #testScore = (abs(y_test - dtrStandard.predict(x_test)).sum()) / x_test.size
             took = timeit.default_timer() - start
             DTRML.__TrainedClassifier = dtrStandard
-            logging.info(f"DTRML standard run score:{testScore}")
-            f = open("dtrml.txt", 'a')
-            f.write(f"DTRML standard run score:{testScore}\n\n")
-            f.write(f"dtrml took {took}\n\n")
+            logging.info(f"{name} standard run score:{testScore}")
+            f = open("{name}.txt", 'a')
+            f.write(f"{name} standard run score:{testScore}\n\n")
+            f.write(f"{name} took {took}\n\n")
             f.write(', '.join([str(elem) for elem in DTRML.__TrainedClassifier.feature_importances_])+"\n\n")
             f.close()
         except Exception as e:
-            logging.error("Error occurred while running DTRML", exc_info=True)
+            logging.error(f"Error occurred while running {name}", exc_info=True)
