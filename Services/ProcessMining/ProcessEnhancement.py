@@ -64,7 +64,8 @@ class ProcessEnhancement(BaseModel):
                                 comingBack = 1
                                 break
                         else:
-                            raise ValueError(f"Unknown change log field {changelogs[j].Field}")
+                            pass
+                            #raise ValueError(f"Unknown change log field {changelogs[j].Field}")
                     timeSinceToDo = 0
                     for j in range(i):
                         if changelogs[j].Field == 'status' and changelogs[j].ToString == 'To Do':

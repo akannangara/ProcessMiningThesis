@@ -18,7 +18,7 @@ from TIssue import TIssue
 
 def ImportJiraIssues():
     jiraImporter = JiraDataImporter(settings, DbContext(settings))
-    projectsList = ["CONBR"]#jiraImporter.GetProjectsList()
+    projectsList = jiraImporter.GetProjectsList()
     for project in projectsList:
         issues = jiraImporter.GetProjectIssues(project)
         jiraImporter.StoreIssuesToDatabase(issues)
@@ -59,10 +59,10 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
-    #ImportJiraIssues()
+    ImportJiraIssues()
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
-    RunPredictiveTechniques()
+    #RunPredictiveTechniques()
     #MakeMultiDPlot()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

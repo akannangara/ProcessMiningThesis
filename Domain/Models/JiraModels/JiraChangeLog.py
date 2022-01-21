@@ -16,13 +16,13 @@ class JiraChangeLogHistories:
     def __init__(self, changeLogsHistories, issueId : str, issueKey : str):
         self.logs = []
         for x in changeLogsHistories.items:
-            if (x.field in AcceptedActivities):
-                self.logs.append(
-                    JiraChangeLogItem(x, changeLogsHistories.id,
-                            changeLogsHistories.author,
-                            changeLogsHistories.created,
-                            issueId,
-                            issueKey))
+            #if (x.field in AcceptedActivities):
+            self.logs.append(
+                JiraChangeLogItem(x, changeLogsHistories.id,
+                        changeLogsHistories.author,
+                        changeLogsHistories.created,
+                        issueId,
+                        issueKey))
 
 class JiraChangeLogItem:
     id = "" #string value
