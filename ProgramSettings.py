@@ -5,7 +5,7 @@ Jira = {
     "ConnectionRefreshTimer": 600
 }
 
-Debug=False #todo server: set to false
+Debug=True #todo server: set to false
 
 DataStoreFolder = "C:\_thesis\DataStore"
 
@@ -55,3 +55,21 @@ GraphViz = {
     "binLocation": "C:\Program Files\Graphviz\\bin",
     "exeLocation": "C:\Program Files\Graphviz\\bin\dot.exe"
 }
+
+StatusIntDictionary = {
+    "Pre-refinement": 1,
+    "Refinement": 2,
+    "To Do": 3,
+    "In Progress": 4,
+    "Ready to Review": 5,
+    "In Review": 6,
+    "Ready to Test": 7,
+    "In Test": 8,
+    "Ready for Acceptance": 9,
+    "Ready to Deploy to Acceptance": 10,
+    "Ready for Acceptance": 11,
+    "In Acceptance": 12,
+    "Ready to Deploy to Acceptance": 13
+}
+
+CompletedStatusIds = [10001, 10003]

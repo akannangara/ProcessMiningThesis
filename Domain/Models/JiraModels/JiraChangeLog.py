@@ -1,6 +1,6 @@
 ﻿from JiraTeamMember import JiraTeamMember
 
-AcceptedActivities = ['status']
+AcceptedActivities = ['status', 'timeestimate', 'timespent']
 
 class JiraChangeLog:
     logs = []

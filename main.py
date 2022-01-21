@@ -18,7 +18,7 @@ from TIssue import TIssue
 
 def ImportJiraIssues():
     jiraImporter = JiraDataImporter(settings, DbContext(settings))
-    projectsList = jiraImporter.GetProjectsList()
+    projectsList = ["CONBR"]#jiraImporter.GetProjectsList()
     for project in projectsList:
         issues = jiraImporter.GetProjectIssues(project)
         jiraImporter.StoreIssuesToDatabase(issues)
@@ -49,8 +49,8 @@ def MakeMultiDPlot():
 def RunPredictiveTechniques():
     processEnhancement = ProcessEnhancement(settings, DbContext(settings))
     processEnhancement.CreateMLDataSet()
-    pt = PredictiveTechniques(settings, DbContext(settings))
-    pt.RunWorkRatioEstimation()
+    #pt = PredictiveTechniques(settings, DbContext(settings))
+    #pt.RunWorkRatioEstimation()
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -63,6 +63,6 @@ if __name__ == "__main__":
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
-    #RunPredictiveTechniques()
-    MakeMultiDPlot()
+    RunPredictiveTechniques()
+    #MakeMultiDPlot()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

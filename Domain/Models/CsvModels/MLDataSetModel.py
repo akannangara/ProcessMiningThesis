@@ -12,8 +12,13 @@ class MLDataSetModel:
     Key : str
     Priority : int = 3
     TimeEstimate : int = 0
+    CurrentStatus : int = 0
     TimeOriginalEstimate : int = 0
     DeltaDueCreate : int = 60*60*24*365
+    TimeSpent : int = 0
+    CalculatedWorkRatio : int = 0
+    TimeSinceToDo : int = 0
+    ComingBack : int = 0
     SizeSummary : int = 0
     SizeDescription : int = 0
 
@@ -60,23 +65,32 @@ class MLDataSetModel:
     RClient : int = 0
     RUndefined : int = 0
 
+    Rejected : int = 0
     WorkRatio : float = 0.0
     Fitness : float = 0.0
 
-    def __init__(self, issue : TIssue):
+    def __init__(self, issue : TIssue, currentStatus : int, timeEstimate : int, timespent : int, timeSinceToDo : int, comingBack : bool, rejected : bool):
         self.Key = issue.Key
         self.Priority = 3 #not defined
         if issue.PriorityId:
             self.Priority = issue.PriorityId
-        self.TimeEstimate = 0 #not defined
-        if issue.TimeEstimate:
-            self.TimeEstimate = issue.TimeEstimate
+        self.TimeEstimate = timeEstimate
+        self.CurrentStatus = currentStatus
         self.TimeOriginalEstimate = 0 #not defined
-        if issue.TimeOriginalEstimate: #not defined
+        if issue.TimeOriginalEstimate:
             self.TimeOriginalEstimate = issue.TimeOriginalEstimate
         self.DeltaDueCreate = 60*60*24*365
         if issue.DueDate:
             self.DeltaDueCreate = (issue.DueDate - issue.Created).total_seconds()
+            if self.DeltaDueCreate < 0:
+                self.DeltaDueCreate == 0
+        self.TimeSpent = timespent
+        if timespent > 0 and timeEstimate > 0:
+            self.CalculatedWorkRatio = (timespent / timeEstimate) * 100
+        else:
+            self.CalculatedWorkRatio = 0
+        self.TimeSinceToDo = timeSinceToDo
+        self.ComingBack = comingBack
         self.SizeSummary = len(issue.Summary.split())
         self.SizeDescription = len(issue.Description.split())
 
@@ -126,7 +140,16 @@ class MLDataSetModel:
             self.RClient = (int(issue.Reporter.Type=="Klant"))
             self.RUndefined = (int(issue.Reporter.Type==""))
 
-        self.WorkRatio = issue.WorkRatio #if really large then rejected if -1 then no originalTimeEstimate
+        self.WorkRatio = issue.WorkRatio #if really large then rejected 
         if self.WorkRatio > 9000000000:
-            self.WorkRatio = 1000000000
+            if timespent > 0 and self.TimeOriginalEstimate > 0:
+                self.WorkRatio = (timespent / self.TimeEstimate) *100
+            else:
+                self.WorkRatio = 0
+        elif self.WorkRatio == -1: #if -1 then no originalTimeEstimate
+            if timespent > 0 and self.TimeEstimate > 0:
+                self.WorkRatio = (timespent / self.TimeEstimate) *100
+            else:
+                self.WorkRatio = 0
         self.Fitness = issue.Fitness
+        self.Rejected = (int(rejected))

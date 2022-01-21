@@ -45,23 +45,24 @@ class CsvFileManager(BaseModel):
 						allChangeLogs = []
 						if not(projectsList):
 								if onlyDone:
-										#10001 == Done and 10003 == Rejected
-										issues = CsvFileManager.__DbContext.QueryOr(TIssue, "StatusId", "10001", "10003")
+										completedStatusIds = CsvFileManager.__Settings.CompletedStatusIds
+										issues = CsvFileManager.__DbContext.QueryOr(TIssue, "StatusId", str(completedStatusIds[0]), str(completedStatusIds[1]))
 										for issue in issues:
-												issueChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "IssueId", issue.Id)
+												issueChangeLogs = CsvFileManager.__DbContext.QueryAnd(TChangeLog, "IssueId", issue.Id, "Field", "status")
 												allChangeLogs.extend(issueChangeLogs)
 								else:
-										allChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "", "")
+										allChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "Field", "status")
 						else:
 								for project in projectsList:
 										projectChangeLogs = []
 										if onlyDone:
-												issues = CsvFileManager.__DbContext.QueryChainOrLike(TIssue, 'StatusId', "10001", "10003", 'IssueKey', project+"%")
+												completedStatusIds = CsvFileManager.__Settings.CompletedStatusIds
+												issues = CsvFileManager.__DbContext.QueryChainOrLike(TIssue, 'StatusId', str(completedStatusIds[0]), str(completedStatusIds[1]), 'IssueKey', project+"%")
 												for issue in issues:
-														issueChangeLogs = CsvFileManager.__DbContext.Query(TChangeLog, "IssueId", issue.Id)
+														issueChangeLogs = CsvFileManager.__DbContext.QueryAnd(TChangeLog, "IssueId", issue.Id, "Field", "status")
 														projectChangeLogs.extend(issueChangeLogs)
 										else:
-												projectChangeLogs = CsvFileManager.__DbContext.QueryLike(TChangeLog, 'IssueKey', project+"%")
+												projectChangeLogs = CsvFileManager.__DbContext.QueryLikeAnd(TChangeLog, 'IssueKey', project+"%", "Field", "status")
 										allChangeLogs.extend(projectChangeLogs)
 						if onlyDone:
 								eventLogName = CsvFileManager.__Settings["OnlyDoneEventLogFileName"]

@@ -75,6 +75,10 @@ class DbContext:
                     projectIssues = self.Query(TIssue, 'ProjectId', project.Id)
                     issues.extend(projectIssues)
             return issues
+
+    def GetIssueChangeLogs(self, issueKey : str):
+        queryResult = DbContext.__session.query(TChangeLog).filter(TChangeLog.IssueKey == issueKey).order_by("Created").all()
+        return queryResult
         
     def Query(self, entity, attribute : str, query : str):
         if not(attribute):
@@ -92,6 +96,10 @@ class DbContext:
 
     def QueryLike(self, entity, attribute : str, query : str):
         queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute).like(query)).all()
+        return queryResult
+
+    def QueryLikeAnd(self, entity, attribute1 : str, query1 : str, attribute2 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute1).like(query1), getattr(entity, attribute2) == query2)).all()
         return queryResult
 
     def QueryOr(self, entity, attribute : str, query1 : str, query2 : str):
