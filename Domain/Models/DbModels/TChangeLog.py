@@ -12,7 +12,7 @@ from DateTimeConverter import DateTimeConverter
 class TChangeLog(Base):
 		__tablename__ = 'ChangeLog'
 
-		Id = Column(BigInteger, primary_key=True, autoincrement=True)
+		Id = Column(Integer, primary_key=True)
 
 		ChangeLogId = Column(BigInteger)
 
