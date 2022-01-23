@@ -28,6 +28,7 @@ class PredictiveTechniques(BaseModel):
     __X = None
     __Y_workRatio = None
     __Y_fitness = None
+    __Y_rejected = None
 
 
     def __init__(self, settings, dbContext : DbContext):
@@ -84,13 +85,11 @@ class PredictiveTechniques(BaseModel):
         try:
             fileManager = CsvFileManager(PredictiveTechniques.__DbContext, PredictiveTechniques.__Settings)
             dataset = fileManager.ReadFileToDataFrame(PredictiveTechniques.__Settings.CsvStorageManager["mlDataSet"])
-            columnsToDrop = ['df_index','Key', 'WorkRatio', 'Fitness']
+            columnsToDrop = ['df_index','Key', 'WorkRatio', 'Fitness', 'Rejected']
             PredictiveTechniques.__X = dataset.drop(columnsToDrop, axis='columns')
-            #PredictiveTechniques.__X = PredictiveTechniques.__X.reset_index()
             PredictiveTechniques.__Y_workRatio = dataset['WorkRatio']
-            #PredictiveTechniques.__Y_workRatio = PredictiveTechniques.__Y_workRatio.reset_index()
             PredictiveTechniques.__Y_fitness = dataset['Fitness']
-            #PredictiveTechniques.__Y_fitness = PredictiveTechniques.__Y_fitness.reset_index()
+            PredictiveTechniques.__Y_rejected = dataset['Rejected']
             logging.info(f"ML data set shape is {dataset.shape}")
         except Exception as e:
             logging.error("Error occurred while reading in dataset for SVR.", exc_info=True)

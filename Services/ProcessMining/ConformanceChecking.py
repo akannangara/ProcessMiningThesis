@@ -26,6 +26,8 @@ from TChangeLog import TChangeLog
 
 from ProcessDiscovery import ProcessDiscovery
 
+from statistics import mean
+
 class ConformanceChecking(BaseModel):
     __Settings = None
     __ImagesSink = None
@@ -83,6 +85,7 @@ class ConformanceChecking(BaseModel):
                                                     loop_two_threshold,fitness, precision, generalization,
                                                     simplicity)
             ConformanceChecking.__ConformanceCheckCollection.append(conformance)
+            return mean([fitness['average_trace_fitness'], precision, generalization])
         except Exception as e:
             logging.error(f"Error occurred when trying to add {minerName} data to conformance check collection", exc_info=True)
 

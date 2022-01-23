@@ -20,6 +20,7 @@ import time
 import timeit
 
 from sklearn.metrics import accuracy_score
+from sklearn.feature_selection import chi2
 
 from CsvFileManager import CsvFileManager
 
@@ -39,9 +40,8 @@ class MLPML(GaussianProcess):
                           Categorical(['lbfgs', 'adam'], name='solver'),
                           Real(0.00005, 0.0005, name='alpha'),
                           Categorical(['constant', 'invscaling', 'adaptive'], name='learning_rate'),
-                          Real(0.0005, 0.0015, name='learning_rate_init'),
                           Real(0.0000, 0.9999, name='momentum'),
-                          Integer(200, 500, name='max_iter')]
+                          Integer(200, 1000, name='max_iter')]
         super().__init__(MLPRegressor, classifierSpace, MLPML.__Settings)
 
     def Run(self, x, y, name : str):
@@ -58,48 +58,29 @@ class MLPML(GaussianProcess):
             f.close()
             
             start = timeit.default_timer()
-            mlpStandard = MLPRegressor(activation=bestParameters[0],solver=bestParameters[1],alpha=bestParameters[2],
-                                       learning_rate=bestParameters[3],learning_rate_init=bestParameters[4],
-                                       momentum=bestParameters[5])
+            mlpStandard = MLPRegressor(activation=bestParameters[0],
+                                       solver=bestParameters[1],
+                                       alpha=bestParameters[2],
+                                       learning_rate=bestParameters[3],
+                                       momentum=bestParameters[4],
+                                       max_iter=bestParameters[5])
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
             mlpStandard.fit(x_train, y_train)
-            #testScore = mlpStandard.score(x_test.to_numpy(), y_test.to_numpy())
-            #testScore = (abs(y_test - mlpStandard.predict(x_test)).sum()) / x_test.size
-            logging.info("pred sum is "+mlpStandard.predict(x_test).sum().astype('str'))
-            logging.info("y test sum is "+y_test.sum().astype('str'))
-            u = ((y_test - mlpStandard.predict(x_test))**2).sum()
-            v = ((y_test - y_test.mean())**2).sum()
-            logging.info(f"{mlpStandard.score(x_test, y_test)}")
-            logging.info(f"u:{u}; v:{v}")
-            testScore = 1-(u/v)
+            testScore = mlpStandard.score(x_test.to_numpy(), y_test.to_numpy())
+            logging.info(f"{name} test score is {testScore}")
             took = timeit.default_timer() - start
 
-            featureImportance = []
-            #for j in range(x_test.shape[1]):
-            #    f_j = self.get_feature_importance(j, 100, testScore, x_test, y_test)
-            #    self.featureImportance.append(f_j)
+            chi_scores_all = chi2(x, y)
+            chi_scores_ML = chi2(x_train, y_train)
 
             f = open(name+".txt", 'a')
             f.write(f"{name} took {took}\n\n")
             f.write(f"{name} standard run score:{testScore}\n\n")
-            f.write(f"{name} feature importance is "+', '.join([str(elem) for elem in featureImportance])+ "\n\n")
+            f.write(f"{name} feature importance is "+', '.join([str(elem) for elem in chi_scores_ML[0]])+ "\n\n")
+            f.write(f"{name} feature importance over all is "+', '.join([str(elem) for elem in chi_scores_all[0]])+ "\n\n")
             f.close()
             MLPML.__TrainedClassifier = mlpStandard
             logging.info(f"{name} standard run score:{testScore}")
 
         except Exception as e:
             logging.error(f"Error occurred while running {name}", exc_info=True)
-
-    def get_feature_importance(self, j, n, s, X_test, y_test):
-        s = s # baseline score
-        total = 0.0
-        for i in range(n):
-            perm = np.random.permutation(range(X_test.shape[0]))
-            X_test_ = X_test.copy()
-            X_test_[:, j] = X_test[perm, j]
-            y_pred_ = MLPML.__TrainedClassifier.predict(X_test_)
-            u = ((y_test, - y_pred)**2).sum()
-            v = ((y_test - y_test.mean())**2).sum()
-            s_ij = 1-(u/v)#accuracy_score(x_test, y_pred_)
-            total += s_ij
-        return s - total / n

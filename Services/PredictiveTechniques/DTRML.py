@@ -65,7 +65,6 @@ class DTRML(GaussianProcess):
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
             dtrStandard.fit(x_train, y_train)
             testScore = dtrStandard.score(x_test, y_test)
-            #testScore = (abs(y_test - dtrStandard.predict(x_test)).sum()) / x_test.size
             took = timeit.default_timer() - start
             DTRML.__TrainedClassifier = dtrStandard
             logging.info(f"{name} standard run score:{testScore}")

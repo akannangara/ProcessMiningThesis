@@ -28,6 +28,7 @@ class SVRML(GaussianProcess):
     __Settings = None
     __DbContext = None
     __TrainedClassifier = None
+    __Space = None
 
     def __init__(self, settings, dbContext : DbContext):
         SVRML.__Settings = settings
@@ -38,10 +39,12 @@ class SVRML(GaussianProcess):
                            Real(0.5, 1.5, name='C'),
                            Real(0.0, 0.5, name='epsilon'),
                            Categorical([True, False], name='shrinking')]
-        classifierSpaceLinear = [Categorical(['epsilon_insensitive', 'squared_epsilon_insensitive'], name='loss'),
+        classifierSpaceLinear = [Real(0.00005, 0.00015, name='tol'),
+                                 Real(0.5,1.5, name='C'),
                                  Categorical([True, False], name='fit_intercept'),
-                                 Categorical([False], name='dual')]
-        super().__init__(SVR, classifierSpace, SVRML.__Settings)
+                                 Real(0.5,2.0, name='intercept_scaling'),
+                                 Integer(1000,5000, name='max_iter')]
+        super().__init__(LinearSVR, classifierSpaceLinear, SVRML.__Settings)
 
     def Run(self, x, y, name : str):
         logging.info(f"Running {name}")
@@ -55,16 +58,12 @@ class SVRML(GaussianProcess):
             f.write(', '.join([str(elem) for elem in bestParameters])+"\n\n")
             f.write(', '.join([str(elem) for elem in scorePerRun]))
             f.close()
-            logging.info(f"{name} GP bestScore:{bestScore}")
+            logging.info(f"{name} GP bestScore:{bestScore}\n\n")
             start = timeit.default_timer()
-            svrStandard = SVR(kernel=bestParameters[0], degree=bestParameters[1],
-                              gamma=bestParameters[2],C=bestParameters[3],
-                              epsilon=bestParameters[4],shrinking=bestParameters[5])
-            #svrStandard = LinearSVR(loss=bestParameters[0], fit_intercept=bestParameters[1], dual=False)
+            svrStandard = LinearSVR(tol=bestParameters[0], C=bestParameters[1], loss='epsilon_insensitive', fit_intercept=bestParameters[2], intercept_scaling=bestParameters[3], max_iter=bestParameters[4])
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
             svrStandard.fit(x_train, y_train)
             testScore = svrStandard.score(x_test, y_test)
-            #testScore = (abs(y_test - svrStandard.predict(x_test)).sum()) / x_test.size
             took = timeit.default_timer() - start
             SVRML.__TrainedClassifier = svrStandard
             logging.info(f"{name} standard run score:{testScore}")

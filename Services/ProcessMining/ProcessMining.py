@@ -36,12 +36,20 @@ from ProcessEnhancement import ProcessEnhancement
 from PredictiveTechniques import PredictiveTechniques
 from DbContext import DbContext
 
+from skopt import gp_minimize
+from skopt.space import Integer, Categorical, Real
+import numpy as np
+
 class ProcessMining(BaseModel):
     __Settings = None
     __EventLog = None
     __ConformantEventLogLocation = None
     __OnlyDone = False
     __DbContext = None
+    __HeuristicsHyperParameters = [Real(0.0,1.0, name='dependency_threshold'),
+                                   Real(0.0,1.0, name='and_threshold'),
+                                   Real(0.0,1.0, name='loop_two_threshold'),
+                                   Categorical([False], name='save')]
 
     def __init__(self, settings, dbContext : DbContext, onlyDone=False):
         ProcessMining.__Settings = settings
@@ -88,26 +96,39 @@ class ProcessMining(BaseModel):
             #Get data
             fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
             df = fileManager.ReadFileToDataFrame(ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
+            
+            #TODO finish statistical test using r value
+            columnsToDrop = ['df_index', 'MinerName', 'AverageFitness','PercentageOfFittingTraces','LogFitness','Precision','Generalization','Simplicity','AverageScore', 'AverageScoreIgnoringSimplicity']
+            x_train = df.drop(columnsToDrop, axis='columns')
+            x_train = x_train *10000
+            y_train = df['AverageScoreIgnoringSimplicity'].copy()
+            for i in range(len(y_train)):
+                y_train[i] = y_train[i]*100000
+            y_train = y_train.astype(int)
+            from sklearn.feature_selection import chi2
+            q=chi2(x_train,y_train)
+
+
             X = df['dependency_threshold'].tolist()
             Y = df['and_threshold'].tolist()
-            Z = np.array(df['loop_two_threshold'].tolist())
+            C = np.array(df['loop_two_threshold'].tolist())
             if ignoreSimplicity:
-                C = np.array(df['AverageScore'])
+                Z = np.array(df['AverageScore'].tolist())
             else:
-                C =  np.array(df['AverageScoreIgnoringSimplicity'])
+                Z = np.array(df['AverageScoreIgnoringSimplicity'].tolist())
             scamap = plt.cm.ScalarMappable(cmap='inferno')
-
             
-            plt.figure(figsize=(16,12), dpi=160)
+            plt.figure(figsize=(48,36), dpi=160)
             fig, axis = plt.subplots(subplot_kw={'projection': '3d'})
             fcolors = scamap.to_rgba(C)
             axis.plot_trisurf(X, Y, Z, facecolors=fcolors, cmap='inferno')
             axis.set_xlabel('Dependency threshold')
             axis.set_ylabel("And threshold")
-            axis.set_zlabel("Loop two threshold")
-            axis.set_title("Heuristics miner average score for varrying threshold over average quality")
-            axis.view_init(30,10)
-            fig.colorbar(scamap)
+            axis.set_zlabel("Quality Score")
+            axis.set_title("Heuristics miner average quality score for varrying thresholds")
+            axis.view_init(30,210)
+            cbar = fig.colorbar(scamap)
+            cbar.set_label("Loop two threshold")
             filePrefix = "matplotsurfaceAverage"
             if ignoreSimplicity:
                 filePrefix = "IgnoreSimplicity"+filePrefix
@@ -149,93 +170,6 @@ class ProcessMining(BaseModel):
             plt.savefig(os.path.join(imagesSink, "matplotlib"+ProcessMining.__Settings.ImageStorage['4d_heuristicsPlot']))
         except Exception as e:
             logging.error("Error occurred while making matplotlib 3d graph", exc_info=True)
-
-    def Save4DPlot(self):
-        logging.info("Storing 4d plot using plotly")
-        try:
-            import plotly
-            import plotly.graph_objs as go
-
-            #Get data
-            fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
-            df = fileManager.ReadFileToDataFrame(ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
-            X = df['dependency_threshold'].tolist()
-            Y = df['and_threshold'].tolist()
-            Z = df['loop_two_threshold'].tolist()
-            c_avarageScore = df['AverageScore'].tolist()
-            c_averageScoreWithoutSimplicty = df['AverageScoreIgnoringSimplicity'].tolist()
-
-            averageScoreData = go.Scatter3d(x=X, y=Y, z=Z,
-                                            marker=dict(color=c_avarageScore,
-                                                        opacity=1,
-                                                        reversescale=True,
-                                                        colorscale='Blues',
-                                                        size=2),
-                                            line=dict(width=0.2),
-                                            mode='markers',
-                                            name="Average score")
-            averageScoreWithoutSimplictyDate = go.Scatter3d(x=X, y=Y, z=Z,
-                                                             marker=dict(color=c_averageScoreWithoutSimplicty,
-                                                                         opacity=1,
-                                                                         reversescale=True,
-                                                                         colorscale='Reds',
-                                                                         size=2),
-                                                             line=dict(width=0.2),
-                                                             mode='markers',
-                                                             name="Average score ignoring simplicity")
-
-            fig = go.Figure(data=[averageScoreData, averageScoreWithoutSimplictyDate])
-
-            #fig.update_layout()
-
-            layout = go.Layout(scene=dict(xaxis=dict(title="dependency threshold"),
-                                          yaxis=dict(title="and threshold"),
-                                          zaxis=dict(title="two loop threshold")),)
-
-            plotly.offline.plot({"data": [averageScoreData, averageScoreWithoutSimplictyDate],
-                                 "layout": layout},
-                                 auto_open=False,
-                                 filename=("multiDimensional Plot.html"))
-
-            
-        except Exception as e:
-            logging.error("Error occurred when storing 4d plot", exc_info=True)
-
-    def __4DThresholdHeuristicsMinerDiscovery(self):
-        logging.info("Running multi-dimensional threshold values for heuristics discovery")
-        try:
-            fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
-            fileName = ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"]
-            if ProcessMining.__OnlyDone:
-                fileName = "OnlyDone_"+fileName
-            fileManager.DeleteFileIfExists(fileName)
-            del fileManager
-            thresholdValues = [1.0, 0.99, 0.97, 0.95, 0.93, 0.91, 0.90, 0.89, 0.87, 0.85, 0.83, 0.81, 0.75, 0.7, 0.6, 0.5]
-            for dependency_threshold in thresholdValues:
-                for and_threshold in thresholdValues:
-                    for loop_two_threshold in thresholdValues:
-                        try:
-                            processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
-                            conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
-                            net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold, save=False)
-                            conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
-                            conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
-                            del conformanceChecker
-                            del processDiscovery
-                        except Exception as e:
-                            try:
-                                processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
-                                conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
-                                net, initial, final = processDiscovery.PetriNetHeuristicsMiner(dependency_threshold, and_threshold, loop_two_threshold, save=False)
-                                conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', dependency_threshold, and_threshold, loop_two_threshold, ProcessMining.__EventLog, net, initial, final)
-                                conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
-                                del conformanceChecker
-                                del processDiscovery
-                            except Exception as e:
-                                logging.error(f"Deep error occurred while running heruritics miner with values  {dependency_threshold};{and_threshold};{loop_two_threshold}", exc_info=True)
-                                raise e
-        except Exception as e:
-            logging.error("Error occurred when running multi-dimensional threshold conformance checks for heuristics discovery.", exc_info=True)
 
     def __RunProcessTreeInductiveDiscovery(self, processDiscovery : ProcessDiscovery):
         logging.info("Running inductive process tree discovery")
@@ -298,15 +232,40 @@ class ProcessMining(BaseModel):
             del conformanceChecker
             del processDiscovery
 
-            #multidimensional threshold heuristics miner
-            self.__4DThresholdHeuristicsMinerDiscovery()
+            #heuristics miner with varrying threshold values
+            self.RunGPHeuristicsDiscovery()
 
         except Exception as e:
             logging.error("Exception occurred when running all discovery algorithms", exc_info=True)
 
-    def Run4DHeuristicsDiscovery(self):
-        #multidimensional threshold heuristics miner
-        self.__4DThresholdHeuristicsMinerDiscovery()
+    def __f(self, params):
+        processDiscovery = ProcessDiscovery(ProcessMining.__Settings, ProcessMining.__EventLog, ProcessMining.__OnlyDone)
+        conformanceChecker = ConformanceChecking(ProcessMining.__Settings, ProcessMining.__DbContext)
+        net, initial, final = processDiscovery.PetriNetHeuristicsMiner(**{dim.name: val for dim, val in zip(ProcessMining.__HeuristicsHyperParameters, params) if dim.name != 'dummy'})
+        score = conformanceChecker.Add4DHeuristicsConformanceCheckToCollection('Heuristics miner', params[0], params[1], params[2], ProcessMining.__EventLog, net, initial, final)
+        conformanceChecker.SaveConformanceCollection(ProcessMining.__OnlyDone, ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"], deleteExistingFile=False)
+        logging.info(f"Ran heuristics miner gp and score is {score}")
+        return 1/score
+
+    def RunGPHeuristicsDiscovery(self):
+        logging.info("Running GP heuristics discovery")
+        try:
+            fileManager = CsvFileManager(ProcessMining.__DbContext, ProcessMining.__Settings)
+            fileName = ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"]
+            if ProcessMining.__OnlyDone:
+                fileName = "OnlyDone_"+fileName
+            fileManager.DeleteFileIfExists(fileName)
+            del fileManager
+            clf = gp_minimize(self.__f,
+                              ProcessMining.__HeuristicsHyperParameters,
+                              acq_func=ProcessMining.__Settings.GaussianProcess['acq_func'],
+                              n_calls=ProcessMining.__Settings.GaussianProcess['n_calls'],
+                              n_initial_points=ProcessMining.__Settings.GaussianProcess['n_initial_points'],
+                              noise=ProcessMining.__Settings.GaussianProcess['noise'],
+                              random_state=None,
+                              n_jobs=-1)
+        except Exception as e:
+            logging.error(f"Error occurred while running GP optimization for heuristics discovery", exc_info=True)
 
     def ConformanceCheckWithDesiredWorkflow(self) -> (Dict[str, float], List):
         logging.info("Running conformance check compared to desired workflow")

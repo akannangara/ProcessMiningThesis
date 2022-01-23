@@ -5,7 +5,7 @@ Jira = {
     "ConnectionRefreshTimer": 600
 }
 
-Debug=False #todo server: set to false
+Debug=True #todo server: set to false
 
 DataStoreFolder = "C:\_thesis\DataStore"
 
@@ -46,7 +46,7 @@ CsvStorageManager = {
 
 GaussianProcess = {
     "acq_func" : "EI",
-    "n_calls" : 10,
+    "n_calls" : 80,
     "n_initial_points": 10,
     "noise": "gaussian"
 }

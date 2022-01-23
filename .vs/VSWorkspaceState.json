@@ -1,10 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Services",
-    "\\Services\\JiraDataCollector\\Support",
-    "\\Services\\PredictiveTechniques"
+    "\\Services\\JiraDataCollector\\Support"
   ],
-  "SelectedNode": "\\Services\\PredictiveTechniques\\GaussianProcess.py",
+  "SelectedNode": "\\Domain",
   "PreviewInSolutionExplorer": false
 }

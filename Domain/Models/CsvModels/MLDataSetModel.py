@@ -69,6 +69,10 @@ class MLDataSetModel:
     WorkRatio : float = 0.0
     Fitness : float = 0.0
 
+    #def __repr__(self):
+    #    for property, value in vars(self).items():
+    #        print(property, ":", value)
+
     def __init__(self, issue : TIssue, currentStatus : int, timeEstimate : int, timespent : int, timeSinceToDo : int, comingBack : bool, rejected : bool):
         self.Key = issue.Key
         self.Priority = 3 #not defined

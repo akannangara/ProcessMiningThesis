@@ -56,7 +56,7 @@ class ProcessEnhancement(BaseModel):
                         if changelogs[j].Field == 'timeestimate' and not(changelogs[j].ToString == timeEstimate):
                             if timeEstimate:
                                 timeEstimate = int(changelogs[j].ToString)
-                        elif changelogs[j].Field == 'timespent':
+                        elif changelogs[j].Field == 'timespent' and timeSpent == 0:
                             if changelogs[j].ToString:
                                 timeSpent = int(changelogs[j].ToString)
                         elif changelogs[j].Field == 'status' and comingBack == 0:

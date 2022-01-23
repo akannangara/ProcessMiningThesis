@@ -18,7 +18,7 @@ from TIssue import TIssue
 
 def ImportJiraIssues():
     jiraImporter = JiraDataImporter(settings, DbContext(settings))
-    projectsList = jiraImporter.GetProjectsList()
+    projectsList = ["CONBR"]#jiraImporter.GetProjectsList()
     for project in projectsList:
         issues = jiraImporter.GetProjectIssues(project)
         jiraImporter.StoreIssuesToDatabase(issues)
@@ -32,25 +32,26 @@ def CreateEventLogsFromDb():
 def RunProcessDiscoveryAndConformance():
     processMiner = ProcessMining(settings, DbContext(settings))
     processMiner.RunAllDiscoveryAlgorithms()
-    processMiner2 = ProcessMining(settings, DbContext(settings), onlyDone=True)
-    processMiner2.RunAllDiscoveryAlgorithms()
+
+def RunGPHeuristicsDiscovery():
+    processMiner = ProcessMining(settings, DbContext(settings))
+    processMiner.RunGPHeuristicsDiscovery()
+    Create4dGrpah()
+
+def Create4dGrpah():
+    processMiner = ProcessMining(settings, DbContext(settings))
+    processMiner.SaveSurfaceMultiDMap(ignoreSimplicity=True)
 
 def RunProcessConformanceWithDesiredWorkflowAndModelEnhancement():
     processMiner = ProcessMining(settings, DbContext(settings))
     _, tokenBasedReplayConformance = processMiner.ConformanceCheckWithDesiredWorkflow()
     processMiner.ModelEnhancement(tokenBasedReplayConformance)
 
-def MakeMultiDPlot():
-    processMiner = ProcessMining(settings, DbContext(settings))
-    processMiner.Run4DHeuristicsDiscovery()
-    #processMiner.Save4DPlot()
-    processMiner.SaveSurfaceMultiDMap()
-
 def RunPredictiveTechniques():
     processEnhancement = ProcessEnhancement(settings, DbContext(settings))
     processEnhancement.CreateMLDataSet()
-    #pt = PredictiveTechniques(settings, DbContext(settings))
-    #pt.RunWorkRatioEstimation()
+    pt = PredictiveTechniques(settings, DbContext(settings))
+    pt.RunWorkRatioEstimation()
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -59,10 +60,11 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
-    ImportJiraIssues()
+    #ImportJiraIssues()
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()
+    #RunGPHeuristicsDiscovery()
+    Create4dGrpah()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
     #RunPredictiveTechniques()
-    #MakeMultiDPlot()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")
