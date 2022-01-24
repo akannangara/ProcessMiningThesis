@@ -57,19 +57,32 @@ GraphViz = {
 }
 
 StatusIntDictionary = {
-    "Pre-refinement": 1,
+    "Reserved": 0,
+    "Backlog": 0,
+    "Pre-Refinement": 1,
     "Refinement": 2,
     "To Do": 3,
     "In Progress": 4,
     "Ready to Review": 5,
     "In Review": 6,
-    "Ready to Test": 7,
-    "In Test": 8,
-    "Ready for Acceptance": 9,
-    "Ready to Deploy to Acceptance": 10,
-    "Ready for Acceptance": 11,
-    "In Acceptance": 12,
-    "Ready to Deploy to Acceptance": 13
+    "Ready to Deploy to Test": 7,
+    "Ready to Test": 8,
+    "In Test": 9,
+    "Ready for Acceptance": 10,
+    "Ready to Deploy to Acceptance": 11,
+    "Ready for Acceptance": 12,
+    "In Acceptance": 13,
+    "Ready to Deploy to Production": 14,
+    "Done": 15,
+    "Rejected": 15
+}
+
+PriorityIntDictionary = {
+    "Highest": 1,
+    "High": 2,
+    "Medium": 3,
+    "Low": 4,
+    "Lowest": 5
 }
 
 CompletedStatusIds = [10001, 10003]

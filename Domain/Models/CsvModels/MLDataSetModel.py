@@ -73,10 +73,6 @@ class MLDataSetModel:
     WorkRatio : float = 0.0
     Fitness : float = 0.0
 
-    #def __repr__(self):
-    #    for property, value in vars(self).items():
-    #        print(property, ":", value)
-
     def __init__(self, issue : TIssue, priority : int, issueType : str, currentStatus : int, timeEstimate : int, timespent : int,
                  timeSinceToDo : int, comingBack : bool, dueDate : datetime, sizeSummary : int,
                  sizeDescription : int, changeSinceCreation : bool, changeSinceLastStatusChange: bool,
@@ -89,11 +85,10 @@ class MLDataSetModel:
         if issue.TimeOriginalEstimate:
             self.TimeOriginalEstimate = issue.TimeOriginalEstimate
         self.DeltaDueCreate = 60*60*24*365
-        self.DeltaDueCreate = 0
         if dueDate:
             self.DeltaDueCreate = (dueDate - issue.Created).total_seconds()
-            if self.DeltaDueCreate < 0:
-                self.DeltaDueCreate == 0
+        if self.DeltaDueCreate < 0:
+            self.DeltaDueCreate == 0
         self.TimeSpent = timespent
         if timespent > 0 and timeEstimate > 0:
             self.CalculatedWorkRatio = (timespent / timeEstimate) * 100

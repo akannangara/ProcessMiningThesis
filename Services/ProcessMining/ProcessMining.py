@@ -98,15 +98,13 @@ class ProcessMining(BaseModel):
             df = fileManager.ReadFileToDataFrame(ProcessMining.__Settings.CsvStorageManager["MultiDimensionalHeuristicConformanceEvaluation"])
             
             #TODO finish statistical test using r value
-            columnsToDrop = ['df_index', 'MinerName', 'AverageFitness','PercentageOfFittingTraces','LogFitness','Precision','Generalization','Simplicity','AverageScore', 'AverageScoreIgnoringSimplicity']
-            x_train = df.drop(columnsToDrop, axis='columns')
-            x_train = x_train *10000
-            y_train = df['AverageScoreIgnoringSimplicity'].copy()
-            for i in range(len(y_train)):
-                y_train[i] = y_train[i]*100000
-            y_train = y_train.astype(int)
-            from sklearn.feature_selection import chi2
-            q=chi2(x_train,y_train)
+            #columnsToDrop = ['df_index', 'MinerName', 'AverageFitness','PercentageOfFittingTraces','LogFitness','Precision','Generalization','Simplicity','AverageScore', 'AverageScoreIgnoringSimplicity']
+            #x_train = df.drop(columnsToDrop, axis='columns')
+            #y_train = df['AverageScoreIgnoringSimplicity']
+            #from sklearn.feature_selection import r_regression
+            #print("R_regession:\n"+r_regression(x_train,y_train) + "\n\n")
+            #from sklearn.feature_selection import mutual_info_regression
+            #print("Mutual info regression:\n"+mutual_info_regression(x_train,y_train) + "\n\n")
 
 
             X = df['dependency_threshold'].tolist()

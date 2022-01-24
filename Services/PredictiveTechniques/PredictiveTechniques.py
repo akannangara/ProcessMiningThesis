@@ -80,6 +80,16 @@ class PredictiveTechniques(BaseModel):
         except Exception as e:
             logging.error("Error occurred while running workRatio estimation", exc_info=True)
 
+    def RunFitnessEstimation(self):
+        logging.info("Running WorkRatio estimation")
+        try:
+            #self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
+            self.__RunDTR(PredictiveTechniques.__Y_fitness, "DTRFITNESS")
+            self.__RunMLP(PredictiveTechniques.__Y_fitness, "MLPFITNESS")
+            self.__RunSVR(PredictiveTechniques.__Y_fitness, "SVRFITNESS")
+        except Exception as e:
+            logging.error("Error occurred while running workRatio estimation", exc_info=True)
+
     def __ReadCsvDataSet(self):
         logging.info("Reading in data set for SVR")
         try:

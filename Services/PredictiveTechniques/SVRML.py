@@ -58,6 +58,16 @@ class SVRML(GaussianProcess):
             f.write(', '.join([str(elem) for elem in bestParameters])+"\n\n")
             f.write(', '.join([str(elem) for elem in scorePerRun]))
             f.close()
+
+            import matplotlib.pyplot as plt
+            plt.plot(np.arrange(1, len(scorePerRun) +1), scorePerRun)
+            plt.title(f"SVR score per GP run")
+            plt.xlabel("Run count")
+            plt.ylabel("Mean absolute error")
+            repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            imagesSink = os.path.join(repsoitoryLocation,  ProcessMining.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.savefig(os.path.join(imagesSink, "SVR_score_per_gp_run.png"))
+
             logging.info(f"{name} GP bestScore:{bestScore}\n\n")
             start = timeit.default_timer()
             svrStandard = LinearSVR(tol=bestParameters[0], C=bestParameters[1], loss='epsilon_insensitive', fit_intercept=bestParameters[2], intercept_scaling=bestParameters[3], max_iter=bestParameters[4])

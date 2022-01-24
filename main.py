@@ -41,7 +41,7 @@ def RunGPHeuristicsDiscovery():
 def Create4dGrpah():
     processMiner = ProcessMining(settings, DbContext(settings))
     processMiner.SaveSurfaceMultiDMap(ignoreSimplicity=True)
-
+    
 def RunProcessConformanceWithDesiredWorkflowAndModelEnhancement():
     processMiner = ProcessMining(settings, DbContext(settings))
     _, tokenBasedReplayConformance = processMiner.ConformanceCheckWithDesiredWorkflow()
@@ -52,6 +52,7 @@ def RunPredictiveTechniques():
     processEnhancement.CreateMLDataSet()
     pt = PredictiveTechniques(settings, DbContext(settings))
     pt.RunWorkRatioEstimation()
+    pt.RunFitnessEstimation()
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -60,11 +61,12 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
+    print(DbContext(settings).Query(TIssue, "", "")[0].Fitness)
     #ImportJiraIssues()
     #CreateEventLogsFromDb()
-    RunProcessDiscoveryAndConformance()
+    #RunProcessDiscoveryAndConformance()
     #RunGPHeuristicsDiscovery()
     #Create4dGrpah()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
-    #RunPredictiveTechniques()
+    RunPredictiveTechniques()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

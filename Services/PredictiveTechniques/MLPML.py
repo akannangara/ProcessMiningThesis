@@ -56,6 +56,16 @@ class MLPML(GaussianProcess):
             f.write(', '.join([str(elem) for elem in bestParameters])+ "\n\n")
             f.write(', '.join([str(elem) for elem in scorePerRun])+ "\n\n")
             f.close()
+
+            import matplotlib.pyplot as plt
+            plt.plot(np.arrange(1, len(scorePerRun) +1), scorePerRun)
+            plt.title(f"MLP score per GP run")
+            plt.xlabel("Run count")
+            plt.ylabel("Mean absolute error")
+            repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            imagesSink = os.path.join(repsoitoryLocation,  ProcessMining.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.savefig(os.path.join(imagesSink, "MLP_score_per_gp_run.png"))
+
             
             start = timeit.default_timer()
             mlpStandard = MLPRegressor(activation=bestParameters[0],
@@ -70,14 +80,9 @@ class MLPML(GaussianProcess):
             logging.info(f"{name} test score is {testScore}")
             took = timeit.default_timer() - start
 
-            chi_scores_all = chi2(x, y)
-            chi_scores_ML = chi2(x_train, y_train)
-
             f = open(name+".txt", 'a')
             f.write(f"{name} took {took}\n\n")
             f.write(f"{name} standard run score:{testScore}\n\n")
-            f.write(f"{name} feature importance is "+', '.join([str(elem) for elem in chi_scores_ML[0]])+ "\n\n")
-            f.write(f"{name} feature importance over all is "+', '.join([str(elem) for elem in chi_scores_all[0]])+ "\n\n")
             f.close()
             MLPML.__TrainedClassifier = mlpStandard
             logging.info(f"{name} standard run score:{testScore}")

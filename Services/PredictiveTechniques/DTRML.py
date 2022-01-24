@@ -56,6 +56,16 @@ class DTRML(GaussianProcess):
             f.write(', '.join([str(elem) for elem in bestParameters])+"\n\n")
             f.write(', '.join([str(elem) for elem in scorePerRun])+"\n\n")
             f.close()
+
+            import matplotlib.pyplot as plt
+            plt.plot(np.arrange(1, len(scorePerRun) +1), scorePerRun)
+            plt.title(f"DTR score per GP run")
+            plt.xlabel("Run count")
+            plt.ylabel("Mean absolute error")
+            repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            imagesSink = os.path.join(repsoitoryLocation,  ProcessMining.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.savefig(os.path.join(imagesSink, "DTR_score_per_gp_run.png"))
+
             logging.info(f"{name} GP bestScore:{bestScore}")
             start = timeit.default_timer()
             dtrStandard = DecisionTreeRegressor(criterion=bestParameters[0], splitter=bestParameters[1], max_depth=bestParameters[2],
