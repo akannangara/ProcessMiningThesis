@@ -18,7 +18,7 @@ from TIssue import TIssue
 
 def ImportJiraIssues():
     jiraImporter = JiraDataImporter(settings, DbContext(settings))
-    projectsList = ["CONBR"]#jiraImporter.GetProjectsList()
+    projectsList = jiraImporter.GetProjectsList()
     for project in projectsList:
         issues = jiraImporter.GetProjectIssues(project)
         jiraImporter.StoreIssuesToDatabase(issues)
@@ -26,8 +26,8 @@ def ImportJiraIssues():
 def CreateEventLogsFromDb():
     fileManager = CsvFileManager(DbContext(settings), settings)
     fileManager.CreateEventLogFromDb(onlyDone=False)
-    fileManager.CreateEventLogFromDb(onlyDone=True)
     fileManager.CreateStatusCollectionFromDb()
+    fileManager.CreateTeamMemberCollectionFromDb()
 
 def RunProcessDiscoveryAndConformance():
     processMiner = ProcessMining(settings, DbContext(settings))
@@ -62,9 +62,9 @@ if __name__ == "__main__":
     startTime = time.time()
     #ImportJiraIssues()
     #CreateEventLogsFromDb()
-    #RunProcessDiscoveryAndConformance()
+    RunProcessDiscoveryAndConformance()
     #RunGPHeuristicsDiscovery()
-    Create4dGrpah()
+    #Create4dGrpah()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
     #RunPredictiveTechniques()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

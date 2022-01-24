@@ -7,6 +7,8 @@ from statistics import mean
 
 from TIssue import TIssue
 
+from datetime import datetime
+
 @dataclass
 class MLDataSetModel:
     Key : str
@@ -21,6 +23,8 @@ class MLDataSetModel:
     ComingBack : int = 0
     SizeSummary : int = 0
     SizeDescription : int = 0
+    ChangeSinceCreation : int = 0
+    ChangeSinceLastStatus : int = 0
 
     Story : int = 0
     Epic : int = 0
@@ -39,7 +43,7 @@ class MLDataSetModel:
     CTester : int = 0
     CIntern : int = 0
     CClient : int = 0
-    CUndefined : int = 0
+    CUndefined : int = 1
 
     ADeliveryManager : int = 0
     AProjectManager : int = 0
@@ -51,7 +55,7 @@ class MLDataSetModel:
     ATester : int = 0
     AIntern : int = 0
     AClient : int = 0
-    AUndefined : int = 0
+    AUndefined : int = 1
 
     RDeliveryManager : int = 0
     RProjectManager : int = 0
@@ -63,7 +67,7 @@ class MLDataSetModel:
     RTester : int = 0
     RIntern : int = 0
     RClient : int = 0
-    RUndefined : int = 0
+    RUndefined : int = 1
 
     Rejected : int = 0
     WorkRatio : float = 0.0
@@ -73,19 +77,21 @@ class MLDataSetModel:
     #    for property, value in vars(self).items():
     #        print(property, ":", value)
 
-    def __init__(self, issue : TIssue, currentStatus : int, timeEstimate : int, timespent : int, timeSinceToDo : int, comingBack : bool, rejected : bool):
+    def __init__(self, issue : TIssue, priority : int, issueType : str, currentStatus : int, timeEstimate : int, timespent : int,
+                 timeSinceToDo : int, comingBack : bool, dueDate : datetime, sizeSummary : int,
+                 sizeDescription : int, changeSinceCreation : bool, changeSinceLastStatusChange: bool,
+                 assignee, rejected : bool):
         self.Key = issue.Key
-        self.Priority = 3 #not defined
-        if issue.PriorityId:
-            self.Priority = issue.PriorityId
+        self.Priority = priority
         self.TimeEstimate = timeEstimate
         self.CurrentStatus = currentStatus
-        self.TimeOriginalEstimate = 0 #not defined
+        self.TimeOriginalEstimate = 0
         if issue.TimeOriginalEstimate:
             self.TimeOriginalEstimate = issue.TimeOriginalEstimate
         self.DeltaDueCreate = 60*60*24*365
-        if issue.DueDate:
-            self.DeltaDueCreate = (issue.DueDate - issue.Created).total_seconds()
+        self.DeltaDueCreate = 0
+        if dueDate:
+            self.DeltaDueCreate = (dueDate - issue.Created).total_seconds()
             if self.DeltaDueCreate < 0:
                 self.DeltaDueCreate == 0
         self.TimeSpent = timespent
@@ -95,15 +101,17 @@ class MLDataSetModel:
             self.CalculatedWorkRatio = 0
         self.TimeSinceToDo = timeSinceToDo
         self.ComingBack = comingBack
-        self.SizeSummary = len(issue.Summary.split())
-        self.SizeDescription = len(issue.Description.split())
+        self.SizeSummary = sizeSummary
+        self.SizeDescription = sizeDescription
+        self.ChangeSinceCreation = int(changeSinceCreation)
+        self.ChangeSinceLastStatus = int(changeSinceLastStatusChange)
 
-        self.Story = (int(issue.IssueType.Name == "Story"))
-        self.Epic = (int(issue.IssueType.Name == "Epic"))
-        self.Task = (int(issue.IssueType.Name == "Task"))
-        self.Bug = (int(issue.IssueType.Name == "Bug"))
-        self.Incident = (int(issue.IssueType.Name == "Incident"))
-        self.SubTask = (int(issue.IssueType.Name == "Sub-task"))
+        self.Story = (int(issueType == "Story"))
+        self.Epic = (int(issueType == "Epic"))
+        self.Task = (int(issueType == "Task"))
+        self.Bug = (int(issueType == "Bug"))
+        self.Incident = (int(issueType == "Incident"))
+        self.SubTask = (int(issueType == "Sub-task"))
 
         if (issue.Creator):
             self.CDeliveryManager = (int(issue.Creator.Type=="Delivery manager"))
@@ -118,18 +126,18 @@ class MLDataSetModel:
             self.CClient = (int(issue.Creator.Type=="Klant"))
             self.CUndefined = (int(issue.Creator.Type==""))
 
-        if (issue.Assignee):
-            self.ADeliveryManager = (int(issue.Assignee.Type=="Delivery manager"))
-            self.AProjectManager = (int(issue.Assignee.Type=="Project manager"))
-            self.ASeniorDeveloper = (int(issue.Assignee.Type=="Senior developer"))
-            self.AMediorDeveloper = (int(issue.Assignee.Type=="Medior developer"))
-            self.AJuniorDeveloper = (int(issue.Assignee.Type=="Junior developer"))
-            self.ADesigner = (int(issue.Assignee.Type=="Designer"))
-            self.ASystemAccount = (int(issue.Assignee.Type=="Systeem account"))
-            self.ATester = (int(issue.Assignee.Type=="Tester"))
-            self.AIntern = (int(issue.Assignee.Type=="Stagiair"))
-            self.AClient = (int(issue.Assignee.Type=="Klant"))
-            self.AUndefined = (int(issue.Assignee.Type==""))
+        if (assignee):
+            self.ADeliveryManager = (int(assignee.Type=="Delivery manager"))
+            self.AProjectManager = (int(assignee.Type=="Project manager"))
+            self.ASeniorDeveloper = (int(assignee.Type=="Senior developer"))
+            self.AMediorDeveloper = (int(assignee.Type=="Medior developer"))
+            self.AJuniorDeveloper = (int(assignee.Type=="Junior developer"))
+            self.ADesigner = (int(assignee.Type=="Designer"))
+            self.ASystemAccount = (int(assignee.Type=="Systeem account"))
+            self.ATester = (int(assignee.Type=="Tester"))
+            self.AIntern = (int(assignee.Type=="Stagiair"))
+            self.AClient = (int(assignee.Type=="Klant"))
+            self.AUndefined = (int(assignee.Type==""))
 
         if (issue.Reporter):
             self.RDeliveryManager = (int(issue.Reporter.Type=="Delivery manager"))
@@ -155,5 +163,6 @@ class MLDataSetModel:
                 self.WorkRatio = (timespent / self.TimeEstimate) *100
             else:
                 self.WorkRatio = 0
+
         self.Fitness = issue.Fitness
         self.Rejected = (int(rejected))

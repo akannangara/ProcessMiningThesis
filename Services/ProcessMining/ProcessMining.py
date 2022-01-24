@@ -297,6 +297,7 @@ class ProcessMining(BaseModel):
 
     def ModelEnhancement(self, eventLogTokenBasedReplayConfromance):
         processEnhancement = ProcessEnhancement(ProcessMining.__Settings, ProcessMining.__DbContext)
-        processEnhancement.AddFitnessToIssues(eventLogTokenBasedReplayConfromance, ProcessMining.__EventLog)
-        #processEnhancement.AddTeamMemberTypeToDbFromCsv()
-        #processEnhancement.CreateMLDataSet()
+        if eventLogTokenBasedReplayConfromance:
+            processEnhancement.AddFitnessToIssues(eventLogTokenBasedReplayConfromance, ProcessMining.__EventLog)
+        processEnhancement.AddTeamMemberTypeToDbFromCsv()
+        processEnhancement.CreateMLDataSet()

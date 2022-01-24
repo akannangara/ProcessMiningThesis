@@ -1,8 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Services\\JiraDataCollector\\Support"
+    "\\Services\\JiraDataCollector",
+    "\\Services\\JiraDataCollector\\Support",
+    "\\Services\\PredictiveTechniques",
+    "\\Services\\ProcessMining"
   ],
-  "SelectedNode": "\\Domain",
+  "SelectedNode": "\\README.md",
   "PreviewInSolutionExplorer": false
 }

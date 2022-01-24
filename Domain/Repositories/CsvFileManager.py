@@ -23,11 +23,11 @@ class CsvFileManager(BaseModel):
 
 		def __init__(self, dbContext : DbContext, settings):
 				CsvFileManager.__DbContext = dbContext
-				CsvFileManager.__Settings = settings.CsvStorageManager
+				CsvFileManager.__Settings = settings
 				fileDir = os.path.dirname(os.path.abspath(__file__))
 				pathToRepository = os.path.join(fileDir, "../../Domain/Repositories")
 
-				CsvFileManager.__SinkDirectory = os.path.join(pathToRepository, CsvFileManager.__Settings["SinkDirectory"])
+				CsvFileManager.__SinkDirectory = os.path.join(pathToRepository, CsvFileManager.__Settings.CsvStorageManager["SinkDirectory"])
 
 		def ReadFileToDataFrame(self, fileName):
 				logging.info(f"Reading {fileName} to dataframe")
@@ -41,7 +41,6 @@ class CsvFileManager(BaseModel):
 		def CreateEventLogFromDb(self, projectsList : List[str] = [], onlyDone=False):
 				logging.info("Storing events from projects list " +(' '.join(str(x) for x in projectsList))+ " as csv")
 				try:
-						eventLogName = CsvFileManager.__Settings["EventLogFileName"]
 						allChangeLogs = []
 						if not(projectsList):
 								if onlyDone:
@@ -65,13 +64,13 @@ class CsvFileManager(BaseModel):
 												projectChangeLogs = CsvFileManager.__DbContext.QueryLikeAnd(TChangeLog, 'IssueKey', project+"%", "Field", "status")
 										allChangeLogs.extend(projectChangeLogs)
 						if onlyDone:
-								eventLogName = CsvFileManager.__Settings["OnlyDoneEventLogFileName"]
+								eventLogName = CsvFileManager.__Settings.CsvStorageManager["OnlyDoneEventLogFileName"]
 						else:
-								eventLogName = CsvFileManager.__Settings["EventLogFileName"]
-						self.DeleteFileIfExists(eventLogname)
+								eventLogName = CsvFileManager.__Settings.CsvStorageManager["EventLogFileName"]
+						self.DeleteFileIfExists(eventLogName)
 						self.__CreateAndStoreDataFrameFromEntityList(allChangeLogs, EventLogItem, eventLogName)
 						if onlyDone:
-								CsvFileManager.__Settings["EventLogFileName"] = eventLogName
+								CsvFileManager.__Settings.CsvStorageManager["EventLogFileName"] = eventLogName
 				except Exception as e:
 						logging.error("Error storing projects list as csv", exc_info=True)
 
@@ -98,7 +97,7 @@ class CsvFileManager(BaseModel):
 						if not(allStatuses):
 								logging.error("No Statuses found when creating status collection as csv")
 								return
-						self.__CreateAndStoreDataFrameFromEntityList(allStatuses, StatusCsvItem, CsvFileManager.__Settings["StatusesFileName"])
+						self.__CreateAndStoreDataFrameFromEntityList(allStatuses, StatusCsvItem, CsvFileManager.__Settings.CsvStorageManager["StatusesFileName"])
 				except Exception as e:
 						logging.error("Error storing status collection to csv", exc_info=True)
 
@@ -109,14 +108,14 @@ class CsvFileManager(BaseModel):
 						if not(allTeamMembers):
 								logging.error("No teamMembers found when creating team member collection as csv")
 								return
-						self.__CreateAndStoreDataFrameFromEntityList(allTeamMembers, TeamMember, CsvFileManager.__Settings["TeamMembersFileName"])
+						self.__CreateAndStoreDataFrameFromEntityList(allTeamMembers, TeamMember, CsvFileManager.__Settings.CsvStorageManager["TeamMembersFileName"])
 				except Exception as e:
 						logging.error("Error storing teamMember collection to csv", exc_info=True)
 
 		def UpdateTeamMemberTypeFromCsv(self):
 				logging.info("Updating TeamMember collection from csv")
 				try:
-						dataframe = pd.read_csv(os.path.join(CsvFileManager.__SinkDirectory, CsvFileManager.__Settings["TeamMembersFileName"]), sep=';')
+						dataframe = pd.read_csv(os.path.join(CsvFileManager.__SinkDirectory, CsvFileManager.__Settings.CsvStorageManager["TeamMembersFileName"]), sep=';')
 						for index, row in dataframe.iterrows():
 								dbEntity = CsvFileManager.__DbContext.Query(TTeamMember, "Key", row["Key"])
 								if not(dbEntity):

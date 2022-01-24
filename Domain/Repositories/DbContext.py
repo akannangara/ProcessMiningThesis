@@ -106,8 +106,8 @@ class DbContext:
         queryResult = DbContext.__session.query(entity).filter(or_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
         return queryResult
 
-    def QueryAnd(self, entity, attribute : str, query1 : str, query2 : str):
-        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
+    def QueryAnd(self, entity, attribute1 : str, query1 : str, attribute2: str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute1) == query1, getattr(entity, attribute2) == query2)).all()
         return queryResult
 
     def AddIssueToDb(self, jiraIssue : JiraIssue):
