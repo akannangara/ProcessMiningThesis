@@ -47,12 +47,15 @@ def RunProcessConformanceWithDesiredWorkflowAndModelEnhancement():
     _, tokenBasedReplayConformance = processMiner.ConformanceCheckWithDesiredWorkflow()
     processMiner.ModelEnhancement(tokenBasedReplayConformance)
 
-def RunPredictiveTechniques():
-    processEnhancement = ProcessEnhancement(settings, DbContext(settings))
-    processEnhancement.CreateMLDataSet()
+def RunPredictiveTechniquesWR():
     pt = PredictiveTechniques(settings, DbContext(settings))
     pt.RunWorkRatioEstimation()
+    del pt
+
+def RunPredictiveTechniquesFitness():
+    pt = PredictiveTechniques(settings, DbContext(settings))
     pt.RunFitnessEstimation()
+    del pt
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -67,5 +70,6 @@ if __name__ == "__main__":
     #RunGPHeuristicsDiscovery()
     #Create4dGrpah()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
-    RunPredictiveTechniques()
+    RunPredictiveTechniquesWR()
+    #RunPredictiveTechniquesFitness()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

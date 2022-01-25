@@ -97,6 +97,7 @@ class PredictiveTechniques(BaseModel):
             imagesSink = os.path.join(repsoitoryLocation, PredictiveTechniques.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
             plt.grid(visible=True, axis='both', which='both')
             plt.xlim(xmin=0)
+            plt.legend()
             plt.savefig(os.path.join(imagesSink, "GPSCOREWORKRATIO.png"))
             del plt
         except Exception as e:
@@ -123,6 +124,7 @@ class PredictiveTechniques(BaseModel):
             imagesSink = os.path.join(repsoitoryLocation, PredictiveTechniques.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
             plt.grid(visible=True, axis='both', which='both')
             plt.xlim(xmin=0)
+            plt.legend()
             plt.savefig(os.path.join(imagesSink, "GPSCOREFITNESS.png"))
             del plt
         except Exception as e:

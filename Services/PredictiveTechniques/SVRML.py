@@ -40,9 +40,9 @@ class SVRML(GaussianProcess):
                            Real(0.0, 0.5, name='epsilon'),
                            Categorical([True, False], name='shrinking')]
         classifierSpaceLinear = [Real(0.00005, 0.00015, name='tol'),
-                                 Real(0.5,1.5, name='C'),
+                                 Real(0.1,1.0, name='C'),
                                  Categorical([True, False], name='fit_intercept'),
-                                 Real(0.5,2.0, name='intercept_scaling'),
+                                 Real(0.5,1.0, name='intercept_scaling'),
                                  Integer(1000,5000, name='max_iter')]
         super().__init__(LinearSVR, classifierSpaceLinear, SVRML.__Settings)
 
@@ -50,7 +50,7 @@ class SVRML(GaussianProcess):
         logging.info(f"Running {name}")
         try:
             start = timeit.default_timer()
-            bestScore, bestParameters, scorePerRun = super().RunGp(x, y, "SVRML")
+            bestScore, bestParameters, scorePerRun = super().RunGp(x, y, name)
             took = timeit.default_timer() - start
             f = open(name+".txt", 'w')
             f.write(f"{name} gp took {took}\n\n")
@@ -80,6 +80,14 @@ class SVRML(GaussianProcess):
             took = timeit.default_timer() - start
             SVRML.__TrainedClassifier = svrStandard
             logging.info(f"{name} standard run score:{testScore}")
+            y_pred = svrStandard.predict(x_test)
+            u = ((y_test - y_pred)**2).sum()
+            v = ((y_test - y_test.mean())**2).sum()
+            logging.info(f"{name} u:{u}")
+            logging.info(f"{name} v:{v}")
+            r2 = 1-(u/v)
+            logging.info(f"{name} r2:{r2}")
+
             f = open(name+".txt", 'a')
             f.write(f"{name} took {took}\n\n")
             f.write(f"{name} standard run score:{testScore}\n\n")

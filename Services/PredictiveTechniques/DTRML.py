@@ -48,7 +48,7 @@ class DTRML(GaussianProcess):
         logging.info(f"Running {name}")
         try:
             start = timeit.default_timer()
-            bestScore, bestParameters, scorePerRun = super().RunGp(x, y, "DTRML")
+            bestScore, bestParameters, scorePerRun = super().RunGp(x, y, f"{name}")
             took = timeit.default_timer() - start
             f = open(name+".txt", 'w')
             f.write(f"{name} gp took {took}\n\n")
@@ -82,7 +82,7 @@ class DTRML(GaussianProcess):
             took = timeit.default_timer() - start
             DTRML.__TrainedClassifier = dtrStandard
             logging.info(f"{name} standard run score:{testScore}")
-            f = open("{name}.txt", 'a')
+            f = open(f"{name}.txt", 'a')
             f.write(f"{name} standard run score:{testScore}\n\n")
             f.write(f"{name} took {took}\n\n")
             f.write(', '.join([str(elem) for elem in DTRML.__TrainedClassifier.feature_importances_])+"\n\n")

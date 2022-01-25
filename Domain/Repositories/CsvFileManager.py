@@ -61,7 +61,7 @@ class CsvFileManager(BaseModel):
 														issueChangeLogs = CsvFileManager.__DbContext.QueryAnd(TChangeLog, "IssueId", issue.Id, "Field", "status")
 														projectChangeLogs.extend(issueChangeLogs)
 										else:
-												projectChangeLogs = CsvFileManager.__DbContext.QueryLikeAnd(TChangeLog, 'IssueKey', project+"%", "Field", "status")
+												projectChangeLogs = CsvFileManager.__DbContext.QueryLikeAnd(TChangeLog, 'Key', project+"%", "Field", "status")
 										allChangeLogs.extend(projectChangeLogs)
 						if onlyDone:
 								eventLogName = CsvFileManager.__Settings.CsvStorageManager["OnlyDoneEventLogFileName"]
