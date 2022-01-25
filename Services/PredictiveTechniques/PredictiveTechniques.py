@@ -40,7 +40,9 @@ class PredictiveTechniques(BaseModel):
         logging.info("Running SVR")
         try:
             svrML = SVRML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext)
-            svrML.Run(PredictiveTechniques.__X, Y, name)
+            gpScore = svrML.Run(PredictiveTechniques.__X, Y, name)
+            del svrML
+            return gpScore
         except Exception as e:
             logging.error("Error occurred running SVR", exc_info=True)
 
@@ -48,7 +50,9 @@ class PredictiveTechniques(BaseModel):
         logging.info("Running MLP")
         try:
             mlpML = MLPML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext)
-            mlpML.Run(PredictiveTechniques.__X, Y, name)
+            gpScore = mlpML.Run(PredictiveTechniques.__X, Y, name)
+            del mlpML
+            return gpScore
         except Exception as e:
             logging.error("Error occurred running MLP", exc_info=True)
 
@@ -56,7 +60,9 @@ class PredictiveTechniques(BaseModel):
         logging.info("Running DTR")
         try:
             dtrML = DTRML(PredictiveTechniques.__Settings, PredictiveTechniques.__DbContext, PredictiveTechniques.__X.size)
-            dtrML.Run(PredictiveTechniques.__X, Y, name)
+            gpScore = dtrML.Run(PredictiveTechniques.__X, Y, name)
+            del dtrML
+            return gpScore
         except Exception as e:
             logging.error("Error occurred running DTR", exc_info=True)
 
@@ -74,19 +80,51 @@ class PredictiveTechniques(BaseModel):
         logging.info("Running WorkRatio estimation")
         try:
             #self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
-            self.__RunDTR(PredictiveTechniques.__Y_workRatio, "DTRWORKRATIO")
-            self.__RunMLP(PredictiveTechniques.__Y_workRatio, "MLPWORKRATIO")
-            self.__RunSVR(PredictiveTechniques.__Y_workRatio, "SVRWORKRATIO")
+            dtr_results = self.__RunDTR(PredictiveTechniques.__Y_workRatio, "DTRWORKRATIO")
+            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_workRatio, "MLPWORKRATIO")
+            svr_results = self.__RunSVR(PredictiveTechniques.__Y_workRatio, "SVRWORKRATIO")
+
+            import matplotlib.pyplot as plt
+            plt.clf()
+            import numpy as np
+            plt.plot(np.arange(1, len(dtr_results) +1), dtr_results, label='DTR GP score')
+            plt.plot(np.arange(1, len(mlp_results) +1), mlp_results, label='MLP GP score')
+            plt.plot(np.arange(1, len(svr_results) +1), svr_results, label='LinearSVR GP score')
+            plt.title(f"Score per GP run for work ratio score")
+            plt.xlabel("Run count")
+            plt.ylabel("Mean absolute error")
+            repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            imagesSink = os.path.join(repsoitoryLocation, PredictiveTechniques.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.grid(visible=True, axis='both', which='both')
+            plt.xlim(xmin=0)
+            plt.savefig(os.path.join(imagesSink, "GPSCOREWORKRATIO.png"))
+            del plt
         except Exception as e:
             logging.error("Error occurred while running workRatio estimation", exc_info=True)
 
     def RunFitnessEstimation(self):
-        logging.info("Running WorkRatio estimation")
+        logging.info("Running Fitness estimation")
         try:
             #self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
-            self.__RunDTR(PredictiveTechniques.__Y_fitness, "DTRFITNESS")
-            self.__RunMLP(PredictiveTechniques.__Y_fitness, "MLPFITNESS")
-            self.__RunSVR(PredictiveTechniques.__Y_fitness, "SVRFITNESS")
+            dtr_results = self.__RunDTR(PredictiveTechniques.__Y_fitness, "DTRFITNESS")
+            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_fitness, "MLPFITNESS")
+            svr_results = self.__RunSVR(PredictiveTechniques.__Y_fitness, "SVRFITNESS")
+
+            import matplotlib.pyplot as plt
+            plt.clf()
+            import numpy as np
+            plt.plot(np.arange(1, len(dtr_results) +1), dtr_results, label='DTR GP score')
+            plt.plot(np.arange(1, len(mlp_results) +1), mlp_results, label='MLP GP score')
+            plt.plot(np.arange(1, len(svr_results) +1), svr_results, label='LinearSVR GP score')
+            plt.title(f"Score per GP run for Fitness score")
+            plt.xlabel("Run count")
+            plt.ylabel("Mean absolute error")
+            repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
+            imagesSink = os.path.join(repsoitoryLocation, PredictiveTechniques.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.grid(visible=True, axis='both', which='both')
+            plt.xlim(xmin=0)
+            plt.savefig(os.path.join(imagesSink, "GPSCOREFITNESS.png"))
+            del plt
         except Exception as e:
             logging.error("Error occurred while running workRatio estimation", exc_info=True)
 

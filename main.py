@@ -61,7 +61,6 @@ if __name__ == "__main__":
         logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
-    print(DbContext(settings).Query(TIssue, "", "")[0].Fitness)
     #ImportJiraIssues()
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()

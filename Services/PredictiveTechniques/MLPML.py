@@ -58,13 +58,16 @@ class MLPML(GaussianProcess):
             f.close()
 
             import matplotlib.pyplot as plt
-            plt.plot(np.arrange(1, len(scorePerRun) +1), scorePerRun)
+            plt.clf()
+            plt.plot(np.arange(1, len(scorePerRun) +1), scorePerRun)
             plt.title(f"MLP score per GP run")
             plt.xlabel("Run count")
             plt.ylabel("Mean absolute error")
+            plt.grid(visible=True, axis='both', which='both')
+            plt.xlim(xmin=0)
             repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
-            imagesSink = os.path.join(repsoitoryLocation,  ProcessMining.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
-            plt.savefig(os.path.join(imagesSink, "MLP_score_per_gp_run.png"))
+            imagesSink = os.path.join(repsoitoryLocation,  MLPML.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.savefig(os.path.join(imagesSink, f"{name}_score_per_gp_run.png"))
 
             
             start = timeit.default_timer()
@@ -86,6 +89,7 @@ class MLPML(GaussianProcess):
             f.close()
             MLPML.__TrainedClassifier = mlpStandard
             logging.info(f"{name} standard run score:{testScore}")
-
+            
+            return scorePerRun
         except Exception as e:
             logging.error(f"Error occurred while running {name}", exc_info=True)

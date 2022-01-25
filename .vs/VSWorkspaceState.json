@@ -1,11 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Services\\JiraDataCollector",
-    "\\Services\\JiraDataCollector\\Support",
-    "\\Services\\PredictiveTechniques",
-    "\\Services\\ProcessMining"
+    "\\Common\\Support",
+    "\\Domain",
+    "\\Domain\\Repositories",
+    "\\Domain\\Repositories\\CsvCollection",
+    "\\Domain\\Repositories\\ProcessDiscoveryImages\\OnlyDone",
+    "\\Services",
+    "\\Services\\PredictiveTechniques"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\Services\\PredictiveTechniques\\MLPML.py",
   "PreviewInSolutionExplorer": false
 }

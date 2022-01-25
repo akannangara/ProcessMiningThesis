@@ -60,13 +60,16 @@ class SVRML(GaussianProcess):
             f.close()
 
             import matplotlib.pyplot as plt
-            plt.plot(np.arrange(1, len(scorePerRun) +1), scorePerRun)
+            plt.clf()
+            plt.plot(np.arange(1, len(scorePerRun) +1), scorePerRun)
             plt.title(f"SVR score per GP run")
             plt.xlabel("Run count")
             plt.ylabel("Mean absolute error")
+            plt.grid(visible=True, axis='both', which='both')
+            plt.xlim(xmin=0)
             repsoitoryLocation = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../Domain/Repositories")
-            imagesSink = os.path.join(repsoitoryLocation,  ProcessMining.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
-            plt.savefig(os.path.join(imagesSink, "SVR_score_per_gp_run.png"))
+            imagesSink = os.path.join(repsoitoryLocation,  SVRML.__Settings.ImageStorage["ImagesSinkProcessDiscovery"])
+            plt.savefig(os.path.join(imagesSink, f"{name}_score_per_gp_run.png"))
 
             logging.info(f"{name} GP bestScore:{bestScore}\n\n")
             start = timeit.default_timer()
@@ -82,5 +85,7 @@ class SVRML(GaussianProcess):
             f.write(f"{name} standard run score:{testScore}\n\n")
             f.write(', '.join([str(elem) for elem in SVRML.__TrainedClassifier.coef_])+"\n\n")
             f.close()
+
+            return scorePerRun
         except Exception as e:
             logging.error(f"Error occurred while running {name}", exc_info=True)
