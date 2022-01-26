@@ -70,7 +70,7 @@ class MLDataSetModel:
     RUndefined : int = 1
 
     SprintChangeSinceCreation : int = 0
-    SprintChangeSinceStatusChange : int
+    SprintChangeSinceStatusChange : int = 0
     Sprintweek : int = 0
     SprintIssueCount : int = 0
     SprintSumEstimatedTime : int = 0
