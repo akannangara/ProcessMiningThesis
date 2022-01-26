@@ -12,7 +12,9 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVR
 from sklearn.svm import LinearSVR
+from sklearn.linear_model import SGDRegressor
 from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
 from skopt.space import Integer, Categorical, Real
 import numpy as np
 import time
@@ -44,7 +46,18 @@ class SVRML(GaussianProcess):
                                  Categorical([True, False], name='fit_intercept'),
                                  Real(0.5,1.0, name='intercept_scaling'),
                                  Integer(1000,5000, name='max_iter')]
-        super().__init__(LinearSVR, classifierSpaceLinear, SVRML.__Settings)
+        classifierSpaceSGDR = [Categorical(['squared_error', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'], name='loss'),
+                               Categorical(['l2', 'l1', 'elasticnet'], name='penalty'),
+                               Real(0.00005,0.00015, name='alpha'),
+                               Real(0.1, 0.2, name='l1_ratio'),
+                               Categorical([True, False], name='fit_intercept'),
+                               Integer(500,5000, name='max_iter'),
+                               Real(0.0005, 0.0015, name='tol'),
+                               Real(0.05,0.15, name='epsilon'),
+                               Categorical(['constant','optimal','invscaling', 'adaptive'], name='learning_rate')]
+        SVRML.__Space = classifierSpaceSGDR
+        #super().__init__(LinearSVR, classifierSpaceLinear, SVRML.__Settings)
+        super().__init__(make_pipeline(StandardScaler(), SGDRegressor()), classifierSpaceSGDR, SVRML.__Settings)
 
     def Run(self, x, y, name : str):
         logging.info(f"Running {name}")
@@ -73,7 +86,8 @@ class SVRML(GaussianProcess):
 
             logging.info(f"{name} GP bestScore:{bestScore}\n\n")
             start = timeit.default_timer()
-            svrStandard = LinearSVR(tol=bestParameters[0], C=bestParameters[1], loss='epsilon_insensitive', fit_intercept=bestParameters[2], intercept_scaling=bestParameters[3], max_iter=bestParameters[4])
+            #svrStandard = LinearSVR(tol=bestParameters[0], C=bestParameters[1], loss='epsilon_insensitive', fit_intercept=bestParameters[2], intercept_scaling=bestParameters[3], max_iter=bestParameters[4])
+            svrStandard = make_pipeline(StandardScaler(), SGDRegressor(**{dim.name: val for dim, val in zip(SVRML.__Space, bestParameters) if dim.name != 'dummy'}))
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
             svrStandard.fit(x_train, y_train)
             testScore = svrStandard.score(x_test, y_test)

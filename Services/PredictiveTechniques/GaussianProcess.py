@@ -29,7 +29,8 @@ class GaussianProcess(BaseModel):
         GaussianProcess.__HyperparameterSpace = hyperparameterSpace
 
     def __f(self, params):
-        classifier = GaussianProcess.__Classifier(**{dim.name: val for dim, val in zip(GaussianProcess.__HyperparameterSpace, params) if dim.name != 'dummy'})
+        classifier = GaussianProcess.__Classifier()
+        classifier.set_params(**{dim.name: val for dim, val in zip(GaussianProcess.__HyperparameterSpace, params) if dim.name != 'dummy'})
         try:
             X_Use, X_Unused, Y_Use, Y_Unused = train_test_split(GaussianProcess.__X, GaussianProcess.__Y, test_size=0.1)
             X_train, X_test, Y_train, Y_test = train_test_split(X_Use, Y_Use, test_size = 0.2)

@@ -2,13 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Common\\Support",
-    "\\Domain",
-    "\\Domain\\Repositories",
-    "\\Domain\\Repositories\\CsvCollection",
     "\\Domain\\Repositories\\ProcessDiscoveryImages\\OnlyDone",
     "\\Services",
+    "\\Services\\JiraDataCollector\\Support",
     "\\Services\\PredictiveTechniques"
   ],
-  "SelectedNode": "\\Services\\PredictiveTechniques\\MLPML.py",
+  "SelectedNode": "\\Services\\PredictiveTechniques\\SVRML.py",
   "PreviewInSolutionExplorer": false
 }
