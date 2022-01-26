@@ -15,6 +15,7 @@ from ProcessEnhancement import ProcessEnhancement
 from PredictiveTechniques import PredictiveTechniques
 
 from TIssue import TIssue
+from TChangeLog import TChangeLog
 
 def ImportJiraIssues():
     jiraImporter = JiraDataImporter(settings, DbContext(settings))
@@ -22,6 +23,13 @@ def ImportJiraIssues():
     for project in projectsList:
         issues = jiraImporter.GetProjectIssues(project)
         jiraImporter.StoreIssuesToDatabase(issues)
+
+def ImportJiraSprints():
+    db = DbContext(settings)
+    jiraImporter = JiraDataImporter(settings, db)
+    sprints = jiraImporter.GetSprints()
+    jiraImporter.StoreSprintsToDatabase(sprints)
+    jiraImporter.EnhanceSprintData()
 
 def CreateEventLogsFromDb():
     fileManager = CsvFileManager(DbContext(settings), settings)
@@ -47,6 +55,11 @@ def RunProcessConformanceWithDesiredWorkflowAndModelEnhancement():
     _, tokenBasedReplayConformance = processMiner.ConformanceCheckWithDesiredWorkflow()
     processMiner.ModelEnhancement(tokenBasedReplayConformance)
 
+def MakeDataset():
+    ImportJiraSprints()
+    pe = ProcessEnhancement(settings, DbContext(settings))
+    pe.CreateMLDataSet()
+
 def RunPredictiveTechniquesWR():
     pt = PredictiveTechniques(settings, DbContext(settings))
     pt.RunWorkRatioEstimation()
@@ -65,11 +78,13 @@ if __name__ == "__main__":
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
     #ImportJiraIssues()
+    ImportJiraSprints()
+    MakeDataset()
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()
     #RunGPHeuristicsDiscovery()
     #Create4dGrpah()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
     RunPredictiveTechniquesWR()
-    #RunPredictiveTechniquesFitness()
+    RunPredictiveTechniquesFitness()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

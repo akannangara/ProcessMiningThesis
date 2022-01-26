@@ -69,6 +69,12 @@ class MLDataSetModel:
     RClient : int = 0
     RUndefined : int = 1
 
+    SprintChangeSinceCreation : int = 0
+    SprintChangeSinceStatusChange : int
+    Sprintweek : int = 0
+    SprintIssueCount : int = 0
+    SprintSumEstimatedTime : int = 0
+
     Rejected : int = 0
     WorkRatio : float = 0.0
     Fitness : float = 0.0
@@ -76,7 +82,8 @@ class MLDataSetModel:
     def __init__(self, issue : TIssue, priority : int, issueType : str, currentStatus : int, timeEstimate : int, timespent : int,
                  timeSinceToDo : int, comingBack : bool, dueDate : datetime, sizeSummary : int,
                  sizeDescription : int, changeSinceCreation : bool, changeSinceLastStatusChange: bool,
-                 assignee, rejected : bool):
+                 assignee, rejected : bool, sprintChangeSinceCreation : int, sprintChangeSinceStatusChange : int,
+                 sprintweek : int, sprintIssueCount : int, sprintSumEstimatedTime : int):
         self.Key = issue.Key
         self.Priority = priority
         self.TimeEstimate = timeEstimate
@@ -146,6 +153,13 @@ class MLDataSetModel:
             self.RIntern = (int(issue.Reporter.Type=="Stagiair"))
             self.RClient = (int(issue.Reporter.Type=="Klant"))
             self.RUndefined = (int(issue.Reporter.Type==""))
+
+        SprintChangeSinceCreation = sprintChangeSinceCreation
+        SprintChangeSinceStatusChange = sprintChangeSinceStatusChange
+        SprintChangeSinceStatusChange = sprintChangeSinceStatusChange
+        Sprintweek = sprintweek
+        SprintIssueCount = sprintIssueCount
+        SprintSumEstimatedTime = sprintSumEstimatedTime
 
         self.WorkRatio = issue.WorkRatio #if really large then rejected 
         if self.WorkRatio > 9000000000:

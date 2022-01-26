@@ -67,6 +67,7 @@ class ProcessEnhancement(BaseModel):
                         timeEstimate = 0
                         if issue.TimeEstimate:
                             timeEstimate = issue.TimeEstimate
+                        timeSpent = 0
                         issueType = issue.IssueType.Name
                         dueDate = None
                         if issue.DueDate:
@@ -74,7 +75,7 @@ class ProcessEnhancement(BaseModel):
                         assignee = None
                         if issue.Assignee:
                             assignee = issue.Assignee
-                        for j in range(len(changelogs)):
+                        for j in range(i):
                             if changelogs[j].Field == 'priority':
                                 if changelogs[j].FromString:
                                     priority = ProcessEnhancement.__Settings.PriorityIntDictionary[changelogs[j].FromString]
@@ -95,26 +96,47 @@ class ProcessEnhancement(BaseModel):
                                 searchResult = db.Query(TTeamMember, "Name", changelogs[j].FromString)
                                 if searchResult:
                                     assignee = searchResult[0]
-
-                        timeSpent = 0
-                        for j in range(len(changelogs)):
-                            if changelogs[j].Field == 'timespent' and changelogs[j].FromString:
+                            elif changelogs[j].Field == 'timespent' and changelogs[j].FromString:
                                 timeSpent = changelogs[j].FromString
 
                         changeFields = ['priority', 'issuetype', 'summary', 'description', 'Attachment', 'assignee', 'duedate']
                         comingBack = 0
                         timeSpent = 0
                         reachedLastStatusChange = False
+                        lastStatusChangeTime = None
                         changeSinceCreation = False
+                        sprintChangeSinceCreation = 0
+                        sprintChangeSinceStatusChange = 0
                         for j in reversed(range(i)):
                             if changelogs[j].Field == 'status':
-                                reachedLastStatusChange = True
+                                if not(reachedLastStatusChange):
+                                    reachedLastStatusChange = True
+                                    lastStatusChangeTime = changelogs[j].Created
                                 if comingBack == 0 and ProcessEnhancement.__Settings.StatusIntDictionary[changelogs[j].ToString] > currentStatus:
                                     comingBack = 1
                             elif changelogs[j].Field == 'timespent' and timeSpent == 0:
                                 timeSpent = int(changelogs[j].ToString)
                             elif changelogs[j].Field in changeFields and not(reachedLastStatusChange):
                                 changeSinceLastStatus = True
+                            elif changelogs[j].Field == 'Sprint':
+                                if sprintChangeSinceCreation == 0:
+                                    if changelogs[j].ToString:
+                                        sprintChangeSinceCreation = len(item.strip() for item in changelogs[j].ToString.split(','))
+                                    else:
+                                        if changelogs[j].FromString:
+                                            sprintChangeSinceCreation == len(item.strip() for item in changelogs[j].FromString.split(','))
+                        if lastStatusChangeTime:
+                            sprintChangeSinceStatusChange = len(db.GetSession().query(TChangeLog)\
+                                .filter(and_(TChangeLog.Field == "Sprint",\
+                                and_(TChangeLog.IssueKey==issue.Key, TChangeLog.Created >= lastStatusChangeTime))).all())
+
+                        sprint = db.query(TSprint).filter(TSprint.StartDate >= changelogs[i].Created, TSprint.EndDate <= changelogs[i].Created).all()
+                        if sprint:
+                            sprint = sprint[0]
+                        sprintId = sprint.Id
+                        sprintweek = sprint.Name.split()[1]
+                        sprintIssueCount = sprint.IssueCount
+                        sprintSumEstimatedTime = sprint.SprintTimeEstimate
 
                         timeSinceToDo = 0
                         reachedToDo = False
@@ -131,7 +153,8 @@ class ProcessEnhancement(BaseModel):
                             rejected = True
                         MLDataSetCollection.append(MLDataSetModel(issue, priority, issueType, currentStatus, timeEstimate, timeSpent, timeSinceToDo, comingBack,
                                                                  dueDate, sizeSummary, sizeDescription, changeSinceCreation,
-                                                                 changeSinceCreation, assignee, rejected))
+                                                                 changeSinceCreation, assignee, rejected, sprintChangeSinceCreation, sprintChangeSinceStatusChange,
+                                                                 sprintweek, sprintIssueCount, sprintSumEstimatedTime))
             fileManager = CsvFileManager(ProcessEnhancement.__DbContext, ProcessEnhancement.__Settings)
             fileManager.DeleteFileIfExists(ProcessEnhancement.__Settings.CsvStorageManager["mlDataSet"])
             fileManager.CreateFileFromEntityCollection(MLDataSetCollection, MLDataSetModel, \

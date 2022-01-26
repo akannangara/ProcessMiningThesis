@@ -66,23 +66,12 @@ class PredictiveTechniques(BaseModel):
         except Exception as e:
             logging.error("Error occurred running DTR", exc_info=True)
 
-    def __RunInParrallel(self, *fns):
-        from multiprocessing import Process
-        proc = []
-        for fn in fns:
-            p = Process(target=fn)
-            p.start()
-            proc.append(p)
-        for p in proc:
-            p.join()
-
     def RunWorkRatioEstimation(self):
         logging.info("Running WorkRatio estimation")
         try:
-            #self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
+            svr_results = self.__RunSVR(PredictiveTechniques.__Y_workRatio, "SVRWORKRATIO")
             dtr_results = self.__RunDTR(PredictiveTechniques.__Y_workRatio, "DTRWORKRATIO")
             mlp_results = self.__RunMLP(PredictiveTechniques.__Y_workRatio, "MLPWORKRATIO")
-            svr_results = self.__RunSVR(PredictiveTechniques.__Y_workRatio, "SVRWORKRATIO")
 
             import matplotlib.pyplot as plt
             plt.clf()
@@ -106,10 +95,9 @@ class PredictiveTechniques(BaseModel):
     def RunFitnessEstimation(self):
         logging.info("Running Fitness estimation")
         try:
-            #self.__RunInParrallel(self.__RunSVR, self.__RunDTR, self.__RunMLP)
+            svr_results = self.__RunSVR(PredictiveTechniques.__Y_fitness, "SVRFITNESS")
             dtr_results = self.__RunDTR(PredictiveTechniques.__Y_fitness, "DTRFITNESS")
             mlp_results = self.__RunMLP(PredictiveTechniques.__Y_fitness, "MLPFITNESS")
-            svr_results = self.__RunSVR(PredictiveTechniques.__Y_fitness, "SVRFITNESS")
 
             import matplotlib.pyplot as plt
             plt.clf()

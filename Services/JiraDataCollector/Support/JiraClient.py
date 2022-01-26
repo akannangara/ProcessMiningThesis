@@ -47,6 +47,19 @@ class JiraClient:
         except Exception as e:
             logging.error("Exception occurred when importing all projects from Jira", exc_info=True)
 
+    def GetBoards(self):
+        self.__ConnectToJira()
+        boards = JiraClient.__client.boards()
+        return boards
+
+    def GetSprints(self):
+        self.__ConnectToJira()
+        sprints = []
+        for i in range(2):
+            s = i * 50
+            sprints.extend(JiraClient.__client.sprints(board_id=6,extended=True, startAt=s))
+        return sprints
+
     def __ConnectToJira(self):
         if (time.time() - JiraClient.__jiraConnectionTime) > JiraClient.__jiraConnectRefreshTimer:
             try:
