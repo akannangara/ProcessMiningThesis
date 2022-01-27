@@ -27,8 +27,8 @@ def ImportJiraIssues():
 def ImportJiraSprints():
     db = DbContext(settings)
     jiraImporter = JiraDataImporter(settings, db)
-    sprints = jiraImporter.GetSprints()
-    jiraImporter.StoreSprintsToDatabase(sprints)
+    #sprints = jiraImporter.GetSprints()
+    #jiraImporter.StoreSprintsToDatabase(sprints)
     jiraImporter.EnhanceSprintData()
 
 def CreateEventLogsFromDb():

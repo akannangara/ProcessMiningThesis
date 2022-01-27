@@ -130,7 +130,7 @@ class ProcessEnhancement(BaseModel):
                                 .filter(and_(TChangeLog.Field == "Sprint",\
                                 and_(TChangeLog.IssueKey==issue.Key, TChangeLog.Created >= lastStatusChangeTime))).all())
 
-                        sprint = db.query(TSprint).filter(TSprint.StartDate >= changelogs[i].Created, TSprint.EndDate <= changelogs[i].Created).all()
+                        sprint = db.GetSession().query(TSprint).filter(TSprint.StartDate >= changelogs[i].Created, TSprint.EndDate <= changelogs[i].Created).all()
                         if sprint:
                             sprint = sprint[0]
                         sprintId = sprint.Id

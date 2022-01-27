@@ -1,12 +1,14 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Common\\Support",
-    "\\Domain\\Repositories\\ProcessDiscoveryImages\\OnlyDone",
-    "\\Services",
+    "\\Domain",
+    "\\Domain\\Models",
+    "\\Domain\\Models\\DbModels",
+    "\\Services\\JiraDataCollector",
     "\\Services\\JiraDataCollector\\Support",
-    "\\Services\\PredictiveTechniques"
+    "\\Services\\PredictiveTechniques",
+    "\\Services\\ProcessMining"
   ],
-  "SelectedNode": "\\Services\\PredictiveTechniques\\SVRML.py",
+  "SelectedNode": "\\GetDatabase.py",
   "PreviewInSolutionExplorer": false
 }

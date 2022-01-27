@@ -1,5 +1,4 @@
 ﻿import ImportAllLocations
-import logging
 
 from DbContext import DbContext
 
@@ -16,9 +15,6 @@ from TTimeTracking import TTimeTracking
 from TProgress import TProgress
 from TWorkLog import TWorkLog
 from TChangeLog import TChangeLog
-
-logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s %(name)s - \
-                                            %(levelname)s - %(message)s', level=logging.INFO)
 
 db=DbContext(settings)
 

@@ -53,10 +53,10 @@ class JiraClient:
         return boards
 
     def GetSprints(self):
-        self.__ConnectToJira()
         sprints = []
         for i in range(2):
             s = i * 50
+            self.__ConnectToJira()
             sprints.extend(JiraClient.__client.sprints(board_id=6,extended=True, startAt=s))
         return sprints
 

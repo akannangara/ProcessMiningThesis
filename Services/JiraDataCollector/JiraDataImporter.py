@@ -106,6 +106,8 @@ class JiraDataImporter(BaseModel):
             sprints = db.Query(TSprint, "", "")
             distinctIssueKeys = []
             for sprint in sprints:
+                #if sprint.StartDate < datetime.date(2020, 11, 13, 00, 00):
+                #    continue
                 if sprint.StartDate > datetime.datetime.now():
                     break
                 logging.info(f"Enhancing sprint data for {sprint.Name}")
@@ -113,11 +115,11 @@ class JiraDataImporter(BaseModel):
                 ThisSprintChangeLogs = db.GetSession().query(TChangeLog).filter(and_(TChangeLog.Created >= sprint.StartDate, TChangeLog.Created < sprint.EndDate)).distinct(TChangeLog.IssueKey).all()
                 sprintIssueKeys.extend([r.IssueKey for r in ThisSprintChangeLogs])
                 #fromSprintChangeLogsIssues
-                sprintIssueKeys.extend([r.IssueKey for r in db.GetSession().query(TChangeLog).filter(and_(TChangeLog.Field=='Sprint', TChangeLog.FromString.like("%{}%".format(sprint.Name)))).all()])
-                sprintIssueKeys.extend([r.IssueKey for r in db.GetSession().query(TChangeLog).filter(and_(TChangeLog.Field=='Sprint', TChangeLog.ToString.like("%{}%".format(sprint.Name)))).all()])
+                sprintIssueKeys.extend([r.IssueKey for r in db.GetSession().query(TChangeLog).filter(and_(TChangeLog.Field=='Sprint', and_(TChangeLog.ToString.like("%{}%".format(sprint.Name)), TChangeLog.Created < sprint.EndDate))).all()])
                 allIssuesBeforeSprint = set([r.IssueKey for r in db.GetSession().query(TChangeLog).filter(and_(TChangeLog.Created < sprint.StartDate, TChangeLog.ToString=='To Do')).all()])
                 for potIssue in allIssuesBeforeSprint:
-                    if not(db.GetSession().query(TChangeLog).filter(and_(TChangeLog.Created < sprint.StartDate, and_(TChangeLog.IssueKey == potIssue, or_(TChangeLog.ToString == 'Done', TChangeLog.ToString=='Rejected')))).all()):
+                    if not(db.GetSession().query(TChangeLog).filter(and_(TChangeLog.Created < sprint.StartDate, and_(TChangeLog.IssueKey == potIssue,\
+                        or_(TChangeLog.ToString == 'Done', TChangeLog.ToString=='Rejected')))).all()):
                         sprintIssueKeys.append(potIssue)
                 sprintIssueKeys = set(sprintIssueKeys)
                 sprint.IssueCount = len(sprintIssueKeys)
