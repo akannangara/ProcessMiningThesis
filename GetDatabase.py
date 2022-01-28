@@ -15,6 +15,7 @@ from TTimeTracking import TTimeTracking
 from TProgress import TProgress
 from TWorkLog import TWorkLog
 from TChangeLog import TChangeLog
+from TSprint import TSprint
 
 db=DbContext(settings)
 

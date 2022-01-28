@@ -13,6 +13,7 @@ from MLDataSetModel import MLDataSetModel
 from DateTimeConverter import DateTimeConverter
 
 from TTeamMember import TTeamMember
+from TSprint import TSprint
 
 
 
@@ -131,12 +132,16 @@ class ProcessEnhancement(BaseModel):
                                 and_(TChangeLog.IssueKey==issue.Key, TChangeLog.Created >= lastStatusChangeTime))).all())
 
                         sprint = db.GetSession().query(TSprint).filter(TSprint.StartDate >= changelogs[i].Created, TSprint.EndDate <= changelogs[i].Created).all()
+                        sprintId = 0
+                        sprintWeek = 0
+                        sprintIssueCount = 0
+                        sprintSumEstimatedTime = 0
                         if sprint:
                             sprint = sprint[0]
-                        sprintId = sprint.Id
-                        sprintweek = sprint.Name.split()[1]
-                        sprintIssueCount = sprint.IssueCount
-                        sprintSumEstimatedTime = sprint.SprintTimeEstimate
+                            sprintId = sprint.Id
+                            sprintweek = sprint.Name.split()[1]
+                            sprintIssueCount = sprint.IssueCount
+                            sprintSumEstimatedTime = sprint.SprintTimeEstimate
 
                         timeSinceToDo = 0
                         reachedToDo = False
