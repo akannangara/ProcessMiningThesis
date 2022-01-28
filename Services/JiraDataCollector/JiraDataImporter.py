@@ -103,6 +103,8 @@ class JiraDataImporter(BaseModel):
         logging.info("Enhancing sprint data")
         try:
             db = JiraDataImporter.__dbContext
+            if not(db.Query(TIssue, "","")):
+                raise("No issues exist in the database. Cannot enhance sprint info without having issues...")
             sprints = db.Query(TSprint, "", "")
             distinctIssueKeys = []
             for sprint in sprints:
