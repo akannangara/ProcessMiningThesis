@@ -27,8 +27,8 @@ def ImportJiraIssues():
 def ImportJiraSprints():
     db = DbContext(settings)
     jiraImporter = JiraDataImporter(settings, db)
-    #sprints = jiraImporter.GetSprints()
-    #jiraImporter.StoreSprintsToDatabase(sprints)
+    sprints = jiraImporter.GetSprints()
+    jiraImporter.StoreSprintsToDatabase(sprints)
     jiraImporter.EnhanceSprintData()
 
 def CreateEventLogsFromDb():
@@ -56,7 +56,6 @@ def RunProcessConformanceWithDesiredWorkflowAndModelEnhancement():
     processMiner.ModelEnhancement(tokenBasedReplayConformance)
 
 def MakeDataset():
-    ImportJiraSprints()
     pe = ProcessEnhancement(settings, DbContext(settings))
     pe.CreateMLDataSet()
 
@@ -70,6 +69,11 @@ def RunPredictiveTechniquesFitness():
     pt.RunFitnessEstimation()
     del pt
 
+def RunPredictiveTechniquesNextState():
+    pt = PredictiveTechniques(settings, DbContext(settings))
+    pt.RunNextStateEstimation()
+    del pt
+
 if __name__ == "__main__":
     if settings.Debug:
         logging.basicConfig(format='%(asctime)s %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -78,13 +82,14 @@ if __name__ == "__main__":
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
     #ImportJiraIssues()
-    ImportJiraSprints()
+    #ImportJiraSprints()
     MakeDataset()
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()
     #RunGPHeuristicsDiscovery()
     #Create4dGrpah()
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
-    RunPredictiveTechniquesWR()
-    RunPredictiveTechniquesFitness()
+    #RunPredictiveTechniquesWR()
+    #RunPredictiveTechniquesFitness()
+    RunPredictiveTechniquesNextState()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

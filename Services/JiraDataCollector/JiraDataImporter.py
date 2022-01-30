@@ -108,7 +108,7 @@ class JiraDataImporter(BaseModel):
             sprints = db.Query(TSprint, "", "")
             distinctIssueKeys = []
             for sprint in sprints:
-                if sprint.StartDate < datetime.datetime(2020, 7, 13, 0, 0):
+                if sprint.StartDate < datetime.datetime(2021, 12, 26, 0, 0):#2021/10/04-
                     continue
                 if sprint.StartDate > datetime.datetime.now():
                     break

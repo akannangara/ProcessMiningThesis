@@ -35,12 +35,13 @@ class SVRML(GaussianProcess):
     def __init__(self, settings, dbContext : DbContext):
         SVRML.__Settings = settings
         SVRML.__DbContext = dbContext
-        classifierSpace = [Categorical(['linear', 'poly', 'rbf', 'sigmoid'], name='kernel'),
+        classifierSpace = [Categorical(['poly', 'rbf'], name='kernel'),
                            Integer(1, 5, name='degree'),
                            Categorical(['scale', 'auto'], name='gamma'),
-                           Real(0.5, 1.5, name='C'),
-                           Real(0.0, 0.5, name='epsilon'),
-                           Categorical([True, False], name='shrinking')]
+                           Real(0.5, 1.0, name='C'),
+                           Real(0.05, 0.15, name='epsilon'),
+                           Categorical([True], name='shrinking'),
+                           Integer(1400, 1500, name='cache_size')]
         classifierSpaceLinear = [Real(0.00005, 0.00015, name='tol'),
                                  Real(0.05,0.9, name='C'),
                                  Categorical([True, False], name='fit_intercept'),
@@ -56,6 +57,8 @@ class SVRML(GaussianProcess):
                                Real(0.05,0.15, name='epsilon'),
                                Categorical(['constant','optimal','invscaling', 'adaptive'], name='learning_rate')]
         SVRML.__Space = classifierSpaceLinear
+        #super().__init__(SVR, SVRML.__Space, SVRML.__Settings)
+
         super().__init__(LinearSVR, classifierSpaceLinear, SVRML.__Settings)
         #super().__init__(SGDRegressor, classifierSpaceSGDR, SVRML.__Settings)
 
@@ -86,6 +89,7 @@ class SVRML(GaussianProcess):
 
             logging.info(f"{name} GP bestScore:{bestScore}\n\n")
             start = timeit.default_timer()
+            #svrStandard = SVR(**{dim.name: val for dim, val in zip(SVRML.__Space, bestParameters) if dim.name != 'dummy'})
             svrStandard = LinearSVR(**{dim.name: val for dim, val in zip(SVRML.__Space, bestParameters) if dim.name != 'dummy'})
             #svrStandard = SGDRegressor(**{dim.name: val for dim, val in zip(SVRML.__Space, bestParameters) if dim.name != 'dummy'})
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
@@ -103,7 +107,7 @@ class SVRML(GaussianProcess):
             logging.info(f"{name} r2:{r2}")
 
             f = open(name+".txt", 'a')
-            f.write(f"{name} took {took}\n\n")
+            f.write(f"\n\n{name} took {took}\n\n")
             f.write(f"{name} standard run score:{testScore}\n\n")
             f.write(', '.join([str(elem) for elem in SVRML.__TrainedClassifier.coef_])+"\n\n")
             f.close()

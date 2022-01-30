@@ -12,6 +12,7 @@ from datetime import datetime
 @dataclass
 class MLDataSetModel:
     Key : str
+    ProjectIssueNumber : int = 0
     Priority : int = 3
     TimeEstimate : int = 0
     CurrentStatus : int = 0
@@ -71,20 +72,25 @@ class MLDataSetModel:
 
     SprintChangeSinceCreation : int = 0
     SprintChangeSinceStatusChange : int = 0
-    Sprintweek : int = 0
+    YearSprintNumber : int = 0
     SprintIssueCount : int = 0
+    DeltaSprintIssueCount : int = 0
     SprintSumEstimatedTime : int = 0
+    DeltaSumEstimatedTime : int = 0
 
     Rejected : int = 0
     WorkRatio : float = 0.0
     Fitness : float = 0.0
+    NextState : int = 0
 
     def __init__(self, issue : TIssue, priority : int, issueType : str, currentStatus : int, timeEstimate : int, timespent : int,
                  timeSinceToDo : int, comingBack : bool, dueDate : datetime, sizeSummary : int,
                  sizeDescription : int, changeSinceCreation : bool, changeSinceLastStatusChange: bool,
                  assignee, rejected : bool, sprintChangeSinceCreation : int, sprintChangeSinceStatusChange : int,
-                 sprintweek : int, sprintIssueCount : int, sprintSumEstimatedTime : int):
+                 sprintweek : int, sprintIssueCount : int, sprintSumEstimatedTime : int, deltaSprintIssueCount : int,
+                 deltaSprintSumEstimateTime : int, nextState : int):
         self.Key = issue.Key
+        self.ProjectIssueNumber = int(issue.Key.split('-')[1])
         self.Priority = priority
         self.TimeEstimate = timeEstimate
         self.CurrentStatus = currentStatus
@@ -154,12 +160,13 @@ class MLDataSetModel:
             self.RClient = (int(issue.Reporter.Type=="Klant"))
             self.RUndefined = (int(issue.Reporter.Type==""))
 
-        SprintChangeSinceCreation = sprintChangeSinceCreation
-        SprintChangeSinceStatusChange = sprintChangeSinceStatusChange
-        SprintChangeSinceStatusChange = sprintChangeSinceStatusChange
-        Sprintweek = sprintweek
-        SprintIssueCount = sprintIssueCount
-        SprintSumEstimatedTime = sprintSumEstimatedTime
+        self.SprintChangeSinceCreation = sprintChangeSinceCreation
+        self.SprintChangeSinceStatusChange = sprintChangeSinceStatusChange
+        self.YearSprintNumber = sprintweek
+        self.SprintIssueCount = sprintIssueCount
+        self.DeltaSprintIssueCount = deltaSprintIssueCount
+        self.SprintSumEstimatedTime = sprintSumEstimatedTime
+        self.DeltaSumEstimatedTime = deltaSprintSumEstimateTime
 
         self.WorkRatio = issue.WorkRatio #if really large then rejected 
         if self.WorkRatio > 9000000000:
@@ -175,3 +182,4 @@ class MLDataSetModel:
 
         self.Fitness = issue.Fitness
         self.Rejected = (int(rejected))
+        self.NextState = nextState

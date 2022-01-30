@@ -34,8 +34,8 @@ class GaussianProcess(BaseModel):
             raise("Classifier has not been defined for GP....")
         classifier.set_params(**{dim.name: val for dim, val in zip(GaussianProcess.__HyperparameterSpace, params) if dim.name != 'dummy'})
         try:
-            X_Use, X_Unused, Y_Use, Y_Unused = train_test_split(GaussianProcess.__X, GaussianProcess.__Y, test_size=0.1)
-            X_train, X_test, Y_train, Y_test = train_test_split(X_Use, Y_Use, test_size = 0.2)
+            #X_Use, X_Unused, Y_Use, Y_Unused = train_test_split(GaussianProcess.__X, GaussianProcess.__Y, test_size=0.1)
+            X_train, X_test, Y_train, Y_test = train_test_split(GaussianProcess.__X, GaussianProcess.__Y, test_size=0.2) #train_test_split(X_Use, Y_Use, test_size = 0.2)
             classifier.fit(X_train, Y_train)
             pred = classifier.predict(X_test)
             score = (abs(Y_test - classifier.predict(X_test)).sum()) / X_test.size
