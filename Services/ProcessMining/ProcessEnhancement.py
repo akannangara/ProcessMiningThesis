@@ -61,10 +61,10 @@ class ProcessEnhancement(BaseModel):
                         currentStatus = ProcessEnhancement.__Settings.StatusIntDictionary[changelogs[i].ToString]
 
                         nextState = -1
-                        for j in range(i, len(changelogs)):
-                             if changelogs[j].Field == 'status':
-                                 nextState = ProcessEnhancement.__Settings.StatusIntDictionary[changelogs[j].ToString]
-                                 break
+                        for j in range(i+1, len(changelogs)):
+                                if changelogs[j].Field == 'status':
+                                    nextState = ProcessEnhancement.__Settings.StatusIntDictionary[changelogs[j].ToString]
+                                    break
 
                         priority = 3
                         if issue.PriorityId:

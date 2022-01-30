@@ -83,7 +83,7 @@ if __name__ == "__main__":
     startTime = time.time()
     #ImportJiraIssues()
     #ImportJiraSprints()
-    MakeDataset()
+    #MakeDataset()
     #CreateEventLogsFromDb()
     #RunProcessDiscoveryAndConformance()
     #RunGPHeuristicsDiscovery()

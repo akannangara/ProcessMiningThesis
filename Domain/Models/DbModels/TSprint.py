@@ -14,7 +14,6 @@ from DateTimeConverter import DateTimeConverter
 from JiraSprint import JiraSprint
 
 
-#TODO check if this works with foreign key and stuff
 class TSprint(Base):
 		__tablename__ = 'Sprints'
 
