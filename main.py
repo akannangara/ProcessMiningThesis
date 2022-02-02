@@ -11,8 +11,11 @@ from JiraDataCollector.JiraDataImporter import JiraDataImporter
 from DbContext import DbContext
 from CsvFileManager import CsvFileManager
 from ProcessMining import ProcessMining
+from ProcessEnhancement import ProcessEnhancement
+from PredictiveTechniques import PredictiveTechniques
 
 from TIssue import TIssue
+from TChangeLog import TChangeLog
 
 def ImportJiraIssues():
     jiraImporter = JiraDataImporter(settings, DbContext(settings))
@@ -21,22 +24,55 @@ def ImportJiraIssues():
         issues = jiraImporter.GetProjectIssues(project)
         jiraImporter.StoreIssuesToDatabase(issues)
 
+def ImportJiraSprints():
+    db = DbContext(settings)
+    jiraImporter = JiraDataImporter(settings, db)
+    sprints = jiraImporter.GetSprints()
+    jiraImporter.StoreSprintsToDatabase(sprints)
+    jiraImporter.EnhanceSprintData()
+
 def CreateEventLogsFromDb():
     fileManager = CsvFileManager(DbContext(settings), settings)
     fileManager.CreateEventLogFromDb(onlyDone=False)
-    fileManager.CreateEventLogFromDb(onlyDone=True)
     fileManager.CreateStatusCollectionFromDb()
+    fileManager.CreateTeamMemberCollectionFromDb()
 
 def RunProcessDiscoveryAndConformance():
     processMiner = ProcessMining(settings, DbContext(settings))
     processMiner.RunAllDiscoveryAlgorithms()
-    processMiner2 = ProcessMining(settings, DbContext(settings), onlyDone=True)
-    processMiner2.RunAllDiscoveryAlgorithms()
 
+def RunGPHeuristicsDiscovery():
+    processMiner = ProcessMining(settings, DbContext(settings))
+    processMiner.RunGPHeuristicsDiscovery()
+    Create4dGrpah()
+
+def Create4dGrpah():
+    processMiner = ProcessMining(settings, DbContext(settings))
+    processMiner.SaveSurfaceMultiDMap(ignoreSimplicity=True)
+    
 def RunProcessConformanceWithDesiredWorkflowAndModelEnhancement():
     processMiner = ProcessMining(settings, DbContext(settings))
     _, tokenBasedReplayConformance = processMiner.ConformanceCheckWithDesiredWorkflow()
     processMiner.ModelEnhancement(tokenBasedReplayConformance)
+
+def MakeDataset():
+    pe = ProcessEnhancement(settings, DbContext(settings))
+    pe.CreateMLDataSet()
+
+def RunPredictiveTechniquesWR():
+    pt = PredictiveTechniques(settings, DbContext(settings))
+    pt.RunWorkRatioEstimation()
+    del pt
+
+def RunPredictiveTechniquesFitness():
+    pt = PredictiveTechniques(settings, DbContext(settings))
+    pt.RunFitnessEstimation()
+    del pt
+
+def RunPredictiveTechniquesNextState():
+    pt = PredictiveTechniques(settings, DbContext(settings))
+    pt.RunNextStateEstimation()
+    del pt
 
 if __name__ == "__main__":
     if settings.Debug:
@@ -46,7 +82,14 @@ if __name__ == "__main__":
                                             %(levelname)s - %(message)s', level=logging.INFO)
     startTime = time.time()
     #ImportJiraIssues()
+    #ImportJiraSprints()
+    #MakeDataset()
     #CreateEventLogsFromDb()
-    RunProcessDiscoveryAndConformance()
-    RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
+    #RunProcessDiscoveryAndConformance()
+    #RunGPHeuristicsDiscovery()
+    #Create4dGrpah()
+    #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
+    #RunPredictiveTechniquesWR()
+    #RunPredictiveTechniquesFitness()
+    #RunPredictiveTechniquesNextState()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

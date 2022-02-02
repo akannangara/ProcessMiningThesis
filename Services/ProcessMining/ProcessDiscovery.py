@@ -89,10 +89,9 @@ class ProcessDiscovery(BaseModel):
         try:
             eventLog = ProcessDiscovery.__EventLog
             net, initial_marking, final_marking = pm4py.discover_petri_net_heuristics(eventLog, dependency_threshold=dependency_threshold, and_threshold=and_threshold, loop_two_threshold=loop_two_threshold)
-            parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
-            gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
-            #pn_visualizer.view(gviz)
             if (save):
+                parameters = {pn_visualizer.Variants.FREQUENCY.value.Parameters.FORMAT: "png"}
+                gviz = pn_visualizer.apply(net, initial_marking, final_marking, parameters=parameters, variant=pn_visualizer.Variants.FREQUENCY, log=eventLog)
                 pn_visualizer.save(gviz, os.path.join(ProcessDiscovery.__ImagesSink,str(dependency_threshold)+"."+str(and_threshold)+"."+str(loop_two_threshold)+ProcessDiscovery.__Settings.ImageStorage['heuristicsMiner']))
             return net, initial_marking, final_marking
         except Exception as e:

@@ -3,12 +3,14 @@ from typing import List
 from pydantic import BaseModel
 
 import sqlalchemy as sql
+from sqlalchemy import MetaData
 from sqlalchemy import or_
 from sqlalchemy import and_
 
 from TIssue import TIssue
 
 from JiraIssue import JiraIssue
+from JiraSprint import JiraSprint
 from TIssueType import TIssueType
 from TProject import TProject
 from TResolution import TResolution
@@ -20,6 +22,7 @@ from TProgress import TProgress
 from TWorkLog import TWorkLog
 from TChangeLog import TChangeLog
 from JiraChangeLog import JiraChangeLogItem
+from TSprint import TSprint
 
 from Base import Base
 
@@ -62,6 +65,14 @@ class DbContext:
         queryResult = DbContext.__session.query(TIssue).filter_by(Key=issueKey).first()
         return queryResult
 
+    def DropTable(self, tableName):
+        md = MetaData()
+        md.reflect(bind=self.GetEngine())
+        table = md.tables.get(tableName)
+        if table is not None:
+            logging.info(f"Deleting {tableName} table")
+            Base.metadata.drop_all(self.GetEngine(), [table], checkfirst=True)
+
     def GetAllIssues(self, projectsList : List[str] = []) -> List[TIssue]:
         if not(projectsList):
             issues = DbContext.__session.query(TIssue).all()
@@ -75,6 +86,10 @@ class DbContext:
                     projectIssues = self.Query(TIssue, 'ProjectId', project.Id)
                     issues.extend(projectIssues)
             return issues
+
+    def GetIssueChangeLogs(self, issueKey : str):
+        queryResult = DbContext.__session.query(TChangeLog).filter(TChangeLog.IssueKey == issueKey).order_by("Created").all()
+        return queryResult
         
     def Query(self, entity, attribute : str, query : str):
         if not(attribute):
@@ -94,12 +109,16 @@ class DbContext:
         queryResult = DbContext.__session.query(entity).filter(getattr(entity, attribute).like(query)).all()
         return queryResult
 
+    def QueryLikeAnd(self, entity, attribute1 : str, query1 : str, attribute2 : str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute1).like(query1), getattr(entity, attribute2) == query2)).all()
+        return queryResult
+
     def QueryOr(self, entity, attribute : str, query1 : str, query2 : str):
         queryResult = DbContext.__session.query(entity).filter(or_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
         return queryResult
 
-    def QueryAnd(self, entity, attribute : str, query1 : str, query2 : str):
-        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute) == query1, getattr(entity, attribute) == query2)).all()
+    def QueryAnd(self, entity, attribute1 : str, query1 : str, attribute2: str, query2 : str):
+        queryResult = DbContext.__session.query(entity).filter(and_(getattr(entity, attribute1) == query1, getattr(entity, attribute2) == query2)).all()
         return queryResult
 
     def AddIssueToDb(self, jiraIssue : JiraIssue):
@@ -137,6 +156,16 @@ class DbContext:
             logItem = self.__AddEntityToDb(TChangeLog(changeLog))
             logItem = self.__AddAttributeWithIdToEntity(logItem, TTeamMember, changeLog.author, 'Author', 'Key')
         return issue
+
+    def AddSprintToDb(self, sprint : JiraSprint):
+        logging.info("Adding jiraSprint "+ sprint.Name+ " to the database.")
+        try:
+            if self.Query(TSprint, "Id", sprint.Id):
+                logging.info(f"Trying to add sprint with id {sprint.Id} which already exists in the database")
+                return None
+            entity = self.__AddEntityToDb(TSprint(sprint))
+        except Exception as e:
+            logging.info("Error occurred while trying to add jira sprint "+sprint.Name +" to database", exc_info=True)
 
     def UpdateEntity(self, entity):
         try:

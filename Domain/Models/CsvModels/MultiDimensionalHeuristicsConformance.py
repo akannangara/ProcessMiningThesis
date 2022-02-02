@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from statistics import mean
 
 @dataclass
-class MuliDimensionalHeuristicsConformance():
+class MultiDimensionalHeuristicsConformance():
     MinerName : str
     dependency_threshold : float
     and_threshold : float

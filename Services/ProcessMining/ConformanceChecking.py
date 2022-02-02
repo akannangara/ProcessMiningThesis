@@ -17,7 +17,7 @@ from pm4py.algo.evaluation.replay_fitness import algorithm as replay_fitness_eva
 from pm4py.visualization.petri_net import visualizer as pn_visualizer
 
 from ProcessMinerConformance import ProcessMinerConformance
-from MuliDimensionalHeuristicsConformance import MuliDimensionalHeuristicsConformance
+from MultiDimensionalHeuristicsConformance import MultiDimensionalHeuristicsConformance
 from CsvFileManager import CsvFileManager
 from DbContext import DbContext
 from EventLogItem import EventLogItem
@@ -25,6 +25,8 @@ from TStatus import TStatus
 from TChangeLog import TChangeLog
 
 from ProcessDiscovery import ProcessDiscovery
+
+from statistics import mean
 
 class ConformanceChecking(BaseModel):
     __Settings = None
@@ -50,7 +52,14 @@ class ConformanceChecking(BaseModel):
         
 
     def FitnessTokenBasedReply(self, log, model, initial, final):
-        return replay_fitness_evaluator.apply(log, model, initial, final, variant=replay_fitness_evaluator.Variants.TOKEN_BASED)
+        try:
+            return pm4py.fitness_token_based_replay(log, model, initial, final)
+        except Exception as e:
+            try:
+                import pm4py as pm4py
+                return replay_fitness_evaluator.apply(log, model, initial, final, variant=replay_fitness_evaluator.Variants.TOKEN_BASED)
+            except Exception as e:
+                raise e
 
     def PrecisionAlignment(self, log, model, initial, final):
         return pm4py.precision_alignments(log, model, initial, final)
@@ -72,10 +81,11 @@ class ConformanceChecking(BaseModel):
             precision = self.PrecisionTokenBasedReplay(eventLog, petrinet, initial, final)
             generalization = self.Generalization(eventLog, petrinet, initial, final)
             simplicity = self.Simplicity(petrinet)
-            conformance = MuliDimensionalHeuristicsConformance(minerName, dependency_threshold, and_threshold,
+            conformance = MultiDimensionalHeuristicsConformance(minerName, dependency_threshold, and_threshold,
                                                     loop_two_threshold,fitness, precision, generalization,
                                                     simplicity)
             ConformanceChecking.__ConformanceCheckCollection.append(conformance)
+            return mean([fitness['average_trace_fitness'], precision, generalization])
         except Exception as e:
             logging.error(f"Error occurred when trying to add {minerName} data to conformance check collection", exc_info=True)
 
