@@ -91,5 +91,5 @@ if __name__ == "__main__":
     #RunProcessConformanceWithDesiredWorkflowAndModelEnhancement()
     #RunPredictiveTechniquesWR()
     #RunPredictiveTechniquesFitness()
-    RunPredictiveTechniquesNextState()
+    #RunPredictiveTechniquesNextState()
     logging.info("Execution time was "+str(time.time()-startTime)+" s")

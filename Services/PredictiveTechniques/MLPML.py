@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
 #from sklearn.pipline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from skopt.space import Integer, Categorical, Real
+from skopt.space import Integer, Categorical, Real, Space
 import numpy as np
 import time
 
@@ -31,6 +31,7 @@ class MLPML(GaussianProcess):
     __Settings = None
     __DbContext = None
     __TrainedClassifier = None
+    __Space = None
     
 
     def __init__(self, settings, dbContext : DbContext):
@@ -42,6 +43,7 @@ class MLPML(GaussianProcess):
                           Categorical(['constant', 'invscaling', 'adaptive'], name='learning_rate'),
                           Real(0.0000, 0.9999, name='momentum'),
                           Integer(200, 1000, name='max_iter')]
+        MLPML.__Space = classifierSpace
         super().__init__(MLPRegressor, classifierSpace, MLPML.__Settings)
 
     def Run(self, x, y, name : str):
@@ -71,12 +73,7 @@ class MLPML(GaussianProcess):
 
             
             start = timeit.default_timer()
-            mlpStandard = MLPRegressor(activation=bestParameters[0],
-                                       solver=bestParameters[1],
-                                       alpha=bestParameters[2],
-                                       learning_rate=bestParameters[3],
-                                       momentum=bestParameters[4],
-                                       max_iter=bestParameters[5])
+            mlpStandard = MLPRegressor(**{dim.name: val for dim, val in zip(MLPML.__Space, bestParameters) if dim.name != 'dummy'})
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
             mlpStandard.fit(x_train, y_train)
             testScore = mlpStandard.score(x_test.to_numpy(), y_test.to_numpy())
@@ -93,3 +90,6 @@ class MLPML(GaussianProcess):
             return scorePerRun
         except Exception as e:
             logging.error(f"Error occurred while running {name}", exc_info=True)
+
+    def GetClassifier(self):
+        return MLPML.__TrainedClassifier

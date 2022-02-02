@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.svm import SVR
 from skopt import gp_minimize
-from skopt.space import Integer, Categorical, Real
+from skopt.space import Integer, Categorical, Real, Space
 import time
 
 

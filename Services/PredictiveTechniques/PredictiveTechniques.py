@@ -70,9 +70,10 @@ class PredictiveTechniques(BaseModel):
     def RunWorkRatioEstimation(self):
         logging.info("Running WorkRatio estimation")
         try:
+            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_workRatio, "MLPWORKRATIO")
             svr_results = self.__RunSVR(PredictiveTechniques.__Y_workRatio, "SVRWORKRATIO")
             dtr_results = self.__RunDTR(PredictiveTechniques.__Y_workRatio, "DTRWORKRATIO")
-            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_workRatio, "MLPWORKRATIO")
+            
 
             import matplotlib.pyplot as plt
             plt.clf()
@@ -96,9 +97,10 @@ class PredictiveTechniques(BaseModel):
     def RunFitnessEstimation(self):
         logging.info("Running Fitness estimation")
         try:
+            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_fitness, "MLPFITNESS")
             svr_results = self.__RunSVR(PredictiveTechniques.__Y_fitness, "SVRFITNESS")
             dtr_results = self.__RunDTR(PredictiveTechniques.__Y_fitness, "DTRFITNESS")
-            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_fitness, "MLPFITNESS")
+            
 
             import matplotlib.pyplot as plt
             plt.clf()
@@ -122,9 +124,9 @@ class PredictiveTechniques(BaseModel):
     def RunNextStateEstimation(self):
         logging.info("Running next state estimation")
         try:
+            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_nextState, "MLPNEXTSTATE")
             svr_results = self.__RunSVR(PredictiveTechniques.__Y_nextState, "SVRNEXTSTATE")
             dtr_results = self.__RunDTR(PredictiveTechniques.__Y_nextState, "DTRNEXTSTATE")
-            mlp_results = self.__RunMLP(PredictiveTechniques.__Y_nextState, "MLPNEXTSTATE")
 
             import matplotlib.pyplot as plt
             plt.clf()
