@@ -1,13 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Domain\\Models\\DbModels",
-    "\\Services",
-    "\\Services\\JiraDataCollector",
-    "\\Services\\JiraDataCollector\\Support",
-    "\\Services\\PredictiveTechniques",
-    "\\Services\\ProcessMining"
+    "\\Results",
+    "\\Results\\CsvCollection"
   ],
-  "SelectedNode": "\\main.py",
+  "SelectedNode": "\\Results\\CsvCollection\\MLDataSet.csv",
   "PreviewInSolutionExplorer": false
 }
