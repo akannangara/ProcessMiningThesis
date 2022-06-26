@@ -1,0 +1,14 @@
+jira
+pm4py
+pandas
+xlrd
+openpyxl
+PyMySQL
+pyodbc
+typing
+dataclasses
+pydantic
+sqlalchemy
+graphviz
+scikit-learn
+scikit-optimize
